@@ -112,7 +112,7 @@ $(document).ready(function() {
         $('#modal_serial_number').val(serial_number);
 
         $('#modal_property').val(property);
-        $('#modal_property').change();//.trigger("change")
+        $('#modal_property').change();//same as .trigger("change")
 
         $('#modal_customer_name').val(customer_name);
         $('#modal_cts').val(cts);
@@ -149,33 +149,65 @@ $(document).ready(function() {
         e.stopPropagation();
     });
 
+    //Note: if the file is too large it will take a long ass time
+    //TODO: Find a way to check the file size before uploading it to the servlet
     $(document).on("click", "#upload", function(e) {
+        e.stopPropagation();
         e.preventDefault();
 
+        if ($("#file")[0].files[0] == null) {
+            alert("Oops! You need to choose a file to upload!");
+            return;
+        }
+        else if ($("#desc").val() == null || $("#desc").val() == "") {
+            alert("Oops! Please include a description!");
+            return;
+        }
 
-        console.log($("#assetTag").val());
-        console.log($("#desc").val());
-        console.log($("#file").val());
+        var asset_tag = $("#assetTag").val();
+        var desc = $("#desc").val();
+
+        var data = new FormData();
+        data.append('assetTag', asset_tag);
+        data.append('description', desc);
+        data.append('file', $("#file")[0].files[0]);
 
         $('#modal_spinner').show();
 
-        $.post("FileUploadDBServlet",
-            {
-                pp_asset_tag: $("#assetTag").val(),
-                description: $("#desc").val(),
-                file: $("#file").val()
-            },
-            function() {
-                $('#modal_spinner').hide();
-                if(data.result == 'success') {
-                    //alert("Drive successfully updated");
-                    $('#search_form').submit();
-                }
-                else
-                    alert("Error: " + data.result);
-            }, "json");
+        $.ajax({
+            url: "FileUploadDBServlet",
+            type: "POST",
+            data: data,
+            cache: false,
+            dataType: "json",
+            processData: false,
+            contentType: false,
+            success: function(data, textStatus, jqXHR) {
+                if (data.result == "success") {//If the data passes all the tests then update the page!
+                    $.ajax({
+                        url: "upload2.jsp?pp_asset_tag=" + pp_asset_tag + "&customer_name=" + customer_name + "&update=true",
+                        dataType: "text",
+                        success: function (msg) {
+                            $('#modal_file2').children().remove();
+                            $('#modal_file2').append(msg);
+                            //The Asset Tag must be changed here because there is no guarantee ajax will finish loading before it gets to the next line
+                            $('#assetTag').val(pp_asset_tag.substring(2));//Do substring(2) to remove the 'PS' from the beginning
 
-        e.stopPropagation();
+                        }
+                    });
+                    $('#modal_spinner').hide();
+                    alert("File Uploaded Successfully!");
+                }
+                else {
+                    $('#modal_spinner').hide();
+                    alert("Oops! " + data.result);
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {//if the server gives us an error we're fucked
+                $('#modal_spinner').hide();
+                alert("ERROR: " + errorThrown);
+            }
+        });
     });
 
     //Prevents duplicate upload tables from being presented in the modal in case they open up the update again
@@ -258,7 +290,7 @@ function searchDrive() {
     var drive_state = $('#drive_state').val();
     var drive_location = $('#drive_location').val();
 
-    // Hardcoded admin username
+    // Hardcoded admin username ._.
     var admin = "zgraham";
 
     $('#page_spinner').show();
@@ -295,6 +327,7 @@ function searchDrive() {
                 value += "<th>MFR/Model</th>";
                 value += "<th>Serial</th>";
                 value += "<th>Label</th>";
+                value += "<th>Location</th>";
                 value += "<th>Property</th>";
                 value += "<th>Status</th>";
                 value += "<th>Return Media To Customer</th>";
@@ -320,6 +353,7 @@ function searchDrive() {
                         value += "<td>" + v.manufacturer + "</td>";
                         value += "<td>" + v.serial_number + "</td>";
                         value += "<td>" + v.label + "</td>";
+                        value += "<td>" + v.drive_location + "</td>";
                         value += "<td>" + v.property + "</td>";
                         value += "<td>" + v.drive_state + "</td>";
 

@@ -76,12 +76,12 @@
     <div class="row display-table-row">
         <div class="col-md-2 col-sm-1 hidden-xs display-table-cell v-align box" id="navigation">
             <div class="logo">
-                <a target="_blank" href="https://www.proofpoint.com"><img style="max-width: 245px !important; margin-top: 6%;" src="https://wiki.proofpoint.com/wiki/download/attachments/425986/atl.site.logo?version=2&modificationDate=1393960799000&api=v2" alt="merkery_logo" class="hidden-xs hidden-sm">
+                <a hef="home.html"><img style="max-width: 245px !important; margin-top: 6%;" src="https://wiki.proofpoint.com/wiki/download/attachments/425986/atl.site.logo?version=2&modificationDate=1393960799000&api=v2" alt="merkery_logo" class="hidden-xs hidden-sm">
                     <img style="max-width: 245px !important; margin-top: 6%;" src="https://wiki.proofpoint.com/wiki/download/attachments/425986/atl.site.logo?version=2&modificationDate=1393960799000&api=v2" alt="merkery_logo" class="visible-xs visible-sm circle-logo">
                 </a>
             </div>
             <div class="navi">
-                <ul class="nav nav-pills nav-stacked" id="side-menu">
+                <ul>
                     <li><a href="searchDrive.jsp"><i class="fa fa-home" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Home</span></a></li>
                     <li><a href="createDrive.jsp"><i class="fa fa-hdd-o" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Create Drive</span></a></li>
                     <li><a href="historyDrive.jsp"><i class="fa fa-bar-chart" aria-hidden="true"></i><span class="hidden-xs hidden-sm">History</span></a></li>

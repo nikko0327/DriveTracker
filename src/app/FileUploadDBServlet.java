@@ -1,4 +1,11 @@
 package app;
+import java.util.List;
+import java.io.File;
+import java.util.Enumeration;
+
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -21,19 +28,24 @@ import javax.servlet.http.Part;
 import db_credentials.mysql_credentials;
 import net.sf.json.JSONObject;
 
+
 @WebServlet("/FileUpload")
 @MultipartConfig
 public class FileUploadDBServlet extends HttpServlet implements mysql_credentials {
 
     private static final long serialVersionUID = 1L;
 
-    private String eMessage;
+    private String eMessage = "";
 
     private Part filePart;
     private String assetAndPP;
     private String description;
 
-    protected void doPost(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {
+    /**
+     * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse
+     *      response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("application/json");
 
@@ -41,14 +53,12 @@ public class FileUploadDBServlet extends HttpServlet implements mysql_credential
         this.assetAndPP = "PS" + request.getParameter("assetTag");
         this.description = request.getParameter("description");
 
-        //System.out.println(assetAndPP);
-        //System.out.println(description);
+        System.out.println(this.filePart.getContentType());
 
         JSONObject json = new JSONObject();
-        if(uploadFileAndData()) {
+        if (uploadFileAndData()) {
             json.put("result", "success");
-        }
-        else
+        } else
             json.put("result", eMessage);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -64,12 +74,15 @@ public class FileUploadDBServlet extends HttpServlet implements mysql_credential
 
         try {
             //if file is NOT a PDF just return false
-            if (!filePart.getContentType().equals("application/pdf"))
+            if (!filePart.getContentType().equals("application/pdf")) {
+                eMessage = "File type must be pdf!";
                 return false;
+            }
             //if file is too BIG then just return false
-            else if (filePart.getSize() > 1048576 )//2mb
+            else if (filePart.getSize() > 1048576) { //2mb
+                eMessage = "Maximum file size is 2 MB!";
                 return false;
-
+            }
             pdfFileBytes = filePart.getInputStream();  // to get the body of the request as binary data
 
             final byte[] bytes = new byte[pdfFileBytes.available()];
@@ -82,6 +95,7 @@ public class FileUploadDBServlet extends HttpServlet implements mysql_credential
             } catch (Exception e) {
                 System.out.println(e);
                 System.exit(0);
+                return false;
             }
 
             try {
@@ -93,14 +107,14 @@ public class FileUploadDBServlet extends HttpServlet implements mysql_credential
                 System.out.println("Tables already created, skipping table creation process");
             }
 
-            int success=0;
+            int success = 0;
             PreparedStatement pstmt = con.prepareStatement("INSERT INTO upload VALUES(default,?,?,?)");
             pstmt.setString(1, assetAndPP);
-            pstmt.setBytes(2,bytes);    //Storing binary data in blob field.
+            pstmt.setBytes(2, bytes);    //Storing binary data in blob field.
             pstmt.setString(3, description);
             success = pstmt.executeUpdate();
 
-            if(success >= 1)
+            if (success >= 1)
                 System.out.println("File Stored");
 
             con.close();
@@ -112,113 +126,51 @@ public class FileUploadDBServlet extends HttpServlet implements mysql_credential
             eMessage = e.getMessage();
         } catch (IOException e) {
             eMessage = e.getMessage();
-        }
-        finally {
+        } finally {
             try {
-                if(con != null)
+                if (con != null)
                     con.close();
-                if(pdfFileBytes != null)
+                if (pdfFileBytes != null)
                     pdfFileBytes.close();
-            } catch(SQLException se) {
+            } catch (SQLException se) {
                 eMessage = se.getMessage();
                 se.printStackTrace();
-            } catch(IOException e) {
+            } catch (IOException e) {
                 eMessage = e.getMessage();
             }
         }
 
         return result;
     }
-//    protected void doPost(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {
-//        //response.setContentType("text/html;charset=UTF-8");
-//        boolean result = false;
-//        response.setContentType("application/json");
+}
+
+//IGNORE: This was inside of doPost right at the beginning but didn't do anything helpful
+//        Enumeration paramNames = request.getParameterNames();
+//        while (paramNames.hasMoreElements()) {
+//            String paramName = (String) paramNames.nextElement();
+//            System.out.println("param name: " + paramName);
+//        }
+//        boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+//        if (isMultipart) {
+//            FileItemFactory factory = new DiskFileItemFactory();
 //
-//        final Part filePart = request.getPart("file");
-//        String assetTag = request.getParameter("assetTag");
-//        String description = request.getParameter("description");
-//        String assetAndPP = "PS" + assetTag;
+//            ServletFileUpload upload = new ServletFileUpload(factory);
+//            try {
+//                List<FileItem> multiparts = upload.parseRequest(request);
+//                for (FileItem item : multiparts) {
 //
-//        System.out.println(assetTag);
-//        System.out.println(description);
-//
-//
-//
-//        InputStream pdfFileBytes = null;
-//        final PrintWriter writer = response.getWriter();
-//
-//        try {
-//
-//            if (!filePart.getContentType().equals("application/pdf")) {
-//                //writer.println("<br/> Invalid File");
-//                return;
-//            }
-//
-//            else if (filePart.getSize() > 1048576 ) { //2mb
-//                {
-//                    //writer.println("<br/> File size is too big");
-//                    return;
+//                    System.out.println("item: " + item);
+//                    //isFormField returns false if it is a file
+//                    if(!item.isFormField()) {
+//                        String fileName = new File(item.getName()).getName();
+//                        System.out.println("file: " + fileName);
+//                    }
+//                    else {
+//                        System.out.println(item.getName());
+//                        System.out.println(item.getFieldName());
+//                    }
 //                }
-//            }
-//
-//            pdfFileBytes = filePart.getInputStream();  // to get the body of the request as binary data
-//
-//            final byte[] bytes = new byte[pdfFileBytes.available()];
-//            pdfFileBytes.read(bytes);  //Storing the binary data in bytes array.
-//
-//            Connection con = null;
-//            Statement stmt = null;
-//
-//            try {
-//                Class.forName("com.mysql.jdbc.Driver");
-//                con = DriverManager.getConnection(db_url, user_name, password);
 //            } catch (Exception e) {
-//                System.out.println(e);
-//                System.exit(0);
-//            }
-//
-//            try {
-//                stmt = con.createStatement();
-//                //to create table with blob field (One time only)
-//                stmt.executeUpdate("CREATE TABLE upload (id int not null auto_increment, pp_asset_tag varchar (10) not null , file MEDIUMBLOB, description varchar(50) not null, Primary key (id))");
-//
-//            } catch (Exception e) {
-//                System.out.println("Tables already created, skipping table creation process");
-//            }
-//
-//            int success=0;
-//            PreparedStatement pstmt = con.prepareStatement("INSERT INTO upload VALUES(default,?,?,?)");
-//            pstmt.setString(1, assetAndPP);
-//            pstmt.setBytes(2,bytes);    //Storing binary data in blob field.
-//            pstmt.setString(3, description);
-//            success = pstmt.executeUpdate();
-//
-//            if(success >= 1) System.out.println("File Stored");
-//
-//            con.close();
-//            //writer.println("<br/> File Successfully Stored. You can now close this page and create/update a drive.");
-//
-//        } catch (FileNotFoundException fnf) {
-//            //writer.println("You did not specify a file to upload");
-//            //writer.println("<br/> ERROR: " + fnf.getMessage());
-//
-//        } catch (SQLException e) {
-//            // TODO Auto-generated catch block
-//            //writer.println("<br/> Upload Failed.");
-//            e.printStackTrace();
-//        } finally {
-//
-//            if (pdfFileBytes != null) {
-//                pdfFileBytes.close();
-//            }
-//            if (writer != null) {
-//                writer.close();
+//                e.printStackTrace();
 //            }
 //        }
-//        JSONObject json = new JSONObject();
-//        response.setContentType("application/json");
-//        response.setCharacterEncoding("UTF-8");
-//        response.getWriter().write(json.toString());
-//        response.flushBuffer();
-//    }
-}

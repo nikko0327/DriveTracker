@@ -9,7 +9,7 @@ $(document).ready(function() {
         e.preventDefault();
         $('.nav.nav-tabs > li').removeClass('active');
         $(this).addClass('active');
-        console.log($(this).find("a").attr("href"));
+
         var id = $(this).attr("id");
 
         $(".frame").hide();
