@@ -190,7 +190,14 @@
                     <textarea style="color: black" id="modal_notes"></textarea>
                 </div>
             </div>
-
+            <div class="alert alert-danger" id="file_warning_box" hidden>
+                <strong>Oops! </strong>
+                <!--warning message goes HERE through script-->
+            </div>
+            <div class="alert alert-success" id="file_success_box" hidden>
+                <strong>Success! </strong>
+                <!--success message goes HERE through script-->
+            </div>
             <div class="control-group">
                 <label class="control-label" for="modal_file2">File Upload</label>
                 <div class="controls">

@@ -151,16 +151,19 @@ $(document).ready(function() {
 
     //Note: if the file is too large it will take a long ass time
     //TODO: Find a way to check the file size before uploading it to the servlet
+    //^ this will speed up process for the user BUT we still need to check the file on the server side
     $(document).on("click", "#upload", function(e) {
         e.stopPropagation();
         e.preventDefault();
+        var warning_box_id = "file_warning_box";
+        var success_box_id = "file_success_box";
 
         if ($("#file")[0].files[0] == null) {
-            alert("Oops! You need to choose a file to upload!");
+            displayUploadAlert(warning_box_id, "You need to choose a file to upload!");
             return;
         }
         else if ($("#desc").val() == null || $("#desc").val() == "") {
-            alert("Oops! Please include a description!");
+            displayUploadAlert(warning_box_id, "Please include a description!");
             return;
         }
 
@@ -183,6 +186,7 @@ $(document).ready(function() {
             processData: false,
             contentType: false,
             success: function(data, textStatus, jqXHR) {
+                $('#modal_spinner').hide();
                 if (data.result == "success") {//If the data passes all the tests then update the page!
                     $.ajax({
                         url: "upload2.jsp?pp_asset_tag=" + pp_asset_tag + "&customer_name=" + customer_name + "&update=true",
@@ -195,17 +199,15 @@ $(document).ready(function() {
 
                         }
                     });
-                    $('#modal_spinner').hide();
-                    alert("File Uploaded Successfully!");
+                    displayUploadAlert(success_box_id, "File was uploaded to the server!");
                 }
                 else {
-                    $('#modal_spinner').hide();
-                    alert("Oops! " + data.result);
+                    displayUploadAlert(warning_box_id, data.result);
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {//if the server gives us an error we're fucked
                 $('#modal_spinner').hide();
-                alert("ERROR: " + errorThrown);
+                displayUploadAlert(warning_box_id, errorThrown);
             }
         });
     });
@@ -289,19 +291,21 @@ function searchDrive() {
     var customer_name = $('#customer_name').val();
     var drive_state = $('#drive_state').val();
     var drive_location = $('#drive_location').val();
-
-    // Hardcoded admin username ._.
+    var tableName = "drive_info";
+    // Hardcoded admin username
+    //TODO: Remove??
     var admin = "zgraham";
 
     $('#page_spinner').show();
 
-    $.post("searchDrive",
+    $.post("DriveSearchServlet",
         {
             pp_asset_tag : pp_asset_tag,
             serial_number : serial_number,
             customer_name : customer_name,
             drive_state : drive_state,
-            drive_location : drive_location
+            drive_location : drive_location,
+            tableName : tableName
         },
         function(data) {
             $('#drive_list').empty();
@@ -454,6 +458,23 @@ function getValuesById(id) {
     created = $('#created_' + id).val();
     last_updated = $('#last_updated_' + id).val();
     updated_by = $('#updated_by_' + id).val();
+}
+
+//Displays an alert msg at the specified ID, but first removes the text from previous alert
+function displayUploadAlert(alert_id, msg) {
+    alert_id = "#" + alert_id;
+    $(alert_id)
+        .contents()
+        .filter(function() {
+            return this.nodeType === 3; //Node.TEXT_NODE
+        }).remove();
+
+    //hides all alert boxes
+    $(".alert").hide();//TODO: change this, it is probably to general as is, this was just a quick fix
+
+    $(alert_id).append(msg);
+
+    $(alert_id).show();
 }
 
 function generateCTSTicketUrl(cts) {

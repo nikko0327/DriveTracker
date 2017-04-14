@@ -39,16 +39,6 @@
   </servlet-mapping>
   <servlet>
     <description></description>
-    <display-name>searchDrive</display-name>
-    <servlet-name>searchDrive</servlet-name>
-    <servlet-class>app.searchDrive</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>searchDrive</servlet-name>
-    <url-pattern>/searchDrive</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
     <display-name>customerInfo</display-name>
     <servlet-name>customerInfo</servlet-name>
     <servlet-class>app.customerInfo</servlet-class>
@@ -79,17 +69,6 @@
   </servlet-mapping>
   <servlet>
     <description></description>
-    <display-name>historyDrive</display-name>
-    <servlet-name>historyDrive</servlet-name>
-    <servlet-class>app.historyDrive</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>historyDrive</servlet-name>
-    <url-pattern>/historyDrive</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
     <display-name>deleteFile</display-name>
     <servlet-name>deleteFile</servlet-name>
     <servlet-class>app.deleteFile</servlet-class>
@@ -108,6 +87,16 @@
   <servlet-mapping>
     <servlet-name>FileUploadDBServlet</servlet-name>
     <url-pattern>/FileUploadDBServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DriveSearchServlet</display-name>
+    <servlet-name>DriveSearchServlet</servlet-name>
+    <servlet-class>app.DriveSearchServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DriveSearchServlet</servlet-name>
+    <url-pattern>/DriveSearchServlet</url-pattern>
   </servlet-mapping>
 
   <resource-ref>

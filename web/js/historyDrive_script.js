@@ -53,16 +53,17 @@ function searchDrive() {
     var customer_name = $('#customer_name').val();
     var drive_state = $('#drive_state').val();
     var drive_location = $('#drive_location').val();
-
+    var tableName = "drive_history";
     $('#page_spinner').show();
 
-    $.post("historyDrive",
+    $.post("DriveSearchServlet",
         {
             pp_asset_tag : pp_asset_tag,
             serial_number : serial_number,
             customer_name : customer_name,
             drive_state : drive_state,
-            drive_location : drive_location
+            drive_location : drive_location,
+            tableName : tableName
         },
         function(data) {
             $('#drive_list').empty();

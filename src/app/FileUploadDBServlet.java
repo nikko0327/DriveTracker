@@ -53,8 +53,6 @@ public class FileUploadDBServlet extends HttpServlet implements mysql_credential
         this.assetAndPP = "PS" + request.getParameter("assetTag");
         this.description = request.getParameter("description");
 
-        System.out.println(this.filePart.getContentType());
-
         JSONObject json = new JSONObject();
         if (uploadFileAndData()) {
             json.put("result", "success");
@@ -143,34 +141,3 @@ public class FileUploadDBServlet extends HttpServlet implements mysql_credential
         return result;
     }
 }
-
-//IGNORE: This was inside of doPost right at the beginning but didn't do anything helpful
-//        Enumeration paramNames = request.getParameterNames();
-//        while (paramNames.hasMoreElements()) {
-//            String paramName = (String) paramNames.nextElement();
-//            System.out.println("param name: " + paramName);
-//        }
-//        boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-//        if (isMultipart) {
-//            FileItemFactory factory = new DiskFileItemFactory();
-//
-//            ServletFileUpload upload = new ServletFileUpload(factory);
-//            try {
-//                List<FileItem> multiparts = upload.parseRequest(request);
-//                for (FileItem item : multiparts) {
-//
-//                    System.out.println("item: " + item);
-//                    //isFormField returns false if it is a file
-//                    if(!item.isFormField()) {
-//                        String fileName = new File(item.getName()).getName();
-//                        System.out.println("file: " + fileName);
-//                    }
-//                    else {
-//                        System.out.println(item.getName());
-//                        System.out.println(item.getFieldName());
-//                    }
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
