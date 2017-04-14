@@ -51,11 +51,14 @@ $(document).ready(function() {
         $('#details_modal_usb').html(usb);
         $('#details_modal_power').html(power);
         $('#details_modal_notes').html("<a href='notes" + jira + "' target='_blank'>" + notes + "</a>");
-        $('#details_modal_file').html("<a href='bookReadPdf.jsp?pp_asset_tag=" + pp_asset_tag +  "&" +
-            "update=true" +" ' target='_blank' style=width=500,height=600," +
-            "toolbar=no,location=no,directories=no,status=no," +
-            "menubar=no,scrollbars=yes,copyhistory=no,resizable=yes'>" +
-            "Open" + "</a>");
+
+        $.ajax({
+            url: "upload2.jsp?pp_asset_tag=" + pp_asset_tag + "&update=false",
+            dataType: "text",
+            success: function(msg){
+                $('#details_modal_file').append(msg);
+            }
+        });
         $('#details_modal_received_date').html(received_date);
         $('#details_modal_sent_date').html(sent_date);
         $('#details_modal_shipping_carrier_sent').html(shipping_carrier_sent);
@@ -66,6 +69,11 @@ $(document).ready(function() {
 
         $('#details_modal_spinner').hide();
         $('#detailsModal').modal();
+    });
+
+    //Prevents duplicate upload tables from being presented in the modal in case they open up the update again
+    $("#detailsModal").on("hidden", function() {
+        $('#details_modal_file').children().remove();
     });
 
     $(document).on('click', 'button[name="deleteButton"]', function(e) {
@@ -215,6 +223,7 @@ $(document).ready(function() {
     //Prevents duplicate upload tables from being presented in the modal in case they open up the update again
     $("#updateModal").on("hidden", function() {
         $('#modal_file2').children().remove();
+        $(".alert").hide();//TODO: change this, it is probably to general as is, this was just a quick fix
     });
 
     $(document).on('click', '#modalUpdateButton', function() {

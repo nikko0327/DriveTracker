@@ -361,7 +361,7 @@
             <div class="control-group">
                 <label class="control-label" for="details_modal_file">Files</label>
                 <div class="controls">
-                    <a id="details_modal_file" >Files</a>
+                    <p id="details_modal_file" ></p>
                 </div>
             </div>
 

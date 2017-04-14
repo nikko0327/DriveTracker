@@ -21,7 +21,7 @@ public class DriveSearchServlet extends HttpServlet implements mysql_credentials
 
     /**
      * @see HttpServlet#HttpServlet()
-     */
+     **/
     public DriveSearchServlet() {
         super();
     }
