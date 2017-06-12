@@ -225,7 +225,7 @@ $(document).ready(function() {
     //Prevents duplicate upload tables from being presented in the modal in case they open up the update again
     $("#updateModal").on("hidden", function() {
         $('#modal_file2').children().remove();
-        $(".alert").hide();//TODO: need to change this, it is probably too  general as is, this was just a quick fix
+        $(".alert").hide();
     });
 
     $(document).on('click', '#modalUpdateButton', function() {
@@ -303,6 +303,7 @@ function searchDrive() {
     var customer_name = $('#customer_name').val();
     var drive_state = $('#drive_state').val();
     var drive_location = $('#drive_location').val();
+    var essential = $('#essential_select').val();
     var tableName = "drive_info";
     // Hardcoded admin username
     //TODO: Remove??
@@ -317,7 +318,8 @@ function searchDrive() {
             customer_name : customer_name,
             drive_state : drive_state,
             drive_location : drive_location,
-            tableName : tableName
+            tableName : tableName,
+            essential : essential
         },
         function(data) {
             $('#drive_list').empty();

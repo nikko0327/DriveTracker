@@ -20,6 +20,11 @@
         <select id="drive_location">
             <option value ="" disabled selected style="display:none; color:gray;">Location</option>
         </select>
+        <select id="essential_select">
+            <option value ="">Essential</option>
+            <option value ="Yes">Yes</option>
+            <option value ="No">No</option>
+        </select>
         <br>
         <br>
         <button type="submit" class="btn btn-primary" id="search">Search</button>

@@ -20,18 +20,20 @@ public class DataFoundObject implements mysql_credentials {
     private String driveState;
     private String driveLocation;
     private String tableName;
+    private String essential;
 
     private String eMessage = "";
     private String searchResult = "";
 
     public DataFoundObject(String assetTag, String serialNumber, String customerName,
-                           String driveState, String driveLocation, String tableName) {
+                           String driveState, String driveLocation, String tableName, String essential) {
         this.assetTag = assetTag;
         this.serialNumber = serialNumber;
         this.customerName = customerName;
         this.driveState = driveState;
         this.driveLocation = driveLocation;
         this.tableName = tableName;
+        this.essential = essential;
     }
 
     public String getErrorMessage() {
@@ -49,6 +51,7 @@ public class DataFoundObject implements mysql_credentials {
         customerName.trim();
         driveState.trim();
         driveLocation.trim();
+        essential.trim();
 
         Connection connect = null;
         try{
@@ -63,7 +66,8 @@ public class DataFoundObject implements mysql_credentials {
                     && (serialNumber.equalsIgnoreCase(null) || serialNumber.equalsIgnoreCase(""))
                     && (customerName.equalsIgnoreCase(null) || customerName.equalsIgnoreCase(""))
                     && (driveState.equalsIgnoreCase(null) || driveState.equalsIgnoreCase(""))
-                    && (driveLocation.equalsIgnoreCase(null) || driveLocation.equalsIgnoreCase(""))) {
+                    && (driveLocation.equalsIgnoreCase(null) || driveLocation.equalsIgnoreCase(""))
+                    && (essential.equalsIgnoreCase(null) || essential.equalsIgnoreCase(""))) {
                 //get all drives except the ones returned to customer
                 query_searchDrive = "select * from " + tableName +
                         " where drive_state <> 'Import Complete / Return Media to Customer' " +
@@ -102,6 +106,13 @@ public class DataFoundObject implements mysql_credentials {
                         query_searchDrive += " drive_location = '" + driveLocation + "'";
                     else
                         query_searchDrive += " and drive_location = '" + driveLocation + "'";
+                }
+
+                if (!(essential.equalsIgnoreCase(null) || essential.equalsIgnoreCase(""))) {
+                    if (query_searchDrive.equalsIgnoreCase("select * from " + tableName + " where"))
+                        query_searchDrive += " essential = '" + essential + "'";
+                    else
+                        query_searchDrive += " and essential = '" + essential + "'";
                 }
 
                 query_searchDrive += " order by last_updated desc;";

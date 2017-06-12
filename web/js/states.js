@@ -1,23 +1,5 @@
 $(document).ready(function() {
-/*
-    statesOfDrive = {
-        "Received from Customer" : "Received from Customer",
-        "Returned to Customer" : "Returned to Customer"
-    };
 
-    statesOfPPDrive = {
-        "Sent to Customer" : "Sent to Customer",
-        "Received Back from Customer" : "Received Back from Customer"
-    };
-
-    states = selectState($('select[id*=property]').val());
-    setStatesOption(states);
-
-    $('select[id*=property]').on('change', function() {
-        states = selectState($('select[id*=property]').val());
-        setStatesOption(states);
-    });
-*/
     $('#shipping_info').hide();
 
     states = {
@@ -63,24 +45,3 @@ function showShippingInfo(state) {
     else
         $('#shipping_info').hide();
 }
-
-/*
-function selectState(property) {
-    if(property == "Proofpoint")
-        return statesOfPPDrive;
-    else
-        return statesOfDrive;
-}
-
-
-function setStatesOption(states) {
-    $('select[id*=drive_state]').empty();
-
-    $.each(states, function(val, text) {
-        $('select[id*=drive_state]').append(
-            $('<option></option>').val(val).html(text)
-        );
-    });
-
-    $('select[id*=drive_state]').change();
-}*/

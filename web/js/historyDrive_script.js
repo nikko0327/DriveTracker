@@ -53,6 +53,7 @@ function searchDrive() {
     var customer_name = $('#customer_name').val();
     var drive_state = $('#drive_state').val();
     var drive_location = $('#drive_location').val();
+    var essential = $('#essential_select').val();
     var tableName = "drive_history";
     $('#page_spinner').show();
 
@@ -63,7 +64,8 @@ function searchDrive() {
             customer_name : customer_name,
             drive_state : drive_state,
             drive_location : drive_location,
-            tableName : tableName
+            tableName : tableName,
+            essential : essential
         },
         function(data) {
             $('#drive_list').empty();
