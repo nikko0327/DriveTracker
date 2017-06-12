@@ -29,6 +29,7 @@ public class HistoryInfo {
     private String created;
     private String lastUpdated;
     private String updatedBy;
+    private String essential;
 
     public HistoryInfo(String type) {
         this.type = type;
@@ -249,4 +250,8 @@ public class HistoryInfo {
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
+
+    public String getEssential() { return essential;}
+
+    public void setEssential(String essential) {this.essential = essential;}
 }

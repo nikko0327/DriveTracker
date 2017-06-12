@@ -227,6 +227,7 @@ $(document).ready(function() {
         return_media_to_customer = $('#return_media_to_customer').val();
         notes = $('#notes').val();
         username = $('#username').val();
+        essential = $('#essential').val();
 
         if(pp_asset_tag == null || pp_asset_tag == "") {
             alert("Please enter PP Asset Tag");
@@ -257,7 +258,8 @@ $(document).ready(function() {
                 return_media_to_customer : return_media_to_customer,
                 notes : notes,
                 updated_by : username,
-                is_update : is_update
+                is_update : is_update,
+                essential: essential
             },
             function(data){
                 $('#spinner').hide();
@@ -285,7 +287,8 @@ $(document).ready(function() {
                         + "<br>Drive Location: " + data.drive_location
                         + "<br>Drive Status: " + data.drive_state
                         + "<br>Received Date: " + data.received_date
-                        + "<br>Return Media to Customer: " + data.return_media_to_customer;
+                        + "<br>Return Media to Customer: " + data.return_media_to_customer
+                        + "<br>Essential: " + data.essential;
 
                     result += "<br>Notes: " + data.notes
                         + "<br>Created: " + data.created

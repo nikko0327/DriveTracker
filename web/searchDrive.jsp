@@ -151,6 +151,17 @@
                 </div>
             </div>
 
+            <div class="control-group">
+                <label class="control-label" for="modal_essential">Essential</label>
+                <div class="controls">
+                    <select id="modal_essential">
+                        <option value=""></option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+            </div>
+
             <div id="shipping_information_received">
                 <div class="control-group">
                     <label class="control-label" for="modal_received_date">Received Date</label>
@@ -193,10 +204,12 @@
             <div class="alert alert-danger" id="file_warning_box" hidden>
                 <strong>Oops! </strong>
                 <!--warning message goes HERE through script-->
+
             </div>
             <div class="alert alert-success" id="file_success_box" hidden>
                 <strong>Success! </strong>
                 <!--success message goes HERE through script-->
+
             </div>
             <div class="control-group">
                 <label class="control-label" for="modal_file2">File Upload</label>
@@ -316,6 +329,13 @@
                 <label class="control-label" for="details_modal_return_media_to_customer">Return Media To Customer</label>
                 <div class="controls">
                     <p id="details_modal_return_media_to_customer"></p>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="details_modal_essential">Essential</label>
+                <div class="controls">
+                    <p id="details_modal_essential"></p>
                 </div>
             </div>
 

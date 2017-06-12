@@ -121,6 +121,17 @@
                 </div>
             </div>
 
+            <div class="control-group">
+                <label class="control-label" for="essential">Essential</label>
+                <div class="controls">
+                    <select id="essential">
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+
             <input id="received_date" type="hidden">
 
             <div id="shipping_info">

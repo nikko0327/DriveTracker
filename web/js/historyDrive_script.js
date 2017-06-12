@@ -93,6 +93,7 @@ function searchDrive() {
                 value += "<th>Updater</th>";
                 value += "<th>Note</th>";
                 value += "<th>Return Media To Customer</th>";
+                value += "<th>Essential</th>";
                 value += "</tr>";
                 value += "</thead>";
                 value += "<tbody>";
@@ -121,6 +122,7 @@ function searchDrive() {
                             // value += "<td style='color: red'>" +  "<strong>" + v.return_media_to_customer + "</strong>" + "</td>";
                             value += "<td style = 'color: red; font-size: 120%;'>" + '<i class="fa fa-times">' + '</i>' + 'No' + "</td>";
                         }
+                        value += "<td>" + v.essential + "</td>";
 
                         value +=
                             "<input type='hidden' id='pp_asset_tag_" + i + "' value='" + v.pp_asset_tag + "'>" +
@@ -144,6 +146,7 @@ function searchDrive() {
                             "<input type='hidden' id='created_" + i + "' value='" + v.created + "'>" +
                             "<input type='hidden' id='last_updated_" + i + "' value='" + v.last_updated + "'>" +
                             "<input type='hidden' id='updated_by_" + i + "' value='" + v.updated_by + "'>" +
+                            "<input type='hidden' id='essential" + i + "' value='" + v.essential + "'>" +
                             "</td>";
                     }
                     value += "</tr>";
@@ -196,4 +199,5 @@ function getValuesById(id) {
     created = $('#created_' + id).val();
     last_updated = $('#last_updated_' + id).val();
     updated_by = $('#updated_by_' + id).val();
+    essential = $('#essential' + id).val();
 }

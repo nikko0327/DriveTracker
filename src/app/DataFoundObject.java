@@ -23,7 +23,7 @@ public class DataFoundObject implements mysql_credentials {
 
     private String eMessage = "";
     private String searchResult = "";
-;
+
     public DataFoundObject(String assetTag, String serialNumber, String customerName,
                            String driveState, String driveLocation, String tableName) {
         this.assetTag = assetTag;
@@ -142,7 +142,7 @@ public class DataFoundObject implements mysql_credentials {
                 map.put("created", rs.getTimestamp("created").toString());
                 map.put("last_updated", rs.getTimestamp("last_updated").toString());
                 map.put("updated_by", rs.getString("updated_by"));
-
+                map.put("essential", rs.getString("essential"));
                 list.add(map);
             }
 

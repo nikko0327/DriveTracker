@@ -11,8 +11,6 @@ import db_credentials.mysql_credentials;
 import net.sf.json.JSONObject;
 
 
-
-
 /**
  * Created by zgraham on 4/13/17.
  */

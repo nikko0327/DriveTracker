@@ -47,6 +47,7 @@ $(document).ready(function() {
         $('#details_modal_drive_location').html(drive_location);
         $('#details_modal_drive_state').html(drive_state);
         $('#details_modal_return_media_to_customer').html(return_media_to_customer);
+        $('#details_modal_essential').html(essential);
         $('#details_modal_encrypted').html(encrypted);
         $('#details_modal_usb').html(usb);
         $('#details_modal_power').html(power);
@@ -129,6 +130,7 @@ $(document).ready(function() {
         $('#modal_drive_location').val(drive_location);
         $('#modal_drive_state').val(drive_state);
         $('#modal_return_media_to_customer').val(return_media_to_customer);
+        $('#modal_essential').val(essential);
         $('#modal_encrypted').val(encrypted);
         $('#modal_usb').val(usb);
         $('#modal_power').val(power);
@@ -223,7 +225,7 @@ $(document).ready(function() {
     //Prevents duplicate upload tables from being presented in the modal in case they open up the update again
     $("#updateModal").on("hidden", function() {
         $('#modal_file2').children().remove();
-        $(".alert").hide();//TODO: change this, it is probably to general as is, this was just a quick fix
+        $(".alert").hide();//TODO: need to change this, it is probably too  general as is, this was just a quick fix
     });
 
     $(document).on('click', '#modalUpdateButton', function() {
@@ -247,11 +249,11 @@ $(document).ready(function() {
         var shipping_carrier_sent = $('#modal_shipping_carrier_sent').val();
         var shipping_tracking_number_sent = $('#modal_shipping_tracking_number_sent').val();
         var username = $('#username').val();
+        var essential = $('#modal_essential').val();
 
         if(pp_asset_tag == null || pp_asset_tag == "") {
             alert("Drive must have a PP Asset Tag");
             $("#modal_pp_asset_tag").focus();
-
             return;
         }
 
@@ -278,7 +280,8 @@ $(document).ready(function() {
                 sent_date : sent_date,
                 shipping_carrier_sent : shipping_carrier_sent,
                 shipping_tracking_number_sent : shipping_tracking_number_sent,
-                updated_by : username
+                updated_by : username,
+                essential : essential
             },
             function(data) {
                 $('#modal_spinner').hide();
@@ -344,7 +347,7 @@ function searchDrive() {
                 value += "<th>Property</th>";
                 value += "<th>Status</th>";
                 value += "<th>Return Media To Customer</th>";
-                //value += "<th>Notes</th>";
+                value += "<th>Essential</th>";
                 value += "<th>Updated</th>";
                 value += "<th>Updated By</th>";
                 value += "<th>Operations</th>";
@@ -379,6 +382,7 @@ function searchDrive() {
                             value += "<td style = 'color: red; font-size: 120%;'>" + '<i class="fa fa-times">' + '</i>' + 'No' + "</td>";
                         }
 
+                        value += "<td>" + v.essential + "</td>";
                         value += "<td>" + v.last_updated + "</td>";
                         value += "<td>" + v.updated_by +"</td>";
 
@@ -410,6 +414,7 @@ function searchDrive() {
                             "<input type='hidden' id='created_" + i + "' value='" + v.created + "'>" +
                             "<input type='hidden' id='last_updated_" + i + "' value='" + v.last_updated + "'>" +
                             "<input type='hidden' id='updated_by_" + i + "' value='" + v.updated_by + "'>" +
+                            "<input type='hidden' id='essential_" + i + "' value='" + v.essential + "'>" +
                             "</td>";
                     }
                     value += "</tr>";
@@ -467,11 +472,12 @@ function getValuesById(id) {
     created = $('#created_' + id).val();
     last_updated = $('#last_updated_' + id).val();
     updated_by = $('#updated_by_' + id).val();
+    essential = $('#essential_' + id).val();
 }
 
 //Displays an alert msg at the specified ID, but first removes the text from previous alert
 function displayUploadAlert(alert_id, msg) {
-    alert_id = "#" + alert_id;
+    alert_id = "#" + alert_id; //added _div here to because this is where text goes to fix a visual bug
     $(alert_id)
         .contents()
         .filter(function() {
@@ -479,7 +485,7 @@ function displayUploadAlert(alert_id, msg) {
         }).remove();
 
     //hides all alert boxes
-    $(".alert").hide();//TODO: change this, it is probably to general as is, this was just a quick fix
+    $(".alert").hide();//TODO: need to change this, it is probably too general as is, this was just a quick fix
 
     $(alert_id).append(msg);
 
