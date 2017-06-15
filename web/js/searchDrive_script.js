@@ -349,7 +349,7 @@ function searchDrive() {
                 value += "<th>Property</th>";
                 value += "<th>Status</th>";
                 value += "<th>Return Media To Customer</th>";
-                value += "<th>Essential</th>";
+                value += "<th>Essentials</th>";
                 value += "<th>Updated</th>";
                 value += "<th>Updated By</th>";
                 value += "<th>Operations</th>";

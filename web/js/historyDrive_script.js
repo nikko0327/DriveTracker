@@ -95,7 +95,7 @@ function searchDrive() {
                 value += "<th>Updater</th>";
                 value += "<th>Note</th>";
                 value += "<th>Return Media To Customer</th>";
-                value += "<th>Essential</th>";
+                value += "<th>Essentials</th>";
                 value += "</tr>";
                 value += "</thead>";
                 value += "<tbody>";

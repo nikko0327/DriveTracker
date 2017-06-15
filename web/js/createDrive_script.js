@@ -138,7 +138,7 @@ $(document).ready(function() {
                         + "<br>Drive Status: " + data.drive_state
                         + "<br>Received Date: " + data.received_date
                         + "<br>Return Media to Customer: " + data.return_media_to_customer
-                        + "<br>Essential: " + data.essential;
+                        + "<br>Essentials: " + data.essential;
 
                     result += "<br>Notes: " + data.notes
                         + "<br>Created: " + data.created

@@ -21,7 +21,7 @@
             <option value ="" disabled selected style="display:none; color:gray;">Location</option>
         </select>
         <select id="essential_select">
-            <option value ="">Essential</option>
+            <option value ="">Essentials</option>
             <option value ="Yes">Yes</option>
             <option value ="No">No</option>
         </select>
@@ -157,7 +157,7 @@
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="modal_essential">Essential</label>
+                <label class="control-label" for="modal_essential">Essentials</label>
                 <div class="controls">
                     <select id="modal_essential">
                         <option value=""></option>
@@ -338,7 +338,7 @@
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="details_modal_essential">Essential</label>
+                <label class="control-label" for="details_modal_essential">Essentials</label>
                 <div class="controls">
                     <p id="details_modal_essential"></p>
                 </div>

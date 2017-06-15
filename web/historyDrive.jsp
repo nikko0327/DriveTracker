@@ -25,7 +25,7 @@
         </select>
 
         <select id="essential_select">
-            <option value ="">Essential</option>
+            <option value ="">Essentials</option>
             <option value ="Yes">Yes</option>
             <option value ="No">No</option>
         </select>

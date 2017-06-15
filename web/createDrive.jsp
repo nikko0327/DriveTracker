@@ -122,7 +122,7 @@
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="essential">Essential</label>
+                <label class="control-label" for="essential">Essentials</label>
                 <div class="controls">
                     <select id="essential">
                         <option value="No">No</option>
