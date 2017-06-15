@@ -149,14 +149,13 @@ public class createDrive extends HttpServlet implements mysql_credentials {
 
             else {
                 query_createSprint = "insert into drive_info ("
-                        + "manufacturer_model, serial_number, property, "
+                        + "pp_asset_tag, manufacturer_model, serial_number, property, "
                         + "customer_name, cts, jira, label, drive_location, drive_state, "
                         + "encrypted, box, usb, power, rack, shelf, notes, "
                         + "created, last_updated, updated_by, "
                         + "sent_date, shipping_carrier_sent, shipping_tracking_number_sent, "
                         + "received_date, return_media_to_customer, "
-                        + "essential, "
-                        + "pp_asset_tag)"
+                        + "essential)"
                         + "values ("
                         + "?,?,?,?,?,?,?,?,?,?,"
                         + "?,?,?,?,?,?,?,?,?,?,"
@@ -165,40 +164,40 @@ public class createDrive extends HttpServlet implements mysql_credentials {
 
             PreparedStatement prepCreateSprintStmt = connect.prepareStatement(query_createSprint);
 
-            prepCreateSprintStmt.setString(1, manufacturer);
-            prepCreateSprintStmt.setString(2, serialNumber);
-            prepCreateSprintStmt.setString(3, property);
-            prepCreateSprintStmt.setString(4, customerName);
-            prepCreateSprintStmt.setString(5, cts);
-            prepCreateSprintStmt.setString(6, jira);
-            prepCreateSprintStmt.setString(7, label);
-            prepCreateSprintStmt.setString(8, driveLocation);
-            prepCreateSprintStmt.setString(9, driveState);
-            prepCreateSprintStmt.setString(10, encrypted);
-            prepCreateSprintStmt.setString(11, box);
-            prepCreateSprintStmt.setString(12, usb);
-            prepCreateSprintStmt.setString(13, power);
-            prepCreateSprintStmt.setString(14, rack);
-            prepCreateSprintStmt.setString(15, shelf);
-            prepCreateSprintStmt.setString(16, notes);
-            prepCreateSprintStmt.setTimestamp(17, sqlTime);
+            prepCreateSprintStmt.setString(1, assetTag);
+            prepCreateSprintStmt.setString(2, manufacturer);
+            prepCreateSprintStmt.setString(3, serialNumber);
+            prepCreateSprintStmt.setString(4, property);
+            prepCreateSprintStmt.setString(5, customerName);
+            prepCreateSprintStmt.setString(6, cts);
+            prepCreateSprintStmt.setString(7, jira);
+            prepCreateSprintStmt.setString(8, label);
+            prepCreateSprintStmt.setString(9, driveLocation);
+            prepCreateSprintStmt.setString(10, driveState);
+            prepCreateSprintStmt.setString(11, encrypted);
+            prepCreateSprintStmt.setString(12, box);
+            prepCreateSprintStmt.setString(13, usb);
+            prepCreateSprintStmt.setString(14, power);
+            prepCreateSprintStmt.setString(15, rack);
+            prepCreateSprintStmt.setString(16, shelf);
+            prepCreateSprintStmt.setString(17, notes);
             prepCreateSprintStmt.setTimestamp(18, sqlTime);
-            prepCreateSprintStmt.setString(19, updatedBy);
+            prepCreateSprintStmt.setTimestamp(19, sqlTime);
+            prepCreateSprintStmt.setString(20, updatedBy);
 
             if(receivedOrSent.equals("Received")) {
-                prepCreateSprintStmt.setString(20, "");
                 prepCreateSprintStmt.setString(21, "");
                 prepCreateSprintStmt.setString(22, "");
+                prepCreateSprintStmt.setString(23, "");
             }
             else if(receivedOrSent.equals("Sent")) {
-                prepCreateSprintStmt.setString(20, sentDate);
-                prepCreateSprintStmt.setString(21, shippingCarrier);
-                prepCreateSprintStmt.setString(22, shippingTrackingNumber);
+                prepCreateSprintStmt.setString(21, sentDate);
+                prepCreateSprintStmt.setString(22, shippingCarrier);
+                prepCreateSprintStmt.setString(23, shippingTrackingNumber);
             }
 
-            prepCreateSprintStmt.setString(23, receivedDate);
-            prepCreateSprintStmt.setString(24, return_media_to_customer);
-            prepCreateSprintStmt.setString(25, assetTag);
+            prepCreateSprintStmt.setString(24, receivedDate);
+            prepCreateSprintStmt.setString(25, return_media_to_customer);
             prepCreateSprintStmt.setString(26, essential);
 
             int createSprintStmtRes = prepCreateSprintStmt.executeUpdate();
