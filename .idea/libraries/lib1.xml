@@ -1,0 +1,34 @@
+<component name="libraryTable">
+  <library name="lib1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/lib/mailapi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/commons-collections-3.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/json-lib-2.4-jdk15.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/commons-beanutils-1.8.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/imap.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/commons-io-2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/pop3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/gimap.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/standard.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/smtp.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/ezmorph-1.0.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/dsn.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/jsoup-1.7.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/commons-codec-1.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/servlet-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/commons-codec-1.7-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/json-rpc-1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/commons-lang-2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/mysql-connector-java-5.1.21-bin.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/velocity-1.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/apache-commons-lang.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/commons-logging-1.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/jstl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/velocity-1.7-dep.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/jsoup-1.7.2-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/commons-fileupload-1.3.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

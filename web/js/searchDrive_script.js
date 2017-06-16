@@ -307,7 +307,7 @@ function searchDrive() {
     var tableName = "drive_info";
     // Hardcoded admin username
     //TODO: Remove??
-    var admin = "zgraham";
+    var admin = "nlee";
 
     $('#page_spinner').show();
 
