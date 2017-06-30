@@ -22,7 +22,10 @@ $(document).ready(function() {
         "Import Complete / Return Media to Customer" : "Import Complete / Return Media to Customer",
         "Wipe Media for New Project" : "Wipe Media for New Project",
         "Project Closed / Media Returned" : "Project Closed / Media Returned",
-        "Export Project Drive" : "Export Project Drive"
+        "Export Project Drive" : "Export Project Drive",
+        "Waiting for AWS Upload" : "Waiting for AWS Upload",
+        "AWS Upload Complete" : "AWS Upload Complete",
+        "Waiting Return from AWS" : "Waiting Return from AWS"
     };
 
 

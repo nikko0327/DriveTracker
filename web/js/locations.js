@@ -5,6 +5,7 @@ $(document).ready(function() {
         "SC4: Inbound" : "SC4: Inbound",
         "SC4: Outbound" : "SC4: Outbound",
         "PS-892 Shipping/Receiving" : "PS-892 Shipping/Receiving",
+        "AWS" : "AWS",
         "In Transit - AWS" : "In Transit - AWS",
         "In Transit - BRA" : "In Transit - BRA",
         "In Transit - FRA" : "In Transit - FRA",
