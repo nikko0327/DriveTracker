@@ -1,5 +1,8 @@
+
+
 $(document).ready(function() {
 
+    new Clipboard('.clipbtn');
 
     $('#pp_asset_tag').focus();
     $("[id$=date]").datepicker({ dateFormat: "yy-mm-dd"});
@@ -107,7 +110,9 @@ $(document).ready(function() {
 
         e.stopPropagation();
     });
-
+    $(document).on('click', 'button[name="copyButton"]', function(e) {
+        e.stopPropagation();
+    });
     $(document).on('click', "button[name='updateButton']", function(e) {
         var id = $(this).attr('id').replace('update_', '');
         getValuesById(id);
@@ -152,6 +157,7 @@ $(document).ready(function() {
 
             }
         });
+
 
         $('#modal_spinner').hide();
         $('#updateModal').modal();
@@ -307,7 +313,7 @@ function searchDrive() {
     var tableName = "drive_info";
     // Hardcoded admin username
     //TODO: Remove??
-    var admin = "nlee";
+    var admin = "zgraham";
 
     $('#page_spinner').show();
 
@@ -335,13 +341,13 @@ function searchDrive() {
             }
             else {
                 var value = "<p>Total Matches: " + data.totalMatches +"</p>";
-                value += "<table id='drive_table' class='table table-condensed table-hover tablesorter'>";
+                value += "<table id='drive_table' class='table table-condensed table-hover tablesorter' style='table-layout: auto;'>";
                 value += "<thead>";
                 value += "<tr style='background-color:#D8D8D8'>";
                 value += "<th>Asset Tag</th>";
                 value += "<th>Customer</th>";
                 value += "<th>CTS</th>";
-                value += "<th>JIRA</th>";// ADDED VALUE: THIS IS THE REASON WHY TABLE IN searchDrive IS PUSHED TO RIGHT
+                value += "<th>JIRA</th>"; // ADDED VALUE: THIS IS THE REASON WHY TABLE IN searchDrive IS PUSHED TO RIGHT
                 value += "<th>MFR/Model</th>";
                 value += "<th>Serial</th>";
                 value += "<th>Label</th>";
@@ -352,7 +358,7 @@ function searchDrive() {
                 value += "<th>Essentials</th>";
                 value += "<th>Updated</th>";
                 value += "<th>Updated By</th>";
-                value += "<th>Operations</th>";
+                value += "<th style='width: 80%'>Operations</th>";
                 value += "</tr>";
                 value += "</thead>";
                 value += "<tbody>";
@@ -375,6 +381,9 @@ function searchDrive() {
                         value += "<td>" + v.property + "</td>";
                         value += "<td>" + v.drive_state + "</td>";
 
+                        var clipboard_text = "" + v.pp_asset_tag + " " + v.customer_name + " " + v.cts + " " + v.jira +
+                                " " + v.manufacturer + " " + v.serial_number;
+
                         if((v.return_media_to_customer) == 'Yes') {
                             // value += "<td style = 'color: green'>" + "<strong>" + v.return_media_to_customer + "</strong>" + "</td>";
                             value += "<td style = 'color: green; font-size: 120%;'>" + '<i class="fa fa-check">' + '</i>' + 'Yes' + "</td>";
@@ -388,10 +397,14 @@ function searchDrive() {
                         value += "<td>" + v.last_updated + "</td>";
                         value += "<td>" + v.updated_by +"</td>";
 
-                        value += "<td><button name ='updateButton' class='btn btn-sm btn-default' id='update_" + i + "'><i class='icon-edit'></i></button>";
+                        value += "<td><button name='updateButton' class='btn btn-sm btn-default' id='update_" + i + "'><i class='icon-edit'></i></button>";
+
+                        value += "&nbsp;<button name='copyButton' class='btn btn-sm btn-default clipbtn' " +
+                            "data-clipboard-text='" + clipboard_text + "' " +
+                            "id='copy_" + i + "'><i class='icon-copy'></i></button>";
 
                         if($('#username').val() == admin)
-                            value += "&nbsp;<button name ='deleteButton' class='btn btn-sm btn-danger' id='delete_" + i +"'><i class='icon-trash'></i></button>";
+                            value += "&nbsp;<button name='deleteButton' class='btn btn-sm btn-danger' id='delete_" + i +"'><i class='icon-trash'></i></button>";
 
                         value +=
                             "<input type='hidden' id='pp_asset_tag_" + i + "' value='" + v.pp_asset_tag + "'>" +
@@ -430,19 +443,9 @@ function searchDrive() {
                 $('#drive_list').append(value);
             }
 
-            //http://tablesorter.com/docs/#Demo
-            //this makes table sortable  //style.css is meant for this one
-            //$('#drive_table').tablesorter();
-            //now sorting by column number in asc order initially
-            //$('#drive_table').tablesorter({sortList: [[0,0], [1,0]]} );
-
-            //now giving sorting options on specific columns
-            $('#drive_table').tablesorter(/*{
-             headers:{
-             14:{sorter:false}
-             }
-             }*/);
-
+            //http://tablesorter.com/docs
+            //third party table sorter utilized
+            $('#drive_table').tablesorter();
             $('#page_spinner').hide();
 
         }, "json");

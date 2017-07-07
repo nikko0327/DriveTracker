@@ -430,20 +430,12 @@
 
 <script src="js/jquery.js"></script>
 <script src="js/jquery-ui-1.8.13.custom.min.js"></script>
-<script src="js/bootstrap-transition.js"></script>
-<script src="js/bootstrap-alert.js"></script>
-<script src="js/bootstrap-modal.js"></script>
-<script src="js/bootstrap-dropdown.js"></script>
-<script src="js/bootstrap-scrollspy.js"></script>
-<script src="js/bootstrap-tab.js"></script>
-<script src="js/bootstrap-tooltip.js"></script>
-<script src="js/bootstrap-popover.js"></script>
-<script src="js/bootstrap-button.js"></script>
-<script src="js/bootstrap-collapse.js"></script>
-<script src="js/bootstrap-carousel.js"></script>
-<script src="js/bootstrap-typeahead.js"></script>
+<script src="js/tether.min.js"></script>
+<script src="js/bootstrap.js"></script>
 <script src="js/jquery.tablesorter.js"></script>
 <script src="js/bootbox.js"></script>
+<script src="js/clipboard.js"></script>
+
 <script src="js/property.js"></script>
 <script src="js/locations.js"></script>
 <script src="js/states.js"></script>
