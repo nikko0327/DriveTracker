@@ -358,7 +358,7 @@ function searchDrive() {
                 value += "<th>Essentials</th>";
                 value += "<th>Updated</th>";
                 value += "<th>Updated By</th>";
-                value += "<th style='width: 80%'>Operations</th>";
+                value += "<th>Operations</th>";
                 value += "</tr>";
                 value += "</thead>";
                 value += "<tbody>";
@@ -397,7 +397,7 @@ function searchDrive() {
                         value += "<td>" + v.last_updated + "</td>";
                         value += "<td>" + v.updated_by +"</td>";
 
-                        value += "<td><button name='updateButton' class='btn btn-sm btn-default' id='update_" + i + "'><i class='icon-edit'></i></button>";
+                        value += "<td style='white-space: nowrap'><button name='updateButton' class='btn btn-sm btn-default' id='update_" + i + "'><i class='icon-edit'></i></button>";
 
                         value += "&nbsp;<button name='copyButton' class='btn btn-sm btn-default clipbtn' " +
                             "data-clipboard-text='" + clipboard_text + "' " +
