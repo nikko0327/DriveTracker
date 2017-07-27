@@ -23,7 +23,7 @@ public class deleteDrive extends HttpServlet implements mysql_credentials{
     private String assetTag;
     private String customerName;
     private String updatedBy;
-
+    private String essential;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -41,6 +41,7 @@ public class deleteDrive extends HttpServlet implements mysql_credentials{
         assetTag = request.getParameter("pp_asset_tag");
         customerName = request.getParameter("customer_name");
         updatedBy = request.getParameter("updated_by");
+        essential = request.getParameter("essential");
 
         JSONObject json = new JSONObject();
 
@@ -122,7 +123,7 @@ public class deleteDrive extends HttpServlet implements mysql_credentials{
         Timestamp sqlTime = new Timestamp(currentDatetime.getTime());
         historyInfo.setLastUpdated(sqlTime.toString());
 
-        EmailNotifier se = new EmailNotifier(historyInfo);
+        EmailNotifier se = new EmailNotifier(historyInfo, this.essential);
         se.send();
     }
 }

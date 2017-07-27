@@ -20,8 +20,13 @@ public class EmailNotifier implements mysql_credentials {
     String serverUrl = "http://lv-drivetrac.corp.proofpoint.com/DriveTracker/";
 
     private Set<InternetAddress> recipients;
+    private String essential;
 
-    public EmailNotifier(HistoryInfo historyInfo) {
+    private final String groupNameEnterprise = "Enterprise";
+    private final String groupNameEssentials = "Essentials";
+
+    public EmailNotifier(HistoryInfo historyInfo, String essential) {
+        this.essential = essential;
         recipients = new HashSet<InternetAddress>();
         loadRecipients();
 
@@ -85,8 +90,16 @@ public class EmailNotifier implements mysql_credentials {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connect = DriverManager.getConnection(db_url, user_name, password);
-
-            String query_selectUsers = "select * from user_info where notification = 'Yes';";
+            String query_selectUsers = "SELECT username FROM user_info WHERE notification='Yes'";
+            if (this.essential.equalsIgnoreCase("Yes")) {
+                query_selectUsers += " AND group_name='"+ this.groupNameEssentials + "';";
+            }
+            else if (this.essential.equalsIgnoreCase("No")) {
+                query_selectUsers += " AND group_name='" + this.groupNameEnterprise + "';";
+            }
+            else {
+                query_selectUsers += ";";
+            }
 
             PreparedStatement prepSelectUsersStmt = connect.prepareStatement(query_selectUsers);
             ResultSet rs = prepSelectUsersStmt.executeQuery();
@@ -97,13 +110,7 @@ public class EmailNotifier implements mysql_credentials {
             rs.close();
             prepSelectUsersStmt.close();
 
-        } catch(SQLException e) {
-            eMessage = e.getMessage();
-            e.printStackTrace();
-        } catch(ClassNotFoundException e) {
-            eMessage = e.getMessage();
-            e.printStackTrace();
-        } catch (AddressException e) {
+        } catch(SQLException | ClassNotFoundException | AddressException e) {
             eMessage = e.getMessage();
             e.printStackTrace();
         } finally {

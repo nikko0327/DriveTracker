@@ -1,5 +1,3 @@
-
-
 $(document).ready(function() {
 
     new Clipboard('.clipbtn');
@@ -84,6 +82,7 @@ $(document).ready(function() {
         var id = $(this).attr('id').replace('delete_','');
         var pp_asset_tag = $('#pp_asset_tag_' + id).val();
         var customer_name = $('#customer_name_' + id).val();
+        var essential = $('#essential_' + id).val();
         var username = $('#username').val();
 
         bootbox.confirm("Are you sure you want to delete this drive?",
@@ -93,7 +92,8 @@ $(document).ready(function() {
                         {
                             pp_asset_tag : pp_asset_tag,
                             customer_name : customer_name,
-                            updated_by : username
+                            updated_by : username,
+                            essential : essential
                         },
                         function(data) {
                             $('#modal_spinner').hide();

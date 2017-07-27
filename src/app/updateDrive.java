@@ -238,7 +238,7 @@ public class updateDrive extends HttpServlet implements mysql_credentials {
         historyInfo.setNotes(notes);
         historyInfo.setLastUpdated(lastUpdated);
         historyInfo.setUpdatedBy(updatedBy);
-        EmailNotifier se = new EmailNotifier(historyInfo);
+        EmailNotifier se = new EmailNotifier(historyInfo, this.essential);
         se.send();
     }
 }

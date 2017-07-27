@@ -127,7 +127,6 @@
                     <select id="essential">
                         <option value="No">No</option>
                         <option value="Yes">Yes</option>
-                        <option value=""></option>
                     </select>
                 </div>
 
