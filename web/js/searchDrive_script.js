@@ -88,23 +88,27 @@ $(document).ready(function() {
         bootbox.confirm("Are you sure you want to delete this drive?",
             function(result) {
                 if(result == true) {
-                    $.post("deleteDrive",
-                        {
-                            pp_asset_tag : pp_asset_tag,
-                            customer_name : customer_name,
-                            updated_by : username,
-                            essential : essential
-                        },
-                        function(data) {
-                            $('#modal_spinner').hide();
+                    if (isAdmin(username)) {
+                        $.post("deleteDrive",
+                            {
+                                pp_asset_tag: pp_asset_tag,
+                                customer_name: customer_name,
+                                updated_by: username,
+                                essential: essential
+                            },
+                            function (data) {
+                                $('#modal_spinner').hide();
 
-                            if(data.result == 'success') {
-                                //alert("Drive successfully deleted");
-                                $('#search_form').submit();
-                            }
-                            else
-                                alert("Error: " + data.result);
-                        }, 'json');
+                                if (data.result == 'success') {
+                                    //alert("Drive successfully deleted");
+                                    $('#search_form').submit();
+                                }
+                                else
+                                    alert("Error: " + data.result);
+                            }, 'json');
+                    }
+                    else
+                        alert("You must be an admin to delete a row");
                 }
             });
 
@@ -164,6 +168,8 @@ $(document).ready(function() {
 
         e.stopPropagation();
     });
+
+
 
     //Note: if the file is too large it will take a long ass time
     //TODO: Find a way to check the file size before uploading it to the servlet
@@ -310,10 +316,8 @@ function searchDrive() {
     var drive_state = $('#drive_state').val();
     var drive_location = $('#drive_location').val();
     var essential = $('#essential_select').val();
+    var username = $('#username').val();
     var tableName = "drive_info";
-    // Hardcoded admin username
-    //TODO: Remove??
-    var admin = "zgraham";
 
     $('#page_spinner').show();
 
@@ -347,7 +351,7 @@ function searchDrive() {
                 value += "<th>Asset Tag</th>";
                 value += "<th>Customer</th>";
                 value += "<th>CTS</th>";
-                value += "<th>JIRA</th>"; // ADDED VALUE: THIS IS THE REASON WHY TABLE IN searchDrive IS PUSHED TO RIGHT
+                value += "<th>JIRA</th>";
                 value += "<th>MFR/Model</th>";
                 value += "<th>Serial</th>";
                 value += "<th>Label</th>";
@@ -373,7 +377,7 @@ function searchDrive() {
                         value += "<td><a href='historyDrive.jsp?pp_asset_tag=" + v.pp_asset_tag + "'>" + v.pp_asset_tag + "</td>";
                         value += "<td>" + v.customer_name + "</td>";
                         value += "<td>" + generateCTSTicketUrl(v.cts) + "</td>";
-                        value += "<td>" + generateJIRATicketUrl(v.jira) + "</td>"; // ADDED VALUE: REFER TO ADDED VALUE ABOVE
+                        value += "<td>" + generateJIRATicketUrl(v.jira) + "</td>";
                         value += "<td>" + v.manufacturer + "</td>";
                         value += "<td>" + v.serial_number + "</td>";
                         value += "<td>" + v.label + "</td>";
@@ -385,11 +389,9 @@ function searchDrive() {
                                 " " + v.manufacturer + " " + v.serial_number;
 
                         if((v.return_media_to_customer) == 'Yes') {
-                            // value += "<td style = 'color: green'>" + "<strong>" + v.return_media_to_customer + "</strong>" + "</td>";
                             value += "<td style = 'color: green; font-size: 120%;'>" + '<i class="fa fa-check">' + '</i>' + 'Yes' + "</td>";
                         }
                         else {
-                            // value += "<td style='color: red'>" +  "<strong>" + v.return_media_to_customer + "</strong>" + "</td>";
                             value += "<td style = 'color: red; font-size: 120%;'>" + '<i class="fa fa-times">' + '</i>' + 'No' + "</td>";
                         }
 
@@ -403,7 +405,8 @@ function searchDrive() {
                             "data-clipboard-text='" + clipboard_text + "' " +
                             "id='copy_" + i + "'><i class='icon-copy'></i></button>";
 
-                        if($('#username').val() == admin)
+                        // check if user is an admin before giving them access to the delete button
+                        if (isAdmin(username))
                             value += "&nbsp;<button name='deleteButton' class='btn btn-sm btn-danger' id='delete_" + i +"'><i class='icon-trash'></i></button>";
 
                         value +=
@@ -525,4 +528,22 @@ function generateShippingTrackingNumberUrl(shipping_tracking_number, shipping_ca
     }
     else
         return shipping_tracking_number;
+}
+
+// sends username over to the Admin.java HttpServlet
+// where it will send a response back letting us know
+// if that username has admin privileges
+function isAdmin(username) {
+    var result = false;
+    $.ajax({
+       type: 'POST',
+        url: 'Admin',
+        async: false, //important to have async set to false so that we wait for the server to give us info before returning
+        data: {username: username},
+        dataType: "json",
+        success: function(data) {
+            result = (data.result === "Yes");
+        }
+    });
+    return result;
 }

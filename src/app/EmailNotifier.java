@@ -24,6 +24,7 @@ public class EmailNotifier implements mysql_credentials {
 
     private final String groupNameEnterprise = "Enterprise";
     private final String groupNameEssentials = "Essentials";
+    private final String groupNameMaster = "Master";
 
     public EmailNotifier(HistoryInfo historyInfo, String essential) {
         this.essential = essential;
@@ -92,13 +93,13 @@ public class EmailNotifier implements mysql_credentials {
             connect = DriverManager.getConnection(db_url, user_name, password);
             String query_selectUsers = "SELECT username FROM user_info WHERE notification='Yes'";
             if (this.essential.equalsIgnoreCase("Yes")) {
-                query_selectUsers += " AND group_name='"+ this.groupNameEssentials + "';";
+                query_selectUsers += " AND group_name IN ('"+ this.groupNameEssentials + "', '" + this.groupNameMaster + "');";
             }
             else if (this.essential.equalsIgnoreCase("No")) {
-                query_selectUsers += " AND group_name='" + this.groupNameEnterprise + "';";
+                query_selectUsers += " AND group_name IN ('" + this.groupNameEnterprise + "', '" + this.groupNameMaster + "');";
             }
             else {
-                query_selectUsers += ";";
+                query_selectUsers += " AND group_name='" + this.groupNameMaster + "';";
             }
 
             PreparedStatement prepSelectUsersStmt = connect.prepareStatement(query_selectUsers);

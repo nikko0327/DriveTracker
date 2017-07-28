@@ -29,6 +29,17 @@
 
   <servlet>
     <description></description>
+    <display-name>Admin</display-name>
+    <servlet-name>Admin</servlet-name>
+    <servlet-class>app.Admin</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Admin</servlet-name>
+    <url-pattern>/Admin</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
     <display-name>createDrive</display-name>
     <servlet-name>createDrive</servlet-name>
     <servlet-class>app.createDrive</servlet-class>
