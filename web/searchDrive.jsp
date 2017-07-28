@@ -294,7 +294,6 @@
                 </div>
             </div>
 
-
             <div class="control-group">
                 <label class="control-label" for="details_modal_usb">USB</label>
                 <div class="controls">

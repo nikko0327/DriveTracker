@@ -1,16 +1,7 @@
 package app;
-import java.util.List;
-import java.io.File;
-import java.util.Enumeration;
 
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.*;
-
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -86,7 +77,6 @@ public class FileUploadDBServlet extends HttpServlet implements mysql_credential
             final byte[] bytes = new byte[pdfFileBytes.available()];
             pdfFileBytes.read(bytes);  //Storing the binary data in bytes array.
 
-
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 con = DriverManager.getConnection(db_url, user_name, password);
@@ -118,12 +108,9 @@ public class FileUploadDBServlet extends HttpServlet implements mysql_credential
             con.close();
             result = true;
 
-        } catch (FileNotFoundException fnf) {
-            eMessage = fnf.getMessage();
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
             eMessage = e.getMessage();
-        } catch (IOException e) {
-            eMessage = e.getMessage();
+            e.printStackTrace();
         } finally {
             try {
                 if (con != null)

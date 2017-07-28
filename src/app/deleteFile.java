@@ -17,15 +17,12 @@ public class deleteFile extends HttpServlet implements mysql_credentials {
     private static final long serialVersionUID = 1L;
     private String eMessage;
 
-    private String attachment_id;
+    private String id;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public deleteFile() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+    public deleteFile() { super(); }
 
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
@@ -33,11 +30,11 @@ public class deleteFile extends HttpServlet implements mysql_credentials {
      */
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
-        attachment_id = request.getParameter("attachment_id");
+        id = request.getParameter("id");
 
         JSONObject json = new JSONObject();
 
-        if(removeDriveAndHistory())
+        if(removeFile())
             json.put("result", "success");
         else
             json.put("result", eMessage);
@@ -48,7 +45,8 @@ public class deleteFile extends HttpServlet implements mysql_credentials {
         response.flushBuffer();
     }
 
-    public boolean removeDriveAndHistory() {
+    @SuppressWarnings("Duplicates")
+    public boolean removeFile() {
         boolean result = false;
 
         Connection connect = null;
@@ -56,22 +54,15 @@ public class deleteFile extends HttpServlet implements mysql_credentials {
             Class.forName("com.mysql.jdbc.Driver");
             connect = DriverManager.getConnection(db_url, user_name, password);
 
-            String query_deleteDrive = "delete from attachment_info where attachment_id = '" + attachment_id + "';";
+            String query_deleteDrive = "DELETE FROM upload WHERE id = '" + this.id + "';";
 
-            PreparedStatement prepDeleteDriveStmt = connect.prepareStatement(query_deleteDrive);
-            int deleteDriveRes = prepDeleteDriveStmt.executeUpdate();
+            PreparedStatement preparedStatement = connect.prepareStatement(query_deleteDrive);
+            preparedStatement.executeUpdate();
 
+            preparedStatement.close();
             System.out.println("Delete drive: " + query_deleteDrive);
-
             result = true;
-
-            prepDeleteDriveStmt.close();
-
-
-        } catch(SQLException e) {
-            eMessage = e.getMessage();
-            e.printStackTrace();
-        } catch(ClassNotFoundException e) {
+        } catch(SQLException | ClassNotFoundException e) {
             eMessage = e.getMessage();
             e.printStackTrace();
         } finally {

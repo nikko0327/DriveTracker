@@ -15,7 +15,7 @@
     if (!update)
         hide = "hidden";
 
-    String query = "Select pp_asset_tag, file, description from upload where pp_asset_tag = " + assetTag;
+    String query = "SELECT * FROM upload WHERE pp_asset_tag = " + assetTag;
 
     String BookId = request.getParameter("pp_asset_tag");
     Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -48,24 +48,26 @@
 <h4>Uploaded Files</h4>
 <table cellpadding="15" border="1">
     <tr>
-        <th>No. </th>
+        <th>ID</th>
         <th style="text-align: center">Description</th>
+        <th id="deleteHeader" style="text-align: center">dlt</th>
     </tr>
     <%
-        int i = 1;
         while(rs.next()){
     %>
     <tr>
         <td>
-            <div id="tableCounter"><%=i%></div>
+            <div id="fileID<%= rs.getString("id")%>"><%=rs.getString("id")%></div>
         </td>
         <td>
-            <%--<div>Asset Tag: <%=rs.getString("pp_asset_tag")%></div>--%>
             <div id="description"><a href="<%="FileReadPdf?assetTag=" + rs.getString("pp_asset_tag") + "&" + "description=" + rs.getString("description")%>" target="_blank"><%=rs.getString("description")%></a></div>
+        </td>
+        <td>
+            <button name='deletePDFButton' class='btn btn-xs btn-danger' id='deletePDF_<%=rs.getString("id")%>'><i class='icon-trash'></i></button>
         </td>
 
     </tr>
     <%
-            i++;
-        }%>
+        }
+    %>
 </table>

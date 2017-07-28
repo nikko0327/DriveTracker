@@ -307,6 +307,39 @@ $(document).ready(function() {
                     alert("Error: " + data.result);
             }, 'json');
     });
+
+    $(document).on('click', "button[name='deletePDFButton']", function(e) {
+        var id = this.getAttribute("id");
+        id = id.replace("deletePDF_", "");
+        var username = $('#username').val();
+        var modal_spinner = $('#modal_spinner');
+        if (isAdmin(username)) {
+            modal_spinner.show();
+            $.ajax({
+                url: "deleteFile",
+                type: 'POST',
+                data: {id : id},
+                dataType: "json",
+                success: function(data) {
+                   modal_spinner.hide();
+                    if (data.result === 'success') {
+                        $('#fileID' + id).parent().destroy();
+                    }
+                    else {
+                        alert("Failed to delete the file... " + data.result);
+                    }
+                },
+                error: function(e) {
+                    modal_spinner.hide();
+                    alert("Something went wrong..." + e);
+                }
+            })
+        }
+        else {
+            alert("You must have admin privileges to delete this file!");
+        }
+
+    });
 });
 
 function searchDrive() {
