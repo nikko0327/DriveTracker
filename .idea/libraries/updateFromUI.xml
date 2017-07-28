@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="updateFromUI">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/web/templates/updateFromUI.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
