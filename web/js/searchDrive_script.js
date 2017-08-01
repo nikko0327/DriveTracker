@@ -1,7 +1,10 @@
+
+
 $(document).ready(function() {
 
-    new Clipboard('.clipbtn');
 
+    new Clipboard('.clipbtn');
+    var user = new User();
     $('#pp_asset_tag').focus();
     $("[id$=date]").datepicker({ dateFormat: "yy-mm-dd"});
 
@@ -19,7 +22,7 @@ $(document).ready(function() {
         return;
     }
 
-    $('#search_form').on('submit', searchDrive);
+    $('#search_form').on('submit', searchDrive(user));
 
     $(document).ready(function() {
         $('#search_form').submit();
@@ -88,7 +91,7 @@ $(document).ready(function() {
         bootbox.confirm("Are you sure you want to delete this drive?",
             function(result) {
                 if(result == true) {
-                    if (isAdmin(username)) {
+                    if (user.isAdmin()) {
                         $.post("deleteDrive",
                             {
                                 pp_asset_tag: pp_asset_tag,
@@ -171,9 +174,7 @@ $(document).ready(function() {
 
 
 
-    //Note: if the file is too large it will take a long ass time
-    //TODO: Find a way to check the file size before uploading it to the servlet
-    //^ this will speed up process for the user BUT we still need to check the file on the server side
+    //Note: if the file is too large it will take a long time
     $(document).on("click", "#upload", function(e) {
         e.stopPropagation();
         e.preventDefault();
@@ -209,7 +210,7 @@ $(document).ready(function() {
             contentType: false,
             success: function(data, textStatus, jqXHR) {
                 $('#modal_spinner').hide();
-                if (data.result == "success") {//If the data passes all the tests then update the page!
+                if (data.result === "success") {//If the data passes all the tests then update the page!
                     $.ajax({
                         url: "upload2.jsp?pp_asset_tag=" + pp_asset_tag + "&customer_name=" + customer_name + "&update=true",
                         dataType: "text",
@@ -309,11 +310,13 @@ $(document).ready(function() {
     });
 
     $(document).on('click', "button[name='deletePDFButton']", function(e) {
+        e.stopPropagation();
+        e.preventDefault();
         var id = this.getAttribute("id");
         id = id.replace("deletePDF_", "");
-        var username = $('#username').val();
         var modal_spinner = $('#modal_spinner');
-        if (isAdmin(username)) {
+
+        if (user.isAdmin()) {
             modal_spinner.show();
             $.ajax({
                 url: "deleteFile",
@@ -323,7 +326,7 @@ $(document).ready(function() {
                 success: function(data) {
                    modal_spinner.hide();
                     if (data.result === 'success') {
-                        $('#fileID' + id).parent().destroy();
+                        $('#fileID' + id).closest('tr').remove();
                     }
                     else {
                         alert("Failed to delete the file... " + data.result);
@@ -338,11 +341,10 @@ $(document).ready(function() {
         else {
             alert("You must have admin privileges to delete this file!");
         }
-
     });
 });
 
-function searchDrive() {
+function searchDrive(user) {
     var pp_asset_tag = $('#pp_asset_tag').val();
     var serial_number = $('#serial_number').val();
     var customer_name = $('#customer_name').val();
@@ -439,7 +441,7 @@ function searchDrive() {
                             "id='copy_" + i + "'><i class='icon-copy'></i></button>";
 
                         // check if user is an admin before giving them access to the delete button
-                        if (isAdmin(username))
+                        if (user.isAdmin())
                             value += "&nbsp;<button name='deleteButton' class='btn btn-sm btn-danger' id='delete_" + i +"'><i class='icon-trash'></i></button>";
 
                         value +=
@@ -561,22 +563,4 @@ function generateShippingTrackingNumberUrl(shipping_tracking_number, shipping_ca
     }
     else
         return shipping_tracking_number;
-}
-
-// sends username over to the Admin.java HttpServlet
-// where it will send a response back letting us know
-// if that username has admin privileges
-function isAdmin(username) {
-    var result = false;
-    $.ajax({
-       type: 'POST',
-        url: 'Admin',
-        async: false, //important to have async set to false so that we wait for the server to give us info before returning
-        data: {username: username},
-        dataType: "json",
-        success: function(data) {
-            result = (data.result === "Yes");
-        }
-    });
-    return result;
 }

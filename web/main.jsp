@@ -24,10 +24,27 @@
 
 
 </div>
-<script src="js/jquery.js"></script>
-<script src="js/jquery-ui-1.8.13.custom.min.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/jquery.tablesorter.js"></script>
-<script src="js/bootbox.js"></script>
+<script src="js/libs/jquery.js"></script>
+<script src="js/libs/jquery-ui-1.8.13.custom.min.js"></script>
+<script src="js/libs/bootstrap.js"></script>
+<script src="js/libs/jquery.tablesorter.js"></script>
+<script src="js/libs/bootbox.js"></script>
 
-<script src="js/tabs.js"></script>
+<script>
+    $(document).ready(function() {
+        //Whenever one of the tabs are clicked make sure the rest are deactivated
+        // and then add active to the one that was clicked
+        $('.nav.nav-tabs > li').on('click', function (e) {
+            e.preventDefault();
+            $('.nav.nav-tabs > li').removeClass('active');
+            $(this).addClass('active');
+
+            var id = $(this).attr("id");
+
+            $(".frame").hide();
+            $("#f" + id).show();
+
+        });
+
+    });
+</script>

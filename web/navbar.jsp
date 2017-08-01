@@ -1,6 +1,3 @@
-<%@ page import="java.io.FileOutputStream" %>
-<%@ page import="java.io.File" %>
-<%@ page import="java.io.DataInputStream" %>
 <%--
   Created by IntelliJ IDEA.
   User: nlee
@@ -10,7 +7,6 @@
 --%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1" %>
-<%@ page import="java.sql.*" %>
 
 <!DOCTYPE html>
 <head>
@@ -30,16 +26,6 @@
 
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
-    <!--[if IE 7]>
-    <link rel="stylesheet" href="css/font-awesome-ie7.min.css">
-    <![endif]-->
-
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
 
     <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
 
@@ -54,6 +40,7 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
     <link href="css/style2.css" rel="stylesheet">
 
+    <link href="css/bootstrap-toggle.css" rel="stylesheet">
 </head>
 
 <%
@@ -115,15 +102,16 @@
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="https://cdn1.iconfinder.com/data/icons/mix-color-4/502/Untitled-1-512.png" alt="user">
                                         <b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
+                                    <ul class="dropdown-menu" id="user_dropdown">
                                         <li>
                                             <div class="navbar-content">
-                                                <span></span>
-                                                <p class="text-muted small">
+                                                <p class="text-muted small" style="margin-bottom: 0px">
                                                     <%= userName + "@proofpoint.com"%>
                                                 </p>
-                                                <div class="divider">
-                                                </div>
+                                                <p id="group_name" class="text-muted small" style="margin-bottom: 0px">
+                                                </p>
+                                                <label>Notifications: </label><input id="notification_button" checked type="checkbox">
+                                                <div class="divider"></div>
                                                 <a href="logout.jsp" class="view btn-sm active">Logout</a>
                                             </div>
                                         </li>

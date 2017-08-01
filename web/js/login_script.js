@@ -10,7 +10,7 @@ $(document).ready(function() {
 	if($.browser.msie) {
 		$(".container").empty();
 
-		msg = "<div class='masthead'><h3 class='muted'>Drive Tracking Dashboard</h3></div><hr>";
+		var msg = "<div class='masthead'><h3 class='muted'>Drive Tracking Dashboard</h3></div><hr>";
 		msg += "<p class='text-error'>This site is compatible with Chrome or Firefox browsers</p>";
 		msg += "<br>";
 		msg += "<p>Please download Chrome: <a href='https://www.google.com/intl/en/chrome/browser/' target='_blank'>Download</a></p>";
@@ -22,8 +22,8 @@ $(document).ready(function() {
 	}
 
 	$("form").on('submit',function() {
-		username = $('#username').val();
-		password = $('#password').val();
+		var username = $('#username').val();
+		var password = $('#password').val();
 
 		$('#spinner').show();
 
@@ -34,9 +34,9 @@ $(document).ready(function() {
 			},
             function(data) {
 
-				if(data.result == "success")
-					window.location.href = "searchDrive.jsp";
-
+				if(data.result == "success") {
+                    window.location.href = "searchDrive.jsp";
+                }
                 else {
 					$('#password').val('').focus();
 					$('#spinner').hide();

@@ -228,60 +228,6 @@ $(document).ready(function(){
 			resetGraph();
 		}	
 	});
-//	$('#page_spinner').show();
-	
-/*	$.get("getActiveProjects",
-			function(data){
-				
-				$('#project_list').empty();
-				
-				if(data.result == 'success'){
-					value = "<table class='table table-condensed table-hover'>";
-		            value += "<thead>";
-		            value += "<tr Style='background-color:#D8D8D8'>";
-		            value += "<th>Project</th>";
-		            value += "<th>Group</th>";
-		            value += "<th>Status</th>";
-		            value += "</tr>";
-		            value += "</thead>";
-		            value += "<tbody>";
-		            
-					$.each(data.projects, function(k,v){
-							value += "<tr>";
-							value += "<td><a name='project_name' href='project.jsp?project_name=" +v.project_name +"'>" +String(v.project_name) +"</a></td>";
-							value += "<td>" +String(v.department_name) +"</td>";
-							value += "<td class='text-success'>" +String(v.status) +"</td>";
-							value += "</tr>";
-					
-					});
-
-					value += "</tbody>";
-					value += "</table>";
-					
-					$('#project_list').append(value);
-					
-					$('#page_spinner').hide();
-				}
-				
-				else{
-					$('#project_list').append("<p class='text-error'>Currently there are no active projects</p><br>" +
-							"<p><b>How to activate project?</b></p>" +
-							"<br>" +
-							"To activate a project you need to create atleast one sprint.");
-					
-					$('#page_spinner').hide();
-				}
-				
-				
-				
-				
-				
-			},"json");
-	*/
-
-	
-	
-	
 });
 	
 	

@@ -25,10 +25,10 @@
 	</div>
 	<!-- /container -->
 
-	<script src="js/jquery.js"></script>
-	<script src="js/bootstrap.js"></script>
-	<script src="js/bootbox.js"></script>
+	<script src="js/libs/jquery.js"></script>
+	<script src="js/libs/bootstrap.js"></script>
+	<script src="js/libs/bootbox.js"></script>
 
-	<script src="js/customerInfo_script.js"></script>
+	<script src="js/libs/customerInfo_script.js"></script>
 </body>
 </html>

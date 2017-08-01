@@ -65,7 +65,6 @@
         <td>
             <button name='deletePDFButton' class='btn btn-xs btn-danger' id='deletePDF_<%=rs.getString("id")%>'><i class='icon-trash'></i></button>
         </td>
-
     </tr>
     <%
         }

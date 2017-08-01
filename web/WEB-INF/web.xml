@@ -40,6 +40,28 @@
 
   <servlet>
     <description></description>
+    <display-name>Notifications</display-name>
+    <servlet-name>Notifications</servlet-name>
+    <servlet-class>app.Notifications</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Notifications</servlet-name>
+    <url-pattern>/Notifications</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>Group</display-name>
+    <servlet-name>Group</servlet-name>
+    <servlet-class>app.Group</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Group</servlet-name>
+    <url-pattern>/Group</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
     <display-name>createDrive</display-name>
     <servlet-name>createDrive</servlet-name>
     <servlet-class>app.createDrive</servlet-class>

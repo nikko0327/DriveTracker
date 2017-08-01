@@ -38,15 +38,13 @@ public class Admin extends HttpServlet implements mysql_credentials {
             json.put("result", "Yes");
         }
         else
-            json.put("result", eMessage);
+            json.put("result", "No");
 
         // send json back to user
         sendResponse(response, json);
     }
 
     //method checks username in the mysql database and returns true if user is an admin and false if not
-    // TODO: NOTE: this is a security risk if deployed externally as a malicious user can
-    // TODO: NOTE: mess with our javascript to grant themselves admin access fairly easily
     private boolean isAdmin() {
         boolean result = false;
         Connection connect = null;

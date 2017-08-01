@@ -146,9 +146,9 @@
             window.history.forward(0);
         </script>
 
-        <script src="js/jquery.js"></script>
-        <script src="js/bootstrap.js"></script>
-        <script src="js/bootbox.js"></script>
+        <script src="js/libs/jquery.js"></script>
+        <script src="js/libs/bootstrap.js"></script>
+        <script src="js/libs/bootbox.js"></script>
 
         <script src="js/login_script.js"></script>
     </body>

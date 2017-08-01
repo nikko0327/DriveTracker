@@ -188,21 +188,9 @@
 
     <input id="username" value='<%= userName %>' hidden>
     <hr>
-
-    <%@include file="footer.jsp" %>
 </div>
-<!-- /container -->
 
-<script src="js/jquery.js"></script>
-<script src="js/jquery-ui-1.8.13.custom.min.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/bootbox.js"></script>
-
-<script src="js/methods.js"></script>
-<script src="js/locations.js"></script>
-<script src="js/states.js"></script>
-<script src="js/shipping_carriers.js"></script>
-<script src="js/property.js"></script>
+<%@include file="footer.jsp" %>
 
 <script src="js/createDrive_script.js"></script>
 

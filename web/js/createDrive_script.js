@@ -1,6 +1,13 @@
 
 $(document).ready(function() {
 
+    //add startsWith function to the String prototype
+    if (typeof String.prototype.startsWith != 'function') {
+        String.prototype.startsWith = function (str){
+            return this.slice(0, str.length) == str;
+        };
+    }
+
     $('#pp_asset_tag').focus();
     $('#sent_date').datepicker({ dateFormat: "yy-mm-dd"});
     $('#received_date').datepicker({ dateFormat: "yy-mm-dd"}).datepicker('setDate', new Date());
@@ -21,7 +28,7 @@ $(document).ready(function() {
 
     $.urlParam = function(name) {
         return getFromURL(name);
-    }
+    };
 
     is_update = $.urlParam("update");
 
@@ -154,3 +161,14 @@ $(document).ready(function() {
         return false;
     });
 });
+
+// Parses URL to get parameters
+function getFromURL(name) {
+    var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results == null) {
+        return "";
+    }
+    else {
+        return decodeURI(results[1]) || "";
+    }
+}
