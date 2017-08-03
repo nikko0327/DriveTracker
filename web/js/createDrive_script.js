@@ -1,6 +1,9 @@
 
 $(document).ready(function() {
 
+    var user  = new User();
+    var username = user.getUsername();
+
     //add startsWith function to the String prototype
     if (typeof String.prototype.startsWith != 'function') {
         String.prototype.startsWith = function (str){
@@ -84,7 +87,6 @@ $(document).ready(function() {
         sent_date = $('#sent_date').val();
         return_media_to_customer = $('#return_media_to_customer').val();
         notes = $('#notes').val();
-        username = $('#username').val();
         essential = $('#essential').val();
 
         if(pp_asset_tag == null || pp_asset_tag == "") {

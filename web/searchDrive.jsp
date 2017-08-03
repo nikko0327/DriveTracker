@@ -421,8 +421,6 @@
 </div>
 <!-- end of details modal -->
 
-<input id="username" value='<%= userName %>' hidden>
-
 <%@include file="footer.jsp" %>
 <script src="js/searchDrive_script.js"></script>
 

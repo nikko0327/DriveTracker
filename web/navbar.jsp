@@ -43,20 +43,21 @@
     <link href="css/bootstrap-toggle.css" rel="stylesheet">
 </head>
 
-<%
-    String userName = null;
-    Cookie[] cookies = request.getCookies();
+<%--<%--%>
+    <%--String userName = null;--%>
+    <%--Cookie[] cookies = request.getCookies();--%>
 
-    if (cookies != null) {
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("username"))
-                userName = cookie.getValue();
-        }
-    }
+    <%--System.out.println("cookies: " + cookies);--%>
+    <%--if (cookies != null) {--%>
+        <%--for (Cookie cookie : cookies) {--%>
+            <%--if (cookie.getName().equals("username"))--%>
+                <%--userName = cookie.getValue();--%>
+        <%--}--%>
+    <%--}--%>
 
-    if (userName == null)
-        response.sendRedirect("/DriveTracker");
-%>
+    <%--if (userName == null)--%>
+        <%--response.sendRedirect("/DriveTracker");--%>
+<%--%>--%>
 
 <body class="home">
 <div class="container-fluid display-table">
@@ -105,8 +106,7 @@
                                     <ul class="dropdown-menu" id="user_dropdown">
                                         <li>
                                             <div class="navbar-content">
-                                                <p class="text-muted small" style="margin-bottom: 0px">
-                                                    <%= userName + "@proofpoint.com"%>
+                                                <p id="user_name" class="text-muted small" style="margin-bottom: 0px">
                                                 </p>
                                                 <p id="group_name" class="text-muted small" style="margin-bottom: 0px">
                                                 </p>

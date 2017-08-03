@@ -9,7 +9,7 @@
     <description></description>
     <display-name>login</display-name>
     <servlet-name>login</servlet-name>
-    <servlet-class>app.login</servlet-class>
+    <servlet-class>app.servlets.login</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>login</servlet-name>
@@ -20,7 +20,7 @@
     <description></description>
     <display-name>logout</display-name>
     <servlet-name>logout</servlet-name>
-    <servlet-class>app.logout</servlet-class>
+    <servlet-class>app.servlets.logout</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>logout</servlet-name>
@@ -29,42 +29,20 @@
 
   <servlet>
     <description></description>
-    <display-name>Admin</display-name>
-    <servlet-name>Admin</servlet-name>
-    <servlet-class>app.Admin</servlet-class>
+    <display-name>UserInfoServlet</display-name>
+    <servlet-name>UserInfoServlet</servlet-name>
+    <servlet-class>app.servlets.UserInfoServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>Admin</servlet-name>
-    <url-pattern>/Admin</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>Notifications</display-name>
-    <servlet-name>Notifications</servlet-name>
-    <servlet-class>app.Notifications</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Notifications</servlet-name>
-    <url-pattern>/Notifications</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <description></description>
-    <display-name>Group</display-name>
-    <servlet-name>Group</servlet-name>
-    <servlet-class>app.Group</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Group</servlet-name>
-    <url-pattern>/Group</url-pattern>
+    <servlet-name>UserInfoServlet</servlet-name>
+    <url-pattern>/UserInfoServlet</url-pattern>
   </servlet-mapping>
 
   <servlet>
     <description></description>
     <display-name>createDrive</display-name>
     <servlet-name>createDrive</servlet-name>
-    <servlet-class>app.createDrive</servlet-class>
+    <servlet-class>app.servlets.createDrive</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>createDrive</servlet-name>
@@ -74,7 +52,7 @@
     <description></description>
     <display-name>customerInfo</display-name>
     <servlet-name>customerInfo</servlet-name>
-    <servlet-class>app.customerInfo</servlet-class>
+    <servlet-class>app.servlets.customerInfo</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>customerInfo</servlet-name>
@@ -84,7 +62,7 @@
     <description></description>
     <display-name>deleteDrive</display-name>
     <servlet-name>deleteDrive</servlet-name>
-    <servlet-class>app.deleteDrive</servlet-class>
+    <servlet-class>app.servlets.deleteDrive</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>deleteDrive</servlet-name>
@@ -94,7 +72,7 @@
     <description></description>
     <display-name>updateDrive</display-name>
     <servlet-name>updateDrive</servlet-name>
-    <servlet-class>app.updateDrive</servlet-class>
+    <servlet-class>app.servlets.updateDrive</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>updateDrive</servlet-name>
@@ -104,7 +82,7 @@
     <description></description>
     <display-name>deleteFile</display-name>
     <servlet-name>deleteFile</servlet-name>
-    <servlet-class>app.deleteFile</servlet-class>
+    <servlet-class>app.servlets.deleteFile</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>deleteFile</servlet-name>
@@ -115,7 +93,7 @@
     <description></description>
     <display-name>FileUploadDBServlet</display-name>
     <servlet-name>FileUploadDBServlet</servlet-name>
-    <servlet-class>app.FileUploadDBServlet</servlet-class>
+    <servlet-class>app.servlets.FileUploadDBServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>FileUploadDBServlet</servlet-name>
@@ -125,7 +103,7 @@
     <description></description>
     <display-name>DriveSearchServlet</display-name>
     <servlet-name>DriveSearchServlet</servlet-name>
-    <servlet-class>app.DriveSearchServlet</servlet-class>
+    <servlet-class>app.servlets.DriveSearchServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>DriveSearchServlet</servlet-name>

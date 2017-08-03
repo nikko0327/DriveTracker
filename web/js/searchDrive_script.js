@@ -5,6 +5,9 @@ $(document).ready(function() {
 
     new Clipboard('.clipbtn');
     var user = new User();
+
+    var username = user.getUsername();
+
     $('#pp_asset_tag').focus();
     $("[id$=date]").datepicker({ dateFormat: "yy-mm-dd"});
 
@@ -86,32 +89,56 @@ $(document).ready(function() {
         var pp_asset_tag = $('#pp_asset_tag_' + id).val();
         var customer_name = $('#customer_name_' + id).val();
         var essential = $('#essential_' + id).val();
-        var username = $('#username').val();
+        //var username = $('#username').val();
 
         bootbox.confirm("Are you sure you want to delete this drive?",
             function(result) {
-                if(result == true) {
-                    if (user.isAdmin()) {
-                        $.post("deleteDrive",
-                            {
-                                pp_asset_tag: pp_asset_tag,
-                                customer_name: customer_name,
-                                updated_by: username,
-                                essential: essential
-                            },
-                            function (data) {
-                                $('#modal_spinner').hide();
+                if(result === true) {
+                    user.isAdmin(function(isAnAdmin) {
+                        if(isAnAdmin) {
+                            $.post("deleteDrive",
+                                {
+                                    pp_asset_tag: pp_asset_tag,
+                                    customer_name: customer_name,
+                                    updated_by: username,
+                                    essential: essential
+                                },
+                                function (data) {
+                                    $('#modal_spinner').hide();
 
-                                if (data.result == 'success') {
-                                    //alert("Drive successfully deleted");
-                                    $('#search_form').submit();
-                                }
-                                else
-                                    alert("Error: " + data.result);
-                            }, 'json');
-                    }
-                    else
-                        alert("You must be an admin to delete a row");
+                                    if (data.result == 'success') {
+                                        //alert("Drive successfully deleted");
+                                        $('#search_form').submit();
+                                    }
+                                    else
+                                        alert("Error: " + data.result);
+                                }, 'json');
+                        }
+                        else
+                            alert("You must be an admin to delete a row");
+                    });
+
+                    // if (user.isAdmin()) {
+                    //     $.post("deleteDrive",
+                    //         {
+                    //             pp_asset_tag: pp_asset_tag,
+                    //             customer_name: customer_name,
+                    //             updated_by: username,
+                    //             essential: essential
+                    //         },
+                    //         function (data) {
+                    //             $('#modal_spinner').hide();
+                    //
+                    //             if (data.result == 'success') {
+                    //                 //alert("Drive successfully deleted");
+                    //                 $('#search_form').submit();
+                    //             }
+                    //             else
+                    //                 alert("Error: " + data.result);
+                    //         }, 'json');
+                    // }
+                    // else
+                    //     alert("You must be an admin to delete a row");
                 }
             });
 
@@ -261,7 +288,7 @@ $(document).ready(function() {
         var sent_date = $('#modal_sent_date').val();
         var shipping_carrier_sent = $('#modal_shipping_carrier_sent').val();
         var shipping_tracking_number_sent = $('#modal_shipping_tracking_number_sent').val();
-        var username = $('#username').val();
+        //var username = $('#username').val();
         var essential = $('#modal_essential').val();
 
         if(pp_asset_tag == null || pp_asset_tag == "") {
@@ -316,31 +343,59 @@ $(document).ready(function() {
         id = id.replace("deletePDF_", "");
         var modal_spinner = $('#modal_spinner');
 
-        if (user.isAdmin()) {
-            modal_spinner.show();
-            $.ajax({
-                url: "deleteFile",
-                type: 'POST',
-                data: {id : id},
-                dataType: "json",
-                success: function(data) {
-                   modal_spinner.hide();
-                    if (data.result === 'success') {
-                        $('#fileID' + id).closest('tr').remove();
+        user.isAdmin(function(isAnAdmin) {
+            if(isAnAdmin) {
+                modal_spinner.show();
+                $.ajax({
+                    url: "deleteFile",
+                    type: 'POST',
+                    data: {id : id},
+                    dataType: "json",
+                    success: function(data) {
+                        modal_spinner.hide();
+                        if (data.result === 'success') {
+                            $('#fileID' + id).closest('tr').remove();
+                        }
+                        else {
+                            alert("Failed to delete the file... " + data.result);
+                        }
+                    },
+                    error: function(e) {
+                        modal_spinner.hide();
+                        alert("Something went wrong..." + e);
                     }
-                    else {
-                        alert("Failed to delete the file... " + data.result);
-                    }
-                },
-                error: function(e) {
-                    modal_spinner.hide();
-                    alert("Something went wrong..." + e);
-                }
-            })
-        }
-        else {
-            alert("You must have admin privileges to delete this file!");
-        }
+                });
+            }
+            else
+                alert("You must have admin privileges to delete this file!");
+        });
+
+
+        // if (user.isAdmin()) {
+        //     modal_spinner.show();
+        //     $.ajax({
+        //         url: "deleteFile",
+        //         type: 'POST',
+        //         data: {id : id},
+        //         dataType: "json",
+        //         success: function(data) {
+        //            modal_spinner.hide();
+        //             if (data.result === 'success') {
+        //                 $('#fileID' + id).closest('tr').remove();
+        //             }
+        //             else {
+        //                 alert("Failed to delete the file... " + data.result);
+        //             }
+        //         },
+        //         error: function(e) {
+        //             modal_spinner.hide();
+        //             alert("Something went wrong..." + e);
+        //         }
+        //     })
+        // }
+        // else {
+        //     alert("You must have admin privileges to delete this file!");
+        // }
     });
 });
 
@@ -351,7 +406,6 @@ function searchDrive(user) {
     var drive_state = $('#drive_state').val();
     var drive_location = $('#drive_location').val();
     var essential = $('#essential_select').val();
-    var username = $('#username').val();
     var tableName = "drive_info";
 
     $('#page_spinner').show();
@@ -434,15 +488,15 @@ function searchDrive(user) {
                         value += "<td>" + v.last_updated + "</td>";
                         value += "<td>" + v.updated_by +"</td>";
 
-                        value += "<td style='white-space: nowrap'><button name='updateButton' class='btn btn-sm btn-default' id='update_" + i + "'><i class='icon-edit'></i></button>";
+                        value += "<td id='ops_" + i + "' style='white-space: nowrap'><button name='updateButton' class='btn btn-sm btn-default' id='update_" + i + "'><i class='icon-edit'></i></button>";
 
                         value += "&nbsp;<button name='copyButton' class='btn btn-sm btn-default clipbtn' " +
                             "data-clipboard-text='" + clipboard_text + "' " +
                             "id='copy_" + i + "'><i class='icon-copy'></i></button>";
 
-                        // check if user is an admin before giving them access to the delete button
-                        if (user.isAdmin())
-                            value += "&nbsp;<button name='deleteButton' class='btn btn-sm btn-danger' id='delete_" + i +"'><i class='icon-trash'></i></button>";
+
+                        // check if user is an admin before giving them access to the delete/trashcan button
+                        generateTrashCan(user, i);
 
                         value +=
                             "<input type='hidden' id='pp_asset_tag_" + i + "' value='" + v.pp_asset_tag + "'>" +
@@ -516,6 +570,15 @@ function getValuesById(id) {
     last_updated = $('#last_updated_' + id).val();
     updated_by = $('#updated_by_' + id).val();
     essential = $('#essential_' + id).val();
+}
+
+function generateTrashCan(user, i) {
+    user.isAdmin(function(isAnAdmin) {
+        if(isAnAdmin) {
+            var trash = "&nbsp;<button name='deleteButton' class='btn btn-sm btn-danger' id='delete_" + i +"'><i class='icon-trash'></i></button>";
+            $('#ops_' + i).append(trash);
+        }
+    });
 }
 
 //Displays an alert msg at the specified ID, but first removes the text from previous alert

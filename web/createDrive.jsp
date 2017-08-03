@@ -186,7 +186,6 @@
     <div id="result">
     </div>
 
-    <input id="username" value='<%= userName %>' hidden>
     <hr>
 </div>
 
