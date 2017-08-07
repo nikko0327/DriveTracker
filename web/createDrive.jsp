@@ -8,16 +8,28 @@
 <br>
 <h1 style="text-align: center;"><i class="icon-magic"></i> Create Drive</h1>
 <h2 style="text-align: center;" id="printchatbox"></h2>
+<div id="essentials_alert_box" hidden></div>
 <br>
 
 <hr>
 <div class="sales">
     <div id="createDrive">
         <form style="margin-left: 31%" id="myForm" action="uploadServlet" class="form-horizontal" method="post" enctype="multipart/form-data">
+
+            <div class="control-group">
+                <label class="control-label" for="essential">Essentials</label>
+                <div class="controls">
+                    <select id="essential">
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="control-group">
                 <label class="control-label" for="pp_asset_tag">PP Asset Tag</label>
                 <div class="controls">
-                    PS <input type="text" id="pp_asset_tag" pattern="\d{6}"  title="Only 6 digits" style="height: inherit;" placeholder="PP Asset Tag (6-digit Number)" required>
+                    <span id="PSorPSE">PS</span> <input type="text" id="pp_asset_tag" pattern="\d{6}"  title="Only 6 digits" style="height: inherit;" placeholder="PP Asset Tag (6-digit Number)" required>
                 </div>
             </div>
 
@@ -121,17 +133,6 @@
                 </div>
             </div>
 
-            <div class="control-group">
-                <label class="control-label" for="essential">Essentials</label>
-                <div class="controls">
-                    <select id="essential">
-                        <option value="No">No</option>
-                        <option value="Yes">Yes</option>
-                    </select>
-                </div>
-
-            </div>
-
             <input id="received_date" type="hidden">
 
             <div id="shipping_info">
@@ -185,8 +186,6 @@
 
     <div id="result">
     </div>
-
-    <hr>
 </div>
 
 <%@include file="footer.jsp" %>

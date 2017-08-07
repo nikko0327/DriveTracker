@@ -37,9 +37,7 @@ public class DriveSearchServlet extends HttpServlet implements mysql_credentials
         String tableName = request.getParameter("tableName");
         String essential = request.getParameter("essential");
 
-
         DataFoundObject dfo = new DataFoundObject(assetTag, serialNumber, customerName, driveState, driveLocation, tableName, essential);
-
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

@@ -1,5 +1,20 @@
 
 $(document).ready(function() {
+
+    if($.browser.msie) {
+        $('.container').empty();
+
+        var msg = "<div class='masthead'><h3 class='muted'>Drive Tracking Dasboard</h3></div><hr>";
+        msg += "<p class='text-error'>This site is compatible with Chrome or Firefox browsers</p>";
+        msg += "<br>";
+        msg += "<p>Please download Chrome: <a href='https://www.google.com/intl/en/chrome/browser/'>Download</a></p>";
+        msg += "<p>Please download Firefox: <a href='http://www.mozilla.org/en-US/firefox/new/'>Download</a></p>";
+
+        $('.container').append(msg);
+
+        return;
+    }
+
     var notifyButton = $('#notification_button');
     var username = $('#user_name');
     var groupName = $('#group_name');

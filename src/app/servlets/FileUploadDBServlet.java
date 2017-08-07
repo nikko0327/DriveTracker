@@ -29,7 +29,7 @@ public class FileUploadDBServlet extends HttpServlet implements mysql_credential
     private String eMessage = "";
 
     private Part filePart;
-    private String assetAndPP;
+    private String ppAssetTag;
     private String description;
 
     /**
@@ -41,7 +41,7 @@ public class FileUploadDBServlet extends HttpServlet implements mysql_credential
         response.setContentType("application/json");
 
         this.filePart = request.getPart("file");
-        this.assetAndPP = "PS" + request.getParameter("assetTag");
+        this.ppAssetTag = request.getParameter("assetTag");
         this.description = request.getParameter("description");
 
         JSONObject json = new JSONObject();
@@ -97,7 +97,7 @@ public class FileUploadDBServlet extends HttpServlet implements mysql_credential
 
             int success = 0;
             PreparedStatement pstmt = con.prepareStatement("INSERT INTO upload VALUES(default,?,?,?)");
-            pstmt.setString(1, assetAndPP);
+            pstmt.setString(1, ppAssetTag);
             pstmt.setBytes(2, bytes);    //Storing binary data in blob field.
             pstmt.setString(3, description);
             success = pstmt.executeUpdate();

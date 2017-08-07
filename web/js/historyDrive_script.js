@@ -177,29 +177,3 @@ function searchDrive() {
     //return false prevents form from reloading/refreshing/going to other page
     return false;
 }
-
-function getValuesById(id) {
-    pp_asset_tag = $('#pp_asset_tag_' + id).val();
-    manufacturer = $('#manufacturer_' + id).val();
-    serial_number = $('#serial_number_' + id).val();
-    property = $('#property_' + id).val();
-    customer_name = $('#customer_name_' + id).val();
-    cts = $('#cts_' + id).val();
-    jira = $('#jira_' + id).val();
-    label = $('#label_' + id).val();
-    drive_location = $('#drive_location_' + id).val();
-    drive_state = $('#drive_state_' + id).val();
-    encrypted = $('#encrypted_' + id).val();
-    usb = $('#usb_' + id).val();
-    power = $('#power_' + id).val();
-    notes = $('#notes_' + id).val();
-    return_media_to_customer = $('#return_media_to_customer' + id).val();
-    received_date = $('#received_date_' + id).val();
-    sent_date = $('#sent_date_' + id).val();
-    shipping_carrier_sent = $('#shipping_carrier_sent_' + id).val();
-    shipping_tracking_number_sent = $('#shipping_tracking_number_sent_' + id).val();
-    created = $('#created_' + id).val();
-    last_updated = $('#last_updated_' + id).val();
-    updated_by = $('#updated_by_' + id).val();
-    essential = $('#essential' + id).val();
-}

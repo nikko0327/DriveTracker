@@ -43,22 +43,6 @@
     <link href="css/bootstrap-toggle.css" rel="stylesheet">
 </head>
 
-<%--<%--%>
-    <%--String userName = null;--%>
-    <%--Cookie[] cookies = request.getCookies();--%>
-
-    <%--System.out.println("cookies: " + cookies);--%>
-    <%--if (cookies != null) {--%>
-        <%--for (Cookie cookie : cookies) {--%>
-            <%--if (cookie.getName().equals("username"))--%>
-                <%--userName = cookie.getValue();--%>
-        <%--}--%>
-    <%--}--%>
-
-    <%--if (userName == null)--%>
-        <%--response.sendRedirect("/DriveTracker");--%>
-<%--%>--%>
-
 <body class="home">
 <div class="container-fluid display-table">
     <div class="row display-table-row">

@@ -4,6 +4,11 @@ $(document).ready(function() {
     var user  = new User();
     var username = user.getUsername();
 
+    $('#result').empty();
+
+    var create_alert_box = "<div id='create_alert_box'></div>";
+    $('#result').append(create_alert_box);
+
     //add startsWith function to the String prototype
     if (typeof String.prototype.startsWith != 'function') {
         String.prototype.startsWith = function (str){
@@ -15,82 +20,58 @@ $(document).ready(function() {
     $('#sent_date').datepicker({ dateFormat: "yy-mm-dd"});
     $('#received_date').datepicker({ dateFormat: "yy-mm-dd"}).datepicker('setDate', new Date());
 
-    if($.browser.msie) {
-        $('.container').empty();
-
-        var msg = "<div class='masthead'><h3 class='muted'>Drive Tracking Dasboard</h3></div><hr>";
-        msg += "<p class='text-error'>This site is compatible with Chrome or Firefox browsers</p>";
-        msg += "<br>";
-        msg += "<p>Please download Chrome: <a href='https://www.google.com/intl/en/chrome/browser/'>Download</a></p>";
-        msg += "<p>Please download Firefox: <a href='http://www.mozilla.org/en-US/firefox/new/'>Download</a></p>";
-
-        $('.container').append(msg);
-
-        return;
-    }
-
-    $.urlParam = function(name) {
-        return getFromURL(name);
-    };
-
-    is_update = $.urlParam("update");
-
-    // If updating a existing drive
-    // Then make PP Asset Tag uneditable
-    if(is_update != "") {
-        $('#pp_asset_tag').val($.urlParam("pp_asset_tag").substring(2)); // Remove the prefix "PS"
-        $('#pp_asset_tag').attr('readonly', true);
-
-        if(is_update == "true") {
-            $('#manufacturer').val($.urlParam("manufacturer"));
-            $('#manufacturer').attr('readonly', true);
-
-            $('#serial_number').val($.urlParam("serial_number"));
-            $('#serial_number').attr('readonly', true);
-
-            $('#customer_name').focus();
+    var essentials_alert = new Alert($('#essentials_alert_box'));
+    essentials_alert.displayInfoMessage("Using Archiving/Enterprise Prefix Tag (PS)");
+    $('#essential').on('change', function() {
+        var PSorPSE = $('#PSorPSE');
+        if ($(this).val() === "Yes") {
+            essentials_alert.clearCurrentMessage();
+            essentials_alert.displayInfoMessage("Using Essentials Prefix Tag (PSE)");
+            PSorPSE.text("PSE");
         }
-        else
-            $('#manufacturer').focus();
-    }
+        else if ($(this).val() === "No") {
+            essentials_alert.clearCurrentMessage();
+            essentials_alert.displayInfoMessage("Using Archiving/Enterprise Prefix Tag (PS)");
+            PSorPSE.text("PS");
+        }
+    });
 
-    // If Property = Customer
-    // Then Return Media to Customer default to Yes
-    //
-    // If Property = Proofpoint
-    // Then Return Media to Customer default to NO
     $(document).on('change', '#property', function() {
-        var property = $('#property').val()
+        var property = $('#property').val();
 
         if(property == "Proofpoint")
-            $("#return_media_to_customer").val("No")
+            $("#return_media_to_customer").val("No");
         else
-            $("#return_media_to_customer").val("Yes")
+            $("#return_media_to_customer").val("Yes");
     });
 
     $("form").on('submit', function() {
-        pp_asset_tag = "PS" + $('#pp_asset_tag').val();
-        manufacturer = $('#manufacturer').val();
-        serial_number = $('#serial_number').val();
-        property = $('#property').val();
-        customer_name = $('#customer_name').val();
-        cts = $('#cts').val();
-        jira = $("#jira").val();
-        label = $('#label').val();
-        drive_location = $('#drive_location').val();
-        drive_state = $('#drive_state').val();
-        usb = $('#usb').val();
-        power = $('#power').val();
-        received_date = $('#received_date').val();
-        shipping_carrier = $('#shipping_carrier').val();
-        shipping_tracking_number = $('#shipping_tracking_number').val();
-        sent_date = $('#sent_date').val();
-        return_media_to_customer = $('#return_media_to_customer').val();
-        notes = $('#notes').val();
-        essential = $('#essential').val();
+        var essential = $('#essential').val();
+
+        if (essential === "Yes")
+            var pp_asset_tag = "PSE" + $('#pp_asset_tag').val();
+        else
+            var pp_asset_tag = "PS" + $('#pp_asset_tag').val();
+
+        var manufacturer = $('#manufacturer').val();
+        var serial_number = $('#serial_number').val();
+        var property = $('#property').val();
+        var customer_name = $('#customer_name').val();
+        var cts = $('#cts').val();
+        var jira = $("#jira").val();
+        var label = $('#label').val();
+        var drive_location = $('#drive_location').val();
+        var drive_state = $('#drive_state').val();
+        var usb = $('#usb').val();
+        var power = $('#power').val();
+        var received_date = $('#received_date').val();
+        var shipping_carrier = $('#shipping_carrier').val();
+        var shipping_tracking_number = $('#shipping_tracking_number').val();
+        var sent_date = $('#sent_date').val();
+        var return_media_to_customer = $('#return_media_to_customer').val();
+        var notes = $('#notes').val();
 
         if(pp_asset_tag == null || pp_asset_tag == "") {
-            alert("Please enter PP Asset Tag");
             $('#pp_asset_tag').focus();
             return;
         }
@@ -118,20 +99,19 @@ $(document).ready(function() {
                 return_media_to_customer : return_media_to_customer,
                 notes : notes,
                 updated_by : username,
-                is_update : is_update,
+                is_update : "false",
                 essential: essential
             },
             function(data){
-                $('#spinner').hide();
                 $('#createDrive').hide();
-                $('#result').empty();
+                essentials_alert.clearCurrentMessage();
+                var alert = new Alert($('#create_alert_box'));
 
-                if(data.pp_asset_tag == undefined) {
-                    var result = '<p><h3>Error:</h3>'
-                        + '<br>' + data.message
-                        + '</p>';
+                if(data.pp_asset_tag === undefined) {
+                    alert.displayFailureMessage("Error: " + data.message);
                 }
                 else {
+                    alert.displaySuccessMessage("Drive created successfully!");
                     var result = "<p><h3>Drive created in system with following details:</h3>"
                         + "<br>PP Asset Tag: " + data.pp_asset_tag
                         + "<br>Customer Name: " + data.customer_name
@@ -147,9 +127,8 @@ $(document).ready(function() {
                         + "<br>Drive Status: " + data.drive_state
                         + "<br>Received Date: " + data.received_date
                         + "<br>Return Media to Customer: " + data.return_media_to_customer
-                        + "<br>Essentials: " + data.essential;
-
-                    result += "<br>Notes: " + data.notes
+                        + "<br>Essentials: " + data.essential
+                        + "<br>Notes: " + data.notes
                         + "<br>Created: " + data.created
                         + "<br>Updated: " + data.last_updated
                         + "<br>Updater: " + data.updated_by
@@ -157,20 +136,10 @@ $(document).ready(function() {
                 }
 
                 $('#result').append(result);
+                $('#spinner').hide();
             }, "json");
 
         //return false prevents form from reloading/refreshing/going to other page
         return false;
     });
 });
-
-// Parses URL to get parameters
-function getFromURL(name) {
-    var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
-    if (results == null) {
-        return "";
-    }
-    else {
-        return decodeURI(results[1]) || "";
-    }
-}

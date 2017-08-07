@@ -38,7 +38,7 @@ public class User implements mysql_credentials{
         return this.username;
     }
     public String getGroup() {
-        String result = "";
+        String result = null;
         Connection connect = null;
 
         try {
@@ -51,7 +51,12 @@ public class User implements mysql_credentials{
 
             // Move pointer to first row of the result set
             rs.first();
-            result = rs.getString("group_name");
+            if (rs.getString("group_name") != null)
+                result = rs.getString("group_name");
+            else {
+                this.errorMessage = "No group name found!";
+                return "Error";
+            }
 
             rs.close();
             prepStatement.close();
@@ -65,7 +70,8 @@ public class User implements mysql_credentials{
                     connect.close();
             } catch (SQLException e) { e.printStackTrace(); }
         }
-        return result;
+        //make sure we don't return null, otherwise we'll get errors
+        return (result != null ? result : "Error");
     }
 
     public String toggleNotifications() {
@@ -168,6 +174,7 @@ public class User implements mysql_credentials{
         }
         return (result ? "Yes" : "No");
     }
+
     public Cookie getLoginCookie() {
         return this.loginCookie;
     }

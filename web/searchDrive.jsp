@@ -1,10 +1,4 @@
 <%@include file="navbar.jsp" %>
-<script>
-    function myFunction() {
-        document.getElementById("search_form").reset();
-    }
-</script>
-
 <br>
 
 <div id="search_options">
@@ -28,8 +22,9 @@
         <br>
         <br>
         <button type="submit" class="btn btn-primary" id="search">Search</button>
-        <button type="submit" class="btn btn-danger btn-md" onclick="myFunction()" value="Reset form">Reset</button>
+        <button type="reset" class="btn btn-danger" id="reset">Reset</button>
     </form>
+    <div id="row_actions_update_box"></div>
 </div>
 
 <hr>
@@ -53,56 +48,56 @@
             <div class="control-group">
                 <label class="control-label" for="modal_pp_asset_tag">PP Asset Tag</label>
                 <div class="controls">
-                    <input type="text" id="modal_pp_asset_tag" value="" readonly>
+                    <input type="text" id="modal_pp_asset_tag" class="update_modal_input" value="" readonly>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="modal_customer_name">Customer</label>
                 <div class="controls">
-                    <input style="color: black" type="text" id="modal_customer_name" value="">
+                    <input style="color: black" type="text" id="modal_customer_name" class="update_modal_input" value="">
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="modal_cts">CTS</label>
                 <div class="controls">
-                    <input style="color: black" type="text" id="modal_cts" value="">
+                    <input style="color: black" type="text" id="modal_cts" value="" class="update_modal_input">
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="modal_jira">JIRA</label>
                 <div class="controls">
-                    <input style="color: black" type="text" id="modal_jira" value="">
+                    <input style="color: black" type="text" id="modal_jira" value="" class="update_modal_input">
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="modal_manufacturer">Manufacturer/Model</label>
                 <div class="controls">
-                    <input style="color: black" type="text" id="modal_manufacturer" value="">
+                    <input style="color: black" type="text" id="modal_manufacturer" value="" class="update_modal_input">
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="modal_serial_number">Serial Number</label>
                 <div class="controls">
-                    <input style="color: black" type="text" id="modal_serial_number" value="">
+                    <input style="color: black" type="text" id="modal_serial_number" value="" class="update_modal_input">
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="modal_label">Label</label>
                 <div class="controls">
-                    <input style="color: black" type="text" id="modal_label" value="">
+                    <input style="color: black" type="text" id="modal_label" value="" class="update_modal_input">
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="modal_usb">USB</label>
                 <div class="controls">
-                    <select id="modal_usb">
+                    <select id="modal_usb" class="update_modal_select">
                         <option value=""></option>
                         <option value="Yes">Yes</option>
                         <option value="No">No</option>
@@ -113,7 +108,7 @@
             <div class="control-group">
                 <label class="control-label" for="modal_power">Power</label>
                 <div class="controls">
-                    <select id="modal_power">
+                    <select id="modal_power" class="update_modal_select">
                         <option value=""></option>
                         <option value="Yes">Yes</option>
                         <option value="No">No</option>
@@ -124,7 +119,7 @@
             <div class="control-group">
                 <label class="control-label" for="modal_property">Property</label>
                 <div class="controls">
-                    <select id="modal_property">
+                    <select id="modal_property" class="update_modal_select">
                     </select>
                 </div>
             </div>
@@ -132,7 +127,7 @@
             <div class="control-group">
                 <label class="control-label" for="modal_drive_location">Drive Location</label>
                 <div class="controls">
-                    <select id="modal_drive_location">
+                    <select id="modal_drive_location" class="update_modal_select">
                     </select>
                 </div>
             </div>
@@ -140,7 +135,7 @@
             <div class="control-group">
                 <label class="control-label" for="modal_drive_state">Drive Status</label> <%--Drive State is changed to Drive Status--%>
                 <div class="controls">
-                    <select id="modal_drive_state">
+                    <select id="modal_drive_state" class="update_modal_select">
                     </select>
                 </div>
             </div>
@@ -148,7 +143,7 @@
             <div class="control-group">
                 <label class="control-label" for="modal_return_media_to_customer">Return Media To Customer</label>
                 <div class="controls">
-                    <select id="modal_return_media_to_customer">
+                    <select id="modal_return_media_to_customer" class="update_modal_select">
                         <option value=""></option>
                         <option value="Yes">Yes</option>
                         <option value="No">No</option>
@@ -159,7 +154,7 @@
             <div class="control-group">
                 <label class="control-label" for="modal_essential">Essentials</label>
                 <div class="controls">
-                    <select id="modal_essential">
+                    <select id="modal_essential" class="update_modal_select">
                         <option value=""></option>
                         <option value="Yes">Yes</option>
                         <option value="No">No</option>
@@ -171,7 +166,7 @@
                 <div class="control-group">
                     <label class="control-label" for="modal_received_date">Received Date</label>
                     <div class="controls">
-                        <input style="color: black" type="text" id="modal_received_date" value="">
+                        <input style="color: black" type="text" id="modal_received_date" value="" class="update_modal_input">
                     </div>
                 </div>
             </div>
@@ -180,14 +175,14 @@
                 <div class="control-group">
                     <label class="control-label" for="modal_sent_date">Sent Date</label>
                     <div class="controls">
-                        <input style="color: black" type="text" id="modal_sent_date" value="">
+                        <input style="color: black" type="text" id="modal_sent_date" value="" class="update_modal_input">
                     </div>
                 </div>
 
                 <div class="control-group">
                     <label class="control-label" for="modal_shipping_carrier_sent">Shipping Carrier</label>
                     <div class="controls">
-                        <select id="modal_shipping_carrier_sent">
+                        <select id="modal_shipping_carrier_sent" class="update_modal_select">
                         </select>
                     </div>
                 </div>
@@ -195,7 +190,7 @@
                 <div class="control-group">
                     <label class="control-label" for="modal_shipping_tracking_number_sent">Shipping Tracking Number</label>
                     <div class="controls">
-                        <input style="color: black" type="text" id="modal_shipping_tracking_number_sent" value="">
+                        <input style="color: black" type="text" id="modal_shipping_tracking_number_sent" value=""  class="update_modal_input">
                     </div>
                 </div>
             </div>
@@ -206,16 +201,9 @@
                     <textarea style="color: black" id="modal_notes"></textarea>
                 </div>
             </div>
-            <div class="alert alert-danger" id="file_warning_box" hidden>
-                <strong>Oops! </strong>
-                <!--warning message goes HERE through script-->
+            <%--This div is accessed by the javascript to turn it into an alert box--%>
+            <div class="alert" id="upload_alert_box" hidden></div>
 
-            </div>
-            <div class="alert alert-success" id="file_success_box" hidden>
-                <strong>Success! </strong>
-                <!--success message goes HERE through script-->
-
-            </div>
             <div class="control-group">
                 <label class="control-label" for="modal_file2">File Upload</label>
                 <div class="controls">
@@ -248,98 +236,98 @@
             <div class="control-group">
                 <label class="control-label" for="details_modal_pp_asset_tag">PP Asset Tag</label>
                 <div class="controls">
-                    <p id="details_modal_pp_asset_tag"></p>
+                    <p id="details_modal_pp_asset_tag" class="detail_modal_p"></p>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="details_modal_customer_name">Customer</label>
                 <div class="controls">
-                    <p id="details_modal_customer_name"></p>
+                    <p id="details_modal_customer_name" class="detail_modal_p"></p>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="details_modal_manufacturer">Manufacturer/Model</label>
                 <div class="controls">
-                    <p id="details_modal_manufacturer"></p>
+                    <p id="details_modal_manufacturer" class="detail_modal_p"></p>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="details_modal_cts">CTS</label>
                 <div class="controls">
-                    <p id="details_modal_cts"></p>
+                    <p id="details_modal_cts" class="detail_modal_p"></p>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="details_modal_jira">JIRA</label>
                 <div class="controls">
-                    <p id="details_modal_jira"></p>
+                    <p id="details_modal_jira" class="detail_modal_p"></p>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="details_modal_serial_number">Serial Number</label>
                 <div class="controls">
-                    <p id="details_modal_serial_number"></p>
+                    <p id="details_modal_serial_number" class="detail_modal_p"></p>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="details_modal_label">Label</label>
                 <div class="controls">
-                    <p id="details_modal_label"></p>
+                    <p id="details_modal_label" class="detail_modal_p"></p>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="details_modal_usb">USB</label>
                 <div class="controls">
-                    <p id="details_modal_usb"></p>
+                    <p id="details_modal_usb" class="detail_modal_p"></p>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="details_modal_power">Power</label>
                 <div class="controls">
-                    <p id="details_modal_power"></p>
+                    <p id="details_modal_power" class="detail_modal_p"></p>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="details_modal_property">Property</label>
                 <div class="controls">
-                    <p id="details_modal_property"></p>
+                    <p id="details_modal_property" class="detail_modal_p"></p>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="details_modal_drive_location">Drive Location</label>
                 <div class="controls">
-                    <p id="details_modal_drive_location"></p>
+                    <p id="details_modal_drive_location" class="detail_modal_p"></p>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="details_modal_drive_state">Drive Status</label>
                 <div class="controls">
-                    <p id="details_modal_drive_state"></p>
+                    <p id="details_modal_drive_state" class="detail_modal_p"></p>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="details_modal_return_media_to_customer">Return Media To Customer</label>
                 <div class="controls">
-                    <p id="details_modal_return_media_to_customer"></p>
+                    <p id="details_modal_return_media_to_customer" class="detail_modal_p"></p>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="details_modal_essential">Essentials</label>
                 <div class="controls">
-                    <p id="details_modal_essential"></p>
+                    <p id="details_modal_essential" class="detail_modal_p"></p>
                 </div>
             </div>
 
@@ -347,7 +335,7 @@
                 <div class="control-group">
                     <label class="control-label" for="details_modal_received_date">Received Date</label>
                     <div class="controls">
-                        <p id="details_modal_received_date"></p>
+                        <p id="details_modal_received_date" class="detail_modal_p"></p>
                     </div>
                 </div>
             </div>
@@ -356,21 +344,21 @@
                 <div class="control-group">
                     <label class="control-label" for="modal_sent_date">Sent Date</label>
                     <div class="controls">
-                        <p id="details_modal_sent_date"></p>
+                        <p id="details_modal_sent_date" class="detail_modal_p"></p>
                     </div>
                 </div>
 
                 <div class="control-group">
                     <label class="control-label" for="modal_shipping_carrier_sent">Shipping Carrier</label>
                     <div class="controls">
-                        <p id="details_modal_shipping_carrier_sent"></p>
+                        <p id="details_modal_shipping_carrier_sent" class="detail_modal_p"></p>
                     </div>
                 </div>
 
                 <div class="control-group">
                     <label class="control-label" for="details_modal_shipping_tracking_number_sent">Shipping Tracking Number</label>
                     <div class="controls">
-                        <p id="details_modal_shipping_tracking_number_sent"></p>
+                        <p id="details_modal_shipping_tracking_number_sent" class="detail_modal_p"></p>
                     </div>
                 </div>
             </div>
@@ -378,35 +366,35 @@
             <div class="control-group">
                 <label class="control-label" for="details_modal_notes">Notes</label>
                 <div class="controls">
-                    <p id="details_modal_notes"></p>
+                    <p id="details_modal_notes" class="detail_modal_p"></p>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="details_modal_file">Files</label>
                 <div class="controls">
-                    <p id="details_modal_file" ></p>
+                    <p id="details_modal_file" class="detail_modal_p"></p>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="details_modal_created">Created</label>
                 <div class="controls">
-                    <p id="details_modal_created"></p>
+                    <p id="details_modal_created" class="detail_modal_p"></p>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="details_modal_last_updated">Last Updated</label>
                 <div class="controls">
-                    <p id="details_modal_last_updated"></p>
+                    <p id="details_modal_last_updated" class="detail_modal_p"></p>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="details_modal_updated_by">Updated By</label>
                 <div class="controls">
-                    <p id="details_modal_updated_by"></p>
+                    <p id="details_modal_updated_by" class="detail_modal_p"></p>
                 </div>
             </div>
 

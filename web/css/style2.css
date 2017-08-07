@@ -1,6 +1,20 @@
 
 /*Main CSS*/
 
+/* CSS for aligning labels and inputs together correctly in modals */
+
+.detail_modal_p {
+    margin-bottom: 0;
+    padding-top: 7px;
+}
+
+.update_modal_input {
+    margin-top: 2px;
+}
+
+.update_modal_select {
+    margin-top: 6px;
+}
 
 /*Login Signup Page*/
 a:focus,a:hover,a{
@@ -454,7 +468,9 @@ header {
     border: 1px solid #d4d9e3;
     font-size: 14px;
     font-weight: 300;
-    margin: 5px 0;
+    margin-right: 0;
+    margin-left: 0;
+    margin-bottom: 5px;
     height: auto;
     width: 63%;
     color: #8492af;

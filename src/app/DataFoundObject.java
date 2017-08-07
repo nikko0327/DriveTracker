@@ -60,7 +60,7 @@ public class DataFoundObject implements mysql_credentials {
 
             ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
 
-            String query_searchDrive = "";
+            String query_searchDrive;
 
             if ((assetTag.equalsIgnoreCase(null) || assetTag.equalsIgnoreCase(""))
                     && (serialNumber.equalsIgnoreCase(null) || serialNumber.equalsIgnoreCase(""))

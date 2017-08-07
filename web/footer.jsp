@@ -19,6 +19,8 @@
 <script src="js/dropdown/states.js"></script>
 <script src="js/dropdown/shipping_carriers.js"></script>
 
+<%--Script I made to standardize alert messages--%>
+<script src="js/alert.js"></script>
 <%--Script I made to figure out if user is admin and also which group user is in--%>
 <script src="js/user.js"></script>
 <%--script that affects the user's profile area of the navbar--%>

@@ -49,6 +49,13 @@ public class EmailNotifier implements mysql_credentials {
 
             message.setFrom(new InternetAddress(from));
 
+            // check if there is anyone to send to, if not dont do it
+            if (recipients.isEmpty()) {
+                this.eMessage = "Warning: No one will receive an email for this particular action.";
+
+                return false;
+            }
+
             InternetAddress[] addresses = recipients.toArray(new InternetAddress[0]);
             message.addRecipients(Message.RecipientType.BCC, addresses);
 

@@ -46,7 +46,6 @@
     <input type="button" value="Print this page" onClick="window.print()">
     <p style="color: green;">Note: To export to pdf, change destination to "Save as PDF" <br>Layout: Landscape <br>Paper Size: Tabloid</p>
     <div id="drive_list" style="overflow: scroll; height: 800px"></div>
-    <input id="username" value='<%= userName %>' hidden>
     <hr>
 </div>
 

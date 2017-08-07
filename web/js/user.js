@@ -1,13 +1,18 @@
 // Created by zgraham 08/1/17
 
-
-//simple 'class' called UserInfo
-//allows centralized way to find out info about the user
-//cookie with username is set at login
-//User object can be created when needed
+/* simple 'class' called UserInfo
+ * allows centralized way to find out info about the user
+ * cookie with username is set at login
+ * User object can be created when needed
+ */
 function User() {
 
-    // get the username (found in cookies)
+    /*
+     * about: private function that returns the username by
+     *        looking at user's cookies
+     * reminder: this.username returns the function,
+     *           this.username() executes the function
+     */
     this.username = function () {
         var nameEQ = "username=";
         var ca = document.cookie.split(';');
@@ -18,10 +23,14 @@ function User() {
         }
         return null;
     };
+
     /*
-     * AJAX is asynchronous meaning that it will run in a
-     * separate thread, so we should wait for it before
-     * continuing, so we use the callback method
+     * about: private function that most public functions use in order to
+     *        post through AJAX to UserInfoServlet
+     * why callbacks:
+     *        AJAX is asynchronous meaning that it will run in a
+     *        separate thread, so we should wait for it before
+     *        continuing, so we use the callback method
      */
     this.postToUserInfoServlet = function(action, myCallback) {
         $.ajax({
@@ -35,7 +44,6 @@ function User() {
         });
     }
 }
-
 
 /*
  * about: finds out if user is an admin
@@ -62,6 +70,7 @@ User.prototype.hasNotifyOn = function(myCallback) {
         myCallback(data.result === "Yes");
     });
 };
+
 /*
  * about: toggles the user's notifications
  * param: none
