@@ -3,20 +3,6 @@ $(document).ready(function() {
     $('#pp_asset_tag').focus();
     $("[id$=date]").datepicker({ dateFormat: "yy-mm-dd"});
 
-    if($.browser.msie) {
-        $('.container').empty();
-
-        var msg = "<div class='masthead'><h3 class='muted'>Drive Tracking Dashboard</h3></div><hr>";
-        msg += "<p class='text-error'>This site is compatible with Chrome or Firefox browsers</p>";
-        msg += "<br>";
-        msg += "<p>Please download Chrome: <a href='https://www.google.com/intl/en/chrome/browser/'>Download</a></p>";
-        msg += "<p>Please download Firefox: <a href='http://www.mozilla.org/en-US/firefox/new/'>Download</a></p>";
-
-        $('.container').append(msg);
-
-        return;
-    }
-
     //Added for pp asset tag click search from searchDrive START
     function getQueryVariable(variable)
     {

@@ -1,5 +1,4 @@
 
-
 $(document).ready(function() {
     new Clipboard('.clipbtn');
     var user = new User();
@@ -9,21 +8,7 @@ $(document).ready(function() {
     $('#pp_asset_tag').focus();
     $("[id$=date]").datepicker({ dateFormat: "yy-mm-dd"});
 
-    if($.browser.msie) {
-        $('.container').empty();
-
-        var msg = "<div class='masthead'><h3 class='muted'>Drive Tracking Dashboard</h3></div><hr>";
-        msg += "<p class='text-error'>This site is compatible with Chrome or Firefox browsers</p>";
-        msg += "<br>";
-        msg += "<p>Please download Chrome: <a href='https://www.google.com/intl/en/chrome/browser/'>Download</a></p>";
-        msg += "<p>Please download Firefox: <a href='http://www.mozilla.org/en-US/firefox/new/'>Download</a></p>";
-
-        $('.container').append(msg);
-
-        return;
-    }
-
-    // Begin search bar logic
+    /* Begin search bar logic */
     var search_form = $('#search_form');
     search_form.on('submit', function(e) {
         e.preventDefault();
@@ -35,7 +20,7 @@ $(document).ready(function() {
     });
 
     search_form.submit();
-    // End search bar logic
+    /* End search bar logic */
 
     $(document).on('click', '#drive_table a', function(e) {
         e.stopPropagation();
@@ -180,7 +165,7 @@ $(document).ready(function() {
             success: function(msg){
                 $('#modal_file2').append(msg);
                 //The Asset Tag must be changed here because there is no guarantee ajax will finish loading before it gets to the next line
-                $('#assetTag').val(values.pp_asset_tag);//Do substring(2) to remove the 'PS' from the beginning
+                $('#assetTag').val(values.pp_asset_tag);
 
             }
         });
@@ -191,7 +176,7 @@ $(document).ready(function() {
         e.stopPropagation();
     });
 
-    //Note: if the file is too large it will take a long time
+    //Note: if the file is too large it will take a long time to upload
     $(document).on("click", "#upload", function(e) {
         e.stopPropagation();
         e.preventDefault();
@@ -255,6 +240,7 @@ $(document).ready(function() {
         $(".alert").hide();
     });
 
+    // when user clicks on the modalUpdateButton event
     $(document).on('click', '#modalUpdateButton', function() {
         var pp_asset_tag = $('#modal_pp_asset_tag').val();
         var manufacturer = $('#modal_manufacturer').val();
@@ -321,6 +307,7 @@ $(document).ready(function() {
             }, 'json');
     });
 
+    // when user clicks on deletePDFButton event
     $(document).on('click', "button[name='deletePDFButton']", function(e) {
         e.stopPropagation();
         e.preventDefault();
@@ -329,6 +316,7 @@ $(document).ready(function() {
         var modal_spinner = $('#modal_spinner');
 
         user.isAdmin(function(isAnAdmin) {
+            var alert_box = new Alert($('#upload_alert_box'));
             if(isAnAdmin) {
                 modal_spinner.show();
                 $.ajax({
@@ -340,19 +328,21 @@ $(document).ready(function() {
                         modal_spinner.hide();
                         if (data.result === 'success') {
                             $('#fileID' + id).closest('tr').remove();
+                            alert_box.displaySuccessMessage("Deleted file successfully.");
                         }
                         else {
-                            alert("Failed to delete the file... " + data.result);
+                            alert_box.displayFailureMessage("Failed to delete the file: " + data.result);
                         }
                     },
                     error: function(e) {
                         modal_spinner.hide();
-                        alert("Something went wrong..." + e);
+                        alert_box.displayFailureMessage("Something went wrong: " + e);
                     }
                 });
             }
-            else
-                alert("You must have admin privileges to delete this file!");
+            else {
+                alert_box.displayFailureMessage("You must be an admin to do this operation!");
+            }
         });
     });
 });
@@ -392,7 +382,7 @@ function searchDrive(user) {
                 $('#drive_list').append(msg);
             }
             else {
-                var value = "<p>Total Matches: " + data.totalMatches +"</p>";
+                var value = "<p>Total Matches: " + data.totalMatches + "</p>";
                 value += "<table id='drive_table' class='table table-condensed table-hover tablesorter' style='table-layout: auto;'>";
                 value += "<thead>";
                 value += "<tr style='background-color:#D8D8D8'>";
@@ -492,7 +482,7 @@ function searchDrive(user) {
                 value += "</table>";
 
                 $('#drive_list').append(value);
-            }
+            } // table creation
 
             //http://tablesorter.com/docs
             //third party table sorter utilized
@@ -537,6 +527,8 @@ function getValuesById(id) {
             shipping_carrier_sent, shipping_tracking_number_sent: shipping_tracking_number_sent, created: created,
             last_updated: last_updated, updated_by: updated_by, essential: essential}; //23 values
 }
+
+
 
 function generateTrashCan(user, i) {
     user.isAdmin(function(isAnAdmin) {
