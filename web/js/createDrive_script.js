@@ -6,9 +6,6 @@ $(document).ready(function() {
 
     $('#result').empty();
 
-    var create_alert_box = "<div id='create_alert_box'></div>";
-    $('#result').append(create_alert_box);
-
     //add startsWith function to the String prototype
     if (typeof String.prototype.startsWith != 'function') {
         String.prototype.startsWith = function (str){
@@ -20,7 +17,7 @@ $(document).ready(function() {
     $('#sent_date').datepicker({ dateFormat: "yy-mm-dd"});
     $('#received_date').datepicker({ dateFormat: "yy-mm-dd"}).datepicker('setDate', new Date());
 
-    var essentials_alert = new Alert($('#essentials_alert_box'));
+    var essentials_alert = new Alert($('#alert-area'));
     essentials_alert.displayInfoMessage("Using Archiving/Enterprise Prefix Tag (PS)");
     $('#essential').on('change', function() {
         var PSorPSE = $('#PSorPSE');
@@ -105,7 +102,7 @@ $(document).ready(function() {
             function(data){
                 $('#createDrive').hide();
                 essentials_alert.clearCurrentMessage();
-                var alert = new Alert($('#create_alert_box'));
+                var alert = new Alert($('#alert-area'));
 
                 if(data.pp_asset_tag === undefined) {
                     alert.displayFailureMessage("Error: " + data.message);

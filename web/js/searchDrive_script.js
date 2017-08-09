@@ -97,7 +97,7 @@ $(document).ready(function() {
                                     essential: essential
                                 },
                                 function (data) {
-                                    var action_alert_box = new Alert($('#row_actions_update_box'));
+                                    var action_alert_box = new Alert($('#alert-area'));
 
                                     if (data.result === 'success') {
                                         $('#tr_' + id).remove();
@@ -181,7 +181,7 @@ $(document).ready(function() {
         e.stopPropagation();
         e.preventDefault();
 
-        var alert = new Alert($('#upload_alert_box'));
+        var alert = new Alert($('#modal-alert-area'));
 
         if ($("#file")[0].files[0] == null) {
             alert.displayFailureMessage("You need to choose a PDF file to upload!");
@@ -192,8 +192,9 @@ $(document).ready(function() {
             return;
         }
 
-        var asset_tag = $("#assetTag").val();
+        var asset_tag = $("#modal_pp_asset_tag").val();
         var desc = $("#desc").val();
+        var customer_name = $('#modal_customer_name').val();
 
         var data = new FormData();
         data.append('assetTag', asset_tag);
@@ -214,14 +215,14 @@ $(document).ready(function() {
                 $('#modal_spinner').hide();
                 if (data.result === "success") {//If the data passes all the tests then update the page!
                     $.ajax({
-                        url: "upload2.jsp?pp_asset_tag=" + pp_asset_tag + "&customer_name=" + customer_name + "&update=true",
+                        url: "upload2.jsp?pp_asset_tag=" + asset_tag + "&customer_name=" + customer_name + "&update=true",
                         dataType: "text",
                         success: function (msg) {
                             $('#modal_file2').children().remove();
                             $('#modal_file2').append(msg);
+                            alert.displaySuccessMessage("File was uploaded to the server!");
                         }
                     });
-                    alert.displaySuccessMessage("File was uploaded to the server!");
                 }
                 else {
                     alert.displayFailureMessage("Error: " + data.result);
@@ -316,27 +317,31 @@ $(document).ready(function() {
         var modal_spinner = $('#modal_spinner');
 
         user.isAdmin(function(isAnAdmin) {
-            var alert_box = new Alert($('#upload_alert_box'));
+            var alert_box = new Alert($('#modal-alert-area'));
             if(isAnAdmin) {
-                modal_spinner.show();
-                $.ajax({
-                    url: "deleteFile",
-                    type: 'POST',
-                    data: {id : id},
-                    dataType: "json",
-                    success: function(data) {
-                        modal_spinner.hide();
-                        if (data.result === 'success') {
-                            $('#fileID' + id).closest('tr').remove();
-                            alert_box.displaySuccessMessage("Deleted file successfully.");
-                        }
-                        else {
-                            alert_box.displayFailureMessage("Failed to delete the file: " + data.result);
-                        }
-                    },
-                    error: function(e) {
-                        modal_spinner.hide();
-                        alert_box.displayFailureMessage("Something went wrong: " + e);
+                bootbox.confirm("Are you sure you want to delete this file?", function(result) {
+                    if (result === true) {
+                        modal_spinner.show();
+                        $.ajax({
+                            url: "deleteFile",
+                            type: 'POST',
+                            data: {id: id},
+                            dataType: "json",
+                            success: function (data) {
+                                modal_spinner.hide();
+                                if (data.result === 'success') {
+                                    $('#fileID' + id).closest('tr').remove();
+                                    alert_box.displaySuccessMessage("Deleted file successfully.");
+                                }
+                                else {
+                                    alert_box.displayFailureMessage("Failed to delete the file: " + data.result);
+                                }
+                            },
+                            error: function (e) {
+                                modal_spinner.hide();
+                                alert_box.displayFailureMessage("Something went wrong: " + e);
+                            }
+                        });
                     }
                 });
             }

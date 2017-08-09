@@ -44,6 +44,9 @@
         <div id="change_customer"></div>
     </div>
     <div class="modal-body">
+        <div id="modal-alert-area" class="alert" hidden>
+
+        </div>
         <form class="form-horizontal">
             <div class="control-group">
                 <label class="control-label" for="modal_pp_asset_tag">PP Asset Tag</label>
@@ -201,8 +204,6 @@
                     <textarea style="color: black" id="modal_notes"></textarea>
                 </div>
             </div>
-            <%--This div is accessed by the javascript to turn it into an alert box--%>
-            <div class="alert" id="upload_alert_box" hidden></div>
 
             <div class="control-group">
                 <label class="control-label" for="modal_file2">File Upload</label>

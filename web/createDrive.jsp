@@ -8,7 +8,6 @@
 <br>
 <h1 style="text-align: center;"><i class="icon-magic"></i> Create Drive</h1>
 <h2 style="text-align: center;" id="printchatbox"></h2>
-<div id="essentials_alert_box" hidden></div>
 <br>
 
 <hr>

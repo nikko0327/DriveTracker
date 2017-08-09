@@ -60,7 +60,7 @@ public class deleteFile extends HttpServlet implements mysql_credentials {
             preparedStatement.executeUpdate();
 
             preparedStatement.close();
-            System.out.println("Delete drive: " + query_deleteDrive);
+            System.out.println("Delete file: " + query_deleteDrive);
             result = true;
         } catch(SQLException | ClassNotFoundException e) {
             eMessage = e.getMessage();

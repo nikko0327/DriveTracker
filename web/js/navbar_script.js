@@ -47,4 +47,20 @@ $(document).ready(function() {
         user.toggleNotifications();
         e.stopPropagation();
     });
+
+    $(".modal").on("show", function () {
+        $("body").addClass("modal-open");
+    }).on("hidden", function () {
+        $("body").removeClass("modal-open")
+    });
+
+    // prevents bootstrap box from being completely deleted when the x is clicked
+    // instead it will just hide it
+    $(".close-alert").click(function() {
+        console.log("hey");
+        var alert_class = $('.alert');
+        alert_class.removeAttr("style");
+        alert_class.empty();
+        alert_class.hide();
+    });
 });

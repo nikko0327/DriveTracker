@@ -10,14 +10,17 @@
     String assetTag = "'" + request.getParameter("pp_asset_tag") + "'";
     boolean update = Boolean.valueOf(request.getParameter("update"));//parses update value(true or false in string) to a boolean
 
+
+    System.out.println("asset: " + assetTag);
+    System.out.println("update: " + update);
     //if it is not called for an update, then dont display the form (since the user isnt updating)
     String hide = "";
     if (!update)
         hide = "hidden";
 
+    //TODO: fix this, this is how sql injections happen (escape the values and use PreparedStatement)
     String query = "SELECT * FROM upload WHERE pp_asset_tag = " + assetTag;
 
-    String BookId = request.getParameter("pp_asset_tag");
     Class.forName("com.mysql.jdbc.Driver").newInstance();
     Connection con = DriverManager.getConnection(mysql_credentials.db_url, mysql_credentials.user_name, mysql_credentials.password);
     Statement st = con.createStatement();
