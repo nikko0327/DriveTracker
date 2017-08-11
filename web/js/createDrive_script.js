@@ -3,6 +3,8 @@ $(document).ready(function() {
 
     var user  = new User();
     var username = user.getUsername();
+    var msgEnum = new Enum().MESSAGE;
+    var createDrive_alert = new Alert($('#alert-area'));
 
     $('#result').empty();
 
@@ -17,18 +19,21 @@ $(document).ready(function() {
     $('#sent_date').datepicker({ dateFormat: "yy-mm-dd"});
     $('#received_date').datepicker({ dateFormat: "yy-mm-dd"}).datepicker('setDate', new Date());
 
-    var essentials_alert = new Alert($('#alert-area'));
-    essentials_alert.displayInfoMessage("Using Archiving/Enterprise Prefix Tag (PS)");
+
+    createDrive_alert.displayMessage("Using Archiving/Enterprise Prefix Tag (PS)", msgEnum.props[msgEnum.INFO].class_code,
+        msgEnum.props[msgEnum.INFO].first_word, msgEnum.props[msgEnum.INFO].ttl);
     $('#essential').on('change', function() {
         var PSorPSE = $('#PSorPSE');
         if ($(this).val() === "Yes") {
-            essentials_alert.clearCurrentMessage();
-            essentials_alert.displayInfoMessage("Using Essentials Prefix Tag (PSE)");
+            createDrive_alert.clearCurrentMessage();
+            createDrive_alert.displayMessage("Now Using Essentials Prefix Tag (PSE)", msgEnum.props[msgEnum.INFO].class_code,
+                msgEnum.props[msgEnum.INFO].first_word, msgEnum.props[msgEnum.INFO].ttl);
             PSorPSE.text("PSE");
         }
         else if ($(this).val() === "No") {
-            essentials_alert.clearCurrentMessage();
-            essentials_alert.displayInfoMessage("Using Archiving/Enterprise Prefix Tag (PS)");
+            createDrive_alert.clearCurrentMessage();
+            createDrive_alert.displayMessage("Now Using Archiving/Enterprise Prefix Tag (PS)", msgEnum.props[msgEnum.INFO].class_code,
+                msgEnum.props[msgEnum.INFO].first_word, msgEnum.props[msgEnum.INFO].ttl);
             PSorPSE.text("PS");
         }
     });
@@ -36,7 +41,7 @@ $(document).ready(function() {
     $(document).on('change', '#property', function() {
         var property = $('#property').val();
 
-        if(property == "Proofpoint")
+        if(property === "Proofpoint")
             $("#return_media_to_customer").val("No");
         else
             $("#return_media_to_customer").val("Yes");
@@ -101,14 +106,15 @@ $(document).ready(function() {
             },
             function(data){
                 $('#createDrive').hide();
-                essentials_alert.clearCurrentMessage();
-                var alert = new Alert($('#alert-area'));
+
 
                 if(data.pp_asset_tag === undefined) {
-                    alert.displayFailureMessage("Error: " + data.message);
+                    createDrive_alert.displayMessage("Error: " + data.message, msgEnum.props[msgEnum.FAILURE].class_code,
+                        msgEnum.props[msgEnum.FAILURE].first_word, msgEnum.props[msgEnum.FAILURE].ttl);
                 }
                 else {
-                    alert.displaySuccessMessage("Drive created successfully!");
+                    createDrive_alert.displayMessage("Drive created successfully!", msgEnum.props[msgEnum.SUCCESS].class_code,
+                        msgEnum.props[msgEnum.SUCCESS].first_word, msgEnum.props[msgEnum.SUCCESS].ttl);
                     var result = "<p><h3>Drive created in system with following details:</h3>"
                         + "<br>PP Asset Tag: " + data.pp_asset_tag
                         + "<br>Customer Name: " + data.customer_name

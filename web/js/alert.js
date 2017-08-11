@@ -1,68 +1,73 @@
 // created by zgraham on 8/7/17
 
 /*
+ * if you are new to OOP in Javascript please read this page: http://javascript.crockford.com/private.html
  * This class creates alert boxes, one object of Alert is an area where the alert will show up
  * constructor takes in a jQuery object, jQuerySelector, which is a jQuery selector object
  */
+
+//Note: this constructor has quite a bit of logic/methods in it, but it is mostly okay because the object should
+//      only be loaded once or twice per DOM
+
 function Alert(jQuerySelector) {
-
-    this.successFadeTime = 3; //set the fade time of the success alerts to 3 seconds
-    this.failureFadeTime = 5; //set fade time of failure alerts to 5 seconds (so they have longer to read it)
-
     this.jQuerySelector = jQuerySelector;
-    this.jQuerySelector.hide(); // hide the alert until method is called on it
-    this.jQuerySelector.empty(); // remove anything inside the alert
-    this.jQuerySelector.attr("class", "alert"); // reset class to just alert
-    // add the close (X) button
-    this.jQuerySelector.append("<button type='button' class='close' aria-label='Close'>" +
-        "<span class='close-alert' style='padding-right: 10px;' aria-hidden='true'>&times;</span>" + "</button>");
-    var that = this;
+    this.timeout = undefined;
 
-    // private function that fades the alert box away
-    this.fadeInSeconds = function(seconds) {
-        window.setTimeout(function() {
+    var that = this; // needed for the private functions
+    // PRIVATE METHODS - only accessible inside the constructor, must be called through privileged methods//
+    function privateResetAlertBox() {
+        that.jQuerySelector.hide();
+        that.jQuerySelector.removeAttr("style");
+        that.jQuerySelector.empty();
+        that.jQuerySelector.attr("class", "alert");
+        that.jQuerySelector.append("<button type='button' class='close' aria-label='Close'>" +
+            "<span class='close-alert' style='padding-right: 10px;' aria-hidden='true'>&times;</span>" + "</button>");
+    }
+
+    function privateFadeInSeconds(seconds) {
+        that.timeout = window.setTimeout(function() {
             if (that.jQuerySelector !== undefined) {
-                (that.jQuerySelector).fadeTo(500, 0).slideUp(500, function () {
-                    that.jQuerySelector.removeAttr("style"); // get rid of styling caused by .fadeTo
-                    that.jQuerySelector.empty(); // empty the alert box
-                    that.jQuerySelector.hide(); // hide the alert box again
+                that.jQuerySelector.fadeTo(500, 0).slideUp(500, function () {
+                    that.resetAlertBox(); // reset the alert box when the time is up
                 });
             }
         }, seconds*1000);
+    }
 
+    function privateStartListening() {
+        $(".close-alert").click(function() {
+            clearTimeout(that.timeout); // first stop the timeout from continuing as all it does its hide/empty
+            privateResetAlertBox(); // then reset the alert box
+        });
+    }
+
+    // PRIVILEGED METHOD(S) - (privileged functions are used to access private methods from public methods) //
+    // hide, empty, and un-stylize the alert box
+    this.resetAlertBox = function() {
+        privateResetAlertBox();
+    };
+
+    // fades the alert box away and takes in how many seconds it takes before it starts to fade
+    this.fadeInSeconds = function(seconds) {
+        privateFadeInSeconds(seconds);
+    };
+
+    // set up event listener
+    this.startListening = function() {
+        privateStartListening();
     }
 }
 
-// display a green success message for user
-Alert.prototype.displaySuccessMessage = function(message) {
-    (this.jQuerySelector).show();
-    (this.jQuerySelector).addClass("alert-success");
-    (this.jQuerySelector).append("<strong>Success! </strong>" + message);
-    this.fadeInSeconds(this.successFadeTime);
-};
-
-// display a yellow warning message for user
-Alert.prototype.displayWarningMessage = function(message) {
-    (this.jQuerySelector).show();
-    (this.jQuerySelector).addClass("alert-warning");
-    (this.jQuerySelector).append("<strong>Warning! </strong>" + message);
-    this.fadeInSeconds(this.successFadeTime);
-};
-
-// display a red failure message for user
-Alert.prototype.displayFailureMessage = function(message) {
-    (this.jQuerySelector).show();
-    (this.jQuerySelector).addClass("alert-danger");
-    (this.jQuerySelector).append("<strong>Oops! </strong>" + message);
-    this.fadeInSeconds(this.failureFadeTime);
-};
-
-// display a blue info/notice message for user
-Alert.prototype.displayInfoMessage = function(message) {
-    (this.jQuerySelector).show();
-    (this.jQuerySelector).addClass("alert-info");
-    (this.jQuerySelector).append("<strong>Notice: </strong>" + message);
-    this.fadeInSeconds(this.failureFadeTime);
+// PUBLIC METHODS //
+// display a message in the alert box (and the alert box itself) to the user
+Alert.prototype.displayMessage = function(msg, msgClass, msgFirstWord, fadeTime) {
+    this.resetAlertBox();
+    this.jQuerySelector.show();
+    this.jQuerySelector.addClass(msgClass);
+    this.jQuerySelector.append(msgFirstWord + msg);
+    clearTimeout(this.timeout);
+    this.fadeInSeconds(fadeTime);
+    this.startListening();
 };
 
 // clear the message and the alert box
@@ -70,9 +75,4 @@ Alert.prototype.clearCurrentMessage = function() {
     (this.jQuerySelector).attr("class", "alert");
     (this.jQuerySelector).empty();
     (this.jQuerySelector).hide();
-};
-
-// forces the user to scroll to where the box is created
-Alert.prototype.focusOnMessage = function() {
-    (this.jQuerySelector).get(0).scrollIntoView();
 };

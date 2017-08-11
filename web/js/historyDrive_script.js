@@ -1,36 +1,44 @@
 $(document).ready(function() {
+    // just defining commonly used variable here
+    var search_form = $('#search_form');
+    var pp_asset_tag = $('#pp_asset_tag');
 
-    $('#pp_asset_tag').focus();
-    $("[id$=date]").datepicker({ dateFormat: "yy-mm-dd"});
+    pp_asset_tag.focus(); // highlight the pp_asset_tag search field
+    $("[id$=date]").datepicker({ dateFormat: "yy-mm-dd"}); // date picker initialization
 
-    //Added for pp asset tag click search from searchDrive START
+    // when user submits the search form then execute searchDrive method (found below)
+    search_form.on('submit', function(e) {
+        e.preventDefault(); // prevent page from reloading when submitting
+        searchDrive();
+    });
+
+    // need this because pp_asset_tag can be sent over GET form
+    // to historyDrive.jsp from searchDrive by clicking on the asset_tag
     function getQueryVariable(variable)
     {
         var query = window.location.search.substring(1);
         var vars = query.split("&");
-        for (var i=0;i<vars.length;i++) {
+        var i;
+        for (i=0; i<vars.length; i++) {
             var pair = vars[i].split("=");
-            if(pair[0] == variable){return pair[1];}
+            if(pair[0] === variable) { // if the variable in the url is variable, return its value
+                return pair[1];
+            }
         }
         return(false);
     }
-    console.log("Asset tag: " + getQueryVariable("pp_asset_tag"));
 
-    if(getQueryVariable("pp_asset_tag") != "") {
-        $('#pp_asset_tag').val(getQueryVariable("pp_asset_tag"));
+    // if the pp_asset_tag GET field is not empty then
+    // set the value of the search asset_tag search field
+    // and submit the search query
+    if(getQueryVariable("pp_asset_tag") !== ("" || false)) {
+        pp_asset_tag.val(getQueryVariable("pp_asset_tag"));
 
-        $(document).ready(function() {
-            $('#search_form').submit();
-        });
+        search_form.submit();
     }
 
-    //END
-
-    $('#search_form').on('submit', searchDrive);
-
-    $(document).ready(function() {
-        $('#search_form').submit();
-    });
+    // automatically submit the form on page load
+    search_form.submit();
 });
 
 function searchDrive() {
@@ -149,15 +157,10 @@ function searchDrive() {
             }
 
 
-            //now giving sorting options on specific columns
-            $('#drive_table').tablesorter(/*{
-             headers:{
-             14:{sorter:false}
-             }
-             }*/);
+            // using tablesorter 3rd party API, this will make table sortable and look better
+            $('#drive_table').tablesorter();
 
             $('#page_spinner').hide();
-
         }, "json");
 
     //return false prevents form from reloading/refreshing/going to other page

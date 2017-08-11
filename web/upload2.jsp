@@ -53,7 +53,9 @@
     <tr>
         <th>ID</th>
         <th style="text-align: center">Description</th>
-        <th id="deleteHeader" style="text-align: center">dlt</th>
+        <% if(update) { %>
+            <th id="deleteHeader" style="text-align: center">dlt</th>
+        <% } %>
     </tr>
     <%
         while(rs.next()){
@@ -65,9 +67,11 @@
         <td>
             <div id="description"><a href="<%="FileReadPdf?assetTag=" + rs.getString("pp_asset_tag") + "&" + "description=" + rs.getString("description")%>" target="_blank"><%=rs.getString("description")%></a></div>
         </td>
+        <% if (update) { %>
         <td>
             <button name='deletePDFButton' class='btn btn-xs btn-danger' id='deletePDF_<%=rs.getString("id")%>'><i class='icon-trash'></i></button>
         </td>
+        <% } %>
     </tr>
     <%
         }

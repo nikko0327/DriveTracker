@@ -13,12 +13,14 @@
 <script src="js/libs/clipboard.js"></script>
 <script src="js/libs/bootstrap-toggle.js"></script>
 
+<%--Enums (I have to decided to put them all in one file, in order to create less objects)--%>
+<script src="js/enum.js"></script>
+
 <%--Dropdown choices--%>
 <script src="js/dropdown/property.js"></script>
 <script src="js/dropdown/locations.js"></script>
 <script src="js/dropdown/states.js"></script>
 <script src="js/dropdown/shipping_carriers.js"></script>
-
 
 <%--Script I made to standardize alert messages--%>
 <script src="js/alert.js"></script>

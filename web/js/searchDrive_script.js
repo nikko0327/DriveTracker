@@ -1,9 +1,12 @@
 
 $(document).ready(function() {
-    new Clipboard('.clipbtn');
     var user = new User();
-
     var username = user.getUsername();
+    var msgEnum = new Enum().MESSAGE;
+    var action_alert_box = new Alert($('#alert-area'));
+    var modal_alert = new Alert($('#modal-alert-area'));
+    new Clipboard('.clipbtn');
+
 
     $('#pp_asset_tag').focus();
     $("[id$=date]").datepicker({ dateFormat: "yy-mm-dd"});
@@ -97,17 +100,15 @@ $(document).ready(function() {
                                     essential: essential
                                 },
                                 function (data) {
-                                    var action_alert_box = new Alert($('#alert-area'));
-
                                     if (data.result === 'success') {
                                         $('#tr_' + id).remove();
-                                        action_alert_box.displaySuccessMessage(pp_asset_tag + " has been deleted!")
+                                        action_alert_box.displayMessage(pp_asset_tag + " has been deleted!", msgEnum.props[msgEnum.SUCCESS].class_code,
+                                            msgEnum.props[msgEnum.SUCCESS].first_word, msgEnum.props[msgEnum.SUCCESS].ttl)
                                     }
                                     else {
-                                        action_alert_box.displayFailureMessage("Error: " + data.result);
+                                        action_alert_box.displayMessage("Error: " + data.result, msgEnum.props[msgEnum.FAILURE].class_code,
+                                            msgEnum.props[msgEnum.FAILURE].first_word, msgEnum.props[msgEnum.FAILURE].ttl);
                                     }
-                                    // force user to see the alert box by scrolling them up to it
-                                    action_alert_box.focusOnMessage();
                                     $('#modal_spinner').hide();
                                 }, 'json');
                         }
@@ -181,14 +182,14 @@ $(document).ready(function() {
         e.stopPropagation();
         e.preventDefault();
 
-        var alert = new Alert($('#modal-alert-area'));
-
         if ($("#file")[0].files[0] == null) {
-            alert.displayFailureMessage("You need to choose a PDF file to upload!");
+            modal_alert.displayMessage("You need to choose a PDF file to upload!", msgEnum.props[msgEnum.FAILURE].class_code,
+                msgEnum.props[msgEnum.FAILURE].first_word, msgEnum.props[msgEnum.FAILURE].ttl);
             return;
         }
         else if ($("#desc").val() == null || $("#desc").val() == "") {
-            alert.displayFailureMessage("You need to include a short description!");
+            modal_alert.displayMessage("You need to include a short description!", msgEnum.props[msgEnum.FAILURE].class_code,
+                msgEnum.props[msgEnum.FAILURE].first_word, msgEnum.props[msgEnum.FAILURE].ttl);
             return;
         }
 
@@ -220,17 +221,20 @@ $(document).ready(function() {
                         success: function (msg) {
                             $('#modal_file2').children().remove();
                             $('#modal_file2').append(msg);
-                            alert.displaySuccessMessage("File was uploaded to the server!");
+                            modal_alert.displayMessage("File was uploaded to the server!", msgEnum.props[msgEnum.SUCCESS].class_code,
+                                msgEnum.props[msgEnum.SUCCESS].first_word, msgEnum.props[msgEnum.SUCCESS].ttl);
                         }
                     });
                 }
                 else {
-                    alert.displayFailureMessage("Error: " + data.result);
+                    modal_alert.displayMessage("Error: " + data.result, msgEnum.props[msgEnum.FAILURE].class_code,
+                        msgEnum.props[msgEnum.FAILURE].first_word, msgEnum.props[msgEnum.FAILURE].ttl);
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {//if the server gives us an error we're fucked
                 $('#modal_spinner').hide();
-                alert.displayFailureMessage("Error: " + errorThrown);
+                modal_alert.displayMessage("Error: " + errorThrown, msgEnum.props[msgEnum.FAILURE].class_code,
+                    msgEnum.props[msgEnum.FAILURE].first_word, msgEnum.props[msgEnum.FAILURE].ttl);
             }
         });
     });
@@ -317,7 +321,6 @@ $(document).ready(function() {
         var modal_spinner = $('#modal_spinner');
 
         user.isAdmin(function(isAnAdmin) {
-            var alert_box = new Alert($('#modal-alert-area'));
             if(isAnAdmin) {
                 bootbox.confirm("Are you sure you want to delete this file?", function(result) {
                     if (result === true) {
@@ -331,22 +334,26 @@ $(document).ready(function() {
                                 modal_spinner.hide();
                                 if (data.result === 'success') {
                                     $('#fileID' + id).closest('tr').remove();
-                                    alert_box.displaySuccessMessage("Deleted file successfully.");
+                                    modal_alert.displayMessage("Deleted file successfully.", msgEnum.props[msgEnum.SUCCESS].class_code,
+                                        msgEnum.props[msgEnum.SUCCESS].first_word, msgEnum.props[msgEnum.SUCCESS].ttl);
                                 }
                                 else {
-                                    alert_box.displayFailureMessage("Failed to delete the file: " + data.result);
+                                    modal_alert.displayMessage("Failed to delete the file: " + data.result, msgEnum.props[msgEnum.FAILURE].class_code,
+                                        msgEnum.props[msgEnum.FAILURE].first_word, msgEnum.props[msgEnum.FAILURE].ttl);
                                 }
                             },
                             error: function (e) {
                                 modal_spinner.hide();
-                                alert_box.displayFailureMessage("Something went wrong: " + e);
+                                modal_alert.displayMessage("Something went wrong: " + e, msgEnum.props[msgEnum.FAILURE].class_code,
+                                    msgEnum.props[msgEnum.FAILURE].first_word, msgEnum.props[msgEnum.FAILURE].ttl);
                             }
                         });
                     }
                 });
             }
             else {
-                alert_box.displayFailureMessage("You must be an admin to do this operation!");
+                modal_alert.displayMessage("You must be an admin to do this operation!", msgEnum.props[msgEnum.FAILURE].class_code,
+                    msgEnum.props[msgEnum.FAILURE].first_word, msgEnum.props[msgEnum.FAILURE].ttl);
             }
         });
     });
