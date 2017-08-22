@@ -22,7 +22,7 @@
         <br>
         <br>
         <button type="submit" class="btn btn-primary" id="search">Search</button>
-        <button type="reset" class="btn btn-danger" id="reset">Reset</button>
+        <button type="reset" class="btn btn-danger" id="myReset">Reset</button>
     </form>
     <div id="row_actions_update_box"></div>
 </div>

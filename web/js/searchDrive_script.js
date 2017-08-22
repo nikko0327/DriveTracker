@@ -19,7 +19,14 @@ $(document).ready(function() {
     });
 
     search_form.on('reset', function() {
-        search_form.submit();
+        search_form[0].reset();
+        $('#pp_asset_tag').val("");
+        $('#serial_number').val("");
+        $('#customer_name').val("");
+        $('#drive_state').val("");
+        $('#drive_location').val("");
+        $('#essential').val("");
+        searchDrive(user);
     });
 
     search_form.submit();
@@ -268,7 +275,7 @@ $(document).ready(function() {
         var shipping_tracking_number_sent = $('#modal_shipping_tracking_number_sent').val();
         var essential = $('#modal_essential').val();
 
-        if(pp_asset_tag == null || pp_asset_tag == "") {
+        if(pp_asset_tag === null || pp_asset_tag === "") {
             alert("Drive must have a PP Asset Tag");
             $("#modal_pp_asset_tag").focus();
             return;
