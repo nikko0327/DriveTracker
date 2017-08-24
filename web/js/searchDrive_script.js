@@ -32,10 +32,13 @@ $(document).ready(function() {
     search_form.submit();
     /* End search bar logic */
 
+    // when user clicks on a link (<a>) stop the propagation
+    // so that it doesnt activate other events related to the drive_table
     $(document).on('click', '#drive_table a', function(e) {
         e.stopPropagation();
     });
 
+    // when user clicks on one of the table rows then show them details of the drive
     $(document).on('click', '#drive_table tr', function() {
         //get id # of table row
         var id = $(this).attr('id').replace('tr_','');
@@ -88,6 +91,7 @@ $(document).ready(function() {
         $('#details_modal_file').children().remove();
     });
 
+    // when user clicks on the delete (trash can) button
     $(document).on('click', 'button[name="deleteButton"]', function(e) {
         var id = $(this).attr('id').replace('delete_','');
         var pp_asset_tag = $('#pp_asset_tag_' + id).val();
@@ -128,11 +132,13 @@ $(document).ready(function() {
         e.stopPropagation();
     });
 
+    // when user clicks on the copy (two intersecting squares) button
     $(document).on('click', 'button[name="copyButton"]', function(e) {
         //prevents other operations from being clicked at same time
         e.stopPropagation();
     });
 
+    // when user clicks the update button
     $(document).on('click', "button[name='updateButton']", function(e) {
         var id = $(this).attr('id').replace('update_', '');
         var values = getValuesById(id);

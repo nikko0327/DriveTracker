@@ -34,7 +34,7 @@ $(document).ready(function() {
 			},
             function(data) {
 
-				if(data.result == "success") {
+				if(data.result === "success") {
                     window.location.href = "searchDrive.jsp";
                 }
                 else {

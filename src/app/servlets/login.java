@@ -62,7 +62,7 @@ public class login extends HttpServlet implements mysql_credentials {
 
             Cookie loginCookie = new Cookie("username", username);
             // setting cookie to expiry in 60 mins
-            loginCookie.setMaxAge(60 * 60);
+//            loginCookie.setMaxAge(60 * 60); // commented this out so that cookies should last entire session rather than 60 minutes
             response.addCookie(loginCookie);
         }
         else
