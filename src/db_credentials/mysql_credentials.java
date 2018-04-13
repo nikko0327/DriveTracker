@@ -6,5 +6,5 @@ public interface mysql_credentials {
 	
 	final String user_name = "root";
 	final String password = "";
-	final String db_url = "jdbc:mysql://localhost/DriveTracker";
+	final String db_url = "jdbc:mysql://localhost/DriveTracking";
 }
