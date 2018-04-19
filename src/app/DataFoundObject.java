@@ -1,6 +1,5 @@
 package app;
 
-import db_credentials.mysql_credentials;
 import net.sf.json.JSONObject;
 
 import javax.annotation.Resource;
@@ -17,7 +16,7 @@ import java.util.Map;
  * Created by zgraham on 4/13/17.
  */
 
-public class DataFoundObject implements mysql_credentials {
+public class DataFoundObject {
 
     private String assetTag;
     private String serialNumber;

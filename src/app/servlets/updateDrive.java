@@ -5,10 +5,12 @@ import app.HistoryInfo;
 import db_credentials.mysql_credentials;
 import net.sf.json.JSONObject;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Date;
@@ -45,6 +47,9 @@ public class updateDrive extends HttpServlet implements mysql_credentials {
     private String updatedBy;
     private String return_media_to_customer;
     private String essential;
+
+    @Resource(name = "jdbc/DriveTrackerDB")
+    private DataSource dataSource;
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -102,9 +107,12 @@ public class updateDrive extends HttpServlet implements mysql_credentials {
 
         boolean result = false;
         Connection connect = null;
+        PreparedStatement psUpdateDrive = null;
+        PreparedStatement psSelectDrive = null;
+        ResultSet selectDriveRes = null;
+
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            connect = DriverManager.getConnection(db_url, user_name, password);
+            connect = dataSource.getConnection();
 
             Date currentDatetime = new Date();
             Timestamp sqlTime = new Timestamp(currentDatetime.getTime());
@@ -118,38 +126,38 @@ public class updateDrive extends HttpServlet implements mysql_credentials {
                     "updated_by = ?, last_updated = ?, return_media_to_customer = ?, essential = ? " +
                     "where pp_asset_tag = '" + assetTag + "'";
 
-            PreparedStatement prepUpdateDriveStmt = connect.prepareStatement(query_updateDrive);
-            prepUpdateDriveStmt.setString(1, manufacturer);
-            prepUpdateDriveStmt.setString(2, serialNumber);
-            prepUpdateDriveStmt.setString(3, property);
-            prepUpdateDriveStmt.setString(4, customerName);
-            prepUpdateDriveStmt.setString(5, cts);
-            prepUpdateDriveStmt.setString(6, jira);
-            prepUpdateDriveStmt.setString(7, label);
-            prepUpdateDriveStmt.setString(8, driveLocation);
-            prepUpdateDriveStmt.setString(9, driveState);
-            prepUpdateDriveStmt.setString(10, encrypted);
-            prepUpdateDriveStmt.setString(11, box);
-            prepUpdateDriveStmt.setString(12, usb);
-            prepUpdateDriveStmt.setString(13, power);
-            prepUpdateDriveStmt.setString(14, rack);
-            prepUpdateDriveStmt.setString(15, shelf);
-            prepUpdateDriveStmt.setString(16, notes);
-            prepUpdateDriveStmt.setString(17, receivedDate);
-            prepUpdateDriveStmt.setString(18, sentDate);
-            prepUpdateDriveStmt.setString(19, shippingCarrierSent);
-            prepUpdateDriveStmt.setString(20, shippingTrackingNumberSent);
-            prepUpdateDriveStmt.setString(21, updatedBy);
-            prepUpdateDriveStmt.setTimestamp(22, sqlTime);
-            prepUpdateDriveStmt.setString(23, return_media_to_customer);
-            prepUpdateDriveStmt.setString(24, essential);
-            int updateRes = prepUpdateDriveStmt.executeUpdate();
+            psUpdateDrive = connect.prepareStatement(query_updateDrive);
+            psUpdateDrive.setString(1, manufacturer);
+            psUpdateDrive.setString(2, serialNumber);
+            psUpdateDrive.setString(3, property);
+            psUpdateDrive.setString(4, customerName);
+            psUpdateDrive.setString(5, cts);
+            psUpdateDrive.setString(6, jira);
+            psUpdateDrive.setString(7, label);
+            psUpdateDrive.setString(8, driveLocation);
+            psUpdateDrive.setString(9, driveState);
+            psUpdateDrive.setString(10, encrypted);
+            psUpdateDrive.setString(11, box);
+            psUpdateDrive.setString(12, usb);
+            psUpdateDrive.setString(13, power);
+            psUpdateDrive.setString(14, rack);
+            psUpdateDrive.setString(15, shelf);
+            psUpdateDrive.setString(16, notes);
+            psUpdateDrive.setString(17, receivedDate);
+            psUpdateDrive.setString(18, sentDate);
+            psUpdateDrive.setString(19, shippingCarrierSent);
+            psUpdateDrive.setString(20, shippingTrackingNumberSent);
+            psUpdateDrive.setString(21, updatedBy);
+            psUpdateDrive.setTimestamp(22, sqlTime);
+            psUpdateDrive.setString(23, return_media_to_customer);
+            psUpdateDrive.setString(24, essential);
+            psUpdateDrive.executeUpdate();
 
             System.out.println("Update drive: " + query_updateDrive);
 
             String query_selectDriveById = "select * from drive_info where pp_asset_tag = '" + assetTag + "'";
-            PreparedStatement prepSelectDriveStmt = connect.prepareStatement(query_selectDriveById);
-            ResultSet selectDriveRes = prepSelectDriveStmt.executeQuery();
+            psSelectDrive = connect.prepareStatement(query_selectDriveById);
+            selectDriveRes = psSelectDrive.executeQuery();
 
             while (selectDriveRes.next()) {
                 Timestamp created = selectDriveRes.getTimestamp("created");
@@ -166,63 +174,61 @@ public class updateDrive extends HttpServlet implements mysql_credentials {
                         + "?,?,?,?,?,?,?,?,?,?,"
                         + "?,?,?,?,?,?);";
 
-                PreparedStatement prepCreateHistoryStmt = connect.prepareStatement(query_createHistory);
+                PreparedStatement prepCreateHistoryStmt = null;
+                try {
 
-                prepCreateHistoryStmt.setString(1, assetTag);
-                prepCreateHistoryStmt.setString(2, manufacturer);
-                prepCreateHistoryStmt.setString(3, serialNumber);
-                prepCreateHistoryStmt.setString(4, property);
-                prepCreateHistoryStmt.setString(5, customerName);
-                prepCreateHistoryStmt.setString(6, cts);
-                prepCreateHistoryStmt.setString(7, jira);
-                prepCreateHistoryStmt.setString(8, label);
-                prepCreateHistoryStmt.setString(9, driveLocation);
-                prepCreateHistoryStmt.setString(10, driveState);
-                prepCreateHistoryStmt.setString(11, encrypted);
-                prepCreateHistoryStmt.setString(12, box);
-                prepCreateHistoryStmt.setString(13, usb);
-                prepCreateHistoryStmt.setString(14, power);
-                prepCreateHistoryStmt.setString(15, rack);
-                prepCreateHistoryStmt.setString(16, shelf);
-                prepCreateHistoryStmt.setString(17, notes);
-                prepCreateHistoryStmt.setString(18, receivedDate);
-                prepCreateHistoryStmt.setString(19, sentDate);
-                prepCreateHistoryStmt.setString(20, shippingCarrierSent);
-                prepCreateHistoryStmt.setString(21, shippingTrackingNumberSent);
-                prepCreateHistoryStmt.setTimestamp(22, created);
-                prepCreateHistoryStmt.setTimestamp(23, sqlTime);
-                prepCreateHistoryStmt.setString(24, updatedBy);
-                prepCreateHistoryStmt.setString(25, return_media_to_customer);
-                prepCreateHistoryStmt.setString(26, essential);
+                    prepCreateHistoryStmt = connect.prepareStatement(query_createHistory);
 
-                int historyRes = prepCreateHistoryStmt.executeUpdate();
+                    prepCreateHistoryStmt.setString(1, assetTag);
+                    prepCreateHistoryStmt.setString(2, manufacturer);
+                    prepCreateHistoryStmt.setString(3, serialNumber);
+                    prepCreateHistoryStmt.setString(4, property);
+                    prepCreateHistoryStmt.setString(5, customerName);
+                    prepCreateHistoryStmt.setString(6, cts);
+                    prepCreateHistoryStmt.setString(7, jira);
+                    prepCreateHistoryStmt.setString(8, label);
+                    prepCreateHistoryStmt.setString(9, driveLocation);
+                    prepCreateHistoryStmt.setString(10, driveState);
+                    prepCreateHistoryStmt.setString(11, encrypted);
+                    prepCreateHistoryStmt.setString(12, box);
+                    prepCreateHistoryStmt.setString(13, usb);
+                    prepCreateHistoryStmt.setString(14, power);
+                    prepCreateHistoryStmt.setString(15, rack);
+                    prepCreateHistoryStmt.setString(16, shelf);
+                    prepCreateHistoryStmt.setString(17, notes);
+                    prepCreateHistoryStmt.setString(18, receivedDate);
+                    prepCreateHistoryStmt.setString(19, sentDate);
+                    prepCreateHistoryStmt.setString(20, shippingCarrierSent);
+                    prepCreateHistoryStmt.setString(21, shippingTrackingNumberSent);
+                    prepCreateHistoryStmt.setTimestamp(22, created);
+                    prepCreateHistoryStmt.setTimestamp(23, sqlTime);
+                    prepCreateHistoryStmt.setString(24, updatedBy);
+                    prepCreateHistoryStmt.setString(25, return_media_to_customer);
+                    prepCreateHistoryStmt.setString(26, essential);
 
-                System.out.println("Create history: " + query_createHistory);
+                    prepCreateHistoryStmt.executeUpdate();
 
-                prepCreateHistoryStmt.close();
+                    System.out.println("Create history: " + query_createHistory);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    prepCreateHistoryStmt.close();
+                }
             }
 
             result = true;
-
-            prepSelectDriveStmt.close();
-            prepUpdateDriveStmt.close();
 
             sendEmailNotification();
 
         } catch (SQLException e) {
             eMessage = e.getMessage();
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (Exception e) {
             eMessage = e.getMessage();
             e.printStackTrace();
         } finally {
-            try {
-                if (connect != null)
-                    connect.close();
-            } catch (SQLException se) {
-                eMessage = se.getMessage();
-                se.printStackTrace();
-            }
+            db_credentials.DB.closeResources(connect, psUpdateDrive, psSelectDrive);
         }
 
         return result;

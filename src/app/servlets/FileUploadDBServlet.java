@@ -1,6 +1,5 @@
 package app.servlets;
 
-import db_credentials.mysql_credentials;
 import net.sf.json.JSONObject;
 
 import javax.annotation.Resource;
@@ -22,7 +21,7 @@ import java.sql.Statement;
 
 @WebServlet("/FileUpload")
 @MultipartConfig
-public class FileUploadDBServlet extends HttpServlet implements mysql_credentials {
+public class FileUploadDBServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 

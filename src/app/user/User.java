@@ -52,7 +52,7 @@ public class User {
         PreparedStatement ps = null;
 
         try {
-            connect = dataSource.getConnection();
+            connect = db_credentials.DB.getConnection();
 
             String query = "SELECT group_name FROM user_info WHERE username = ?;";
 
@@ -92,7 +92,7 @@ public class User {
 
         try {
 
-            connect = dataSource.getConnection();
+            connect = db_credentials.DB.getConnection();
 
             String query = "UPDATE user_info SET notification = ? WHERE username = ?;";
 
@@ -122,7 +122,7 @@ public class User {
         ResultSet rs = null;
 
         try {
-            connect = dataSource.getConnection();
+            connect = db_credentials.DB.getConnection();
 
             String query = "SELECT notification FROM user_info WHERE username = ?;";
 
@@ -156,7 +156,7 @@ public class User {
         ResultSet rs = null;
 
         try {
-            connect = dataSource.getConnection();
+            connect = db_credentials.DB.getConnection();
 
             String query = "SELECT admin FROM user_info WHERE username = ?;";
 
@@ -173,6 +173,8 @@ public class User {
             this.errorMessage = e.getMessage();
             e.printStackTrace();
             return "Error";
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             db_credentials.DB.closeResources(connect, ps, rs);
         }

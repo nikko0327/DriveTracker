@@ -1,7 +1,5 @@
 package app;
 
-import db_credentials.mysql_credentials;
-
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -9,18 +7,21 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-public class EmailNotifier implements mysql_credentials {
-    HistoryInfo info;
-    String from;
-    String host;
-    Properties props;
-    String eMessage;
-    String serverUrl = "http://lv-drivetrac.corp.proofpoint.com/DriveTracker/";
+public class EmailNotifier {
+    private HistoryInfo info;
+    private String from;
+    private String host;
+    private Properties props;
+    private String eMessage;
+    private String serverUrl = "http://lv-drivetrac.corp.proofpoint.com/DriveTracker/";
 
     private Set<InternetAddress> recipients;
     private String essential;
@@ -96,9 +97,12 @@ public class EmailNotifier implements mysql_credentials {
 
     private void loadRecipients() {
         Connection connect = null;
+        PreparedStatement psSelectUser = null;
+        ResultSet rs = null;
+
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            connect = DriverManager.getConnection(db_url, user_name, password);
+            connect = db_credentials.DB.getConnection();
+            System.out.println("Email datasource ok");
 
             String query_selectUsers = "SELECT username FROM user_info WHERE notification='Yes'";
             if (this.essential.equalsIgnoreCase("Yes")) {
@@ -109,26 +113,18 @@ public class EmailNotifier implements mysql_credentials {
                 query_selectUsers += " AND group_name='" + this.groupNameMaster + "';";
             }
 
-            PreparedStatement prepSelectUsersStmt = connect.prepareStatement(query_selectUsers);
-            ResultSet rs = prepSelectUsersStmt.executeQuery();
+            psSelectUser = connect.prepareStatement(query_selectUsers);
+            rs = psSelectUser.executeQuery();
 
-            while (rs.next())
+            while (rs.next()) {
                 recipients.add(new InternetAddress(rs.getString("username") + "@proofpoint.com"));
+            }
 
-            rs.close();
-            prepSelectUsersStmt.close();
-
-        } catch (SQLException | ClassNotFoundException | AddressException e) {
+        } catch (SQLException | AddressException e) {
             eMessage = e.getMessage();
             e.printStackTrace();
         } finally {
-            try {
-                if (connect != null)
-                    connect.close();
-            } catch (SQLException se) {
-                eMessage = se.getMessage();
-                se.printStackTrace();
-            }
+            db_credentials.DB.closeResources(connect, psSelectUser, rs);
         }
     }
 }

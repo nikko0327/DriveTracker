@@ -22,7 +22,7 @@ public abstract class DB implements mysql_credentials {
             DataSource ds = (DataSource) envContext.lookup("jdbc/DriveTrackerDB");
             c = ds.getConnection();
 
-            System.out.println("Connection via DataSource successful.");
+            //System.out.println("Connection via DataSource successful.");
 
         } catch (SQLException sql) {
 

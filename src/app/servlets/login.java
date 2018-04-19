@@ -83,6 +83,8 @@ public class login extends HttpServlet {
         boolean result = false;
         String mail = "";
 
+        DirContext ctx = null;
+
         Hashtable env = new Hashtable(11);
 
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
@@ -98,7 +100,7 @@ public class login extends HttpServlet {
 
         try {
             // Create initial context
-            DirContext ctx = new InitialDirContext(env);
+            ctx = new InitialDirContext(env);
 
             String[] attrIDs = {"mail"};
             // other attributes are: givenName,sn,userPassword, loginShell, etc
@@ -119,12 +121,17 @@ public class login extends HttpServlet {
 
             // Close the context when we're done
             result = true;
-            ctx.close();
 
         } catch (NamingException e) {
             e.printStackTrace();
             result = false;
             eMessage = e.getMessage();
+        } finally {
+            try {
+                ctx.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return result;
@@ -132,33 +139,26 @@ public class login extends HttpServlet {
 
     private void loadAuthorizedUsers() {
         Connection connect = null;
-        try {
+        PreparedStatement psSelectUsers = null;
+        ResultSet rs = null;
 
+        try {
             connect = dataSource.getConnection();
 
             String query_selectUsers = "select * from user_info where login = 'Yes';";
 
-            PreparedStatement prepSelectUsersStmt = connect.prepareStatement(query_selectUsers);
-            ResultSet rs = prepSelectUsersStmt.executeQuery();
+            psSelectUsers = connect.prepareStatement(query_selectUsers);
+            rs = psSelectUsers.executeQuery();
 
             while (rs.next()) {
                 users.add(rs.getString("username"));
             }
 
-            rs.close();
-            prepSelectUsersStmt.close();
-
         } catch (SQLException e) {
             eMessage = e.getMessage();
             e.printStackTrace();
         } finally {
-            try {
-                if (connect != null)
-                    connect.close();
-            } catch (SQLException se) {
-                eMessage = se.getMessage();
-                se.printStackTrace();
-            }
+            db_credentials.DB.closeResources(connect, psSelectUsers, rs);
         }
     }
 }
