@@ -14,11 +14,13 @@ public class UserInfoServlet extends HttpServlet implements mysql_credentials {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UserInfoServlet() { super(); }
+    public UserInfoServlet() {
+        super();
+    }
 
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-     *      response)
+     * response)
      */
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
@@ -29,7 +31,7 @@ public class UserInfoServlet extends HttpServlet implements mysql_credentials {
 
         JSONObject json = new JSONObject();
 
-        switch(action) {
+        switch (action) {
             case "isAdmin":
                 json.put("result", user.isAdmin());
                 break;

@@ -1,24 +1,23 @@
-
-$(document).ready(function() {
+$(document).ready(function () {
     var user = new User();
     var username = user.getUsername();
     var msgEnum = new Enum().MESSAGE;
     var action_alert_box = new Alert($('#alert-area'));
     var modal_alert = new Alert($('#modal-alert-area'));
-    new Clipboard('.clipbtn');
+    //new Clipboard('.clipbtn');
 
 
     $('#pp_asset_tag').focus();
-    $("[id$=date]").datepicker({ dateFormat: "yy-mm-dd"});
+    $("[id$=date]").datepicker({dateFormat: "yy-mm-dd"});
 
     /* Begin search bar logic */
     var search_form = $('#search_form');
-    search_form.on('submit', function(e) {
+    search_form.on('submit', function (e) {
         e.preventDefault();
         searchDrive(user);
     });
 
-    search_form.on('reset', function() {
+    search_form.on('reset', function () {
         search_form[0].reset();
         $('#pp_asset_tag').val("");
         $('#serial_number').val("");
@@ -34,14 +33,14 @@ $(document).ready(function() {
 
     // when user clicks on a link (<a>) stop the propagation
     // so that it doesnt activate other events related to the drive_table
-    $(document).on('click', '#drive_table a', function(e) {
+    $(document).on('click', '#drive_table a', function (e) {
         e.stopPropagation();
     });
 
     // when user clicks on one of the table rows then show them details of the drive
-    $(document).on('click', '#drive_table tr', function() {
+    $(document).on('click', '#drive_table tr', function () {
         //get id # of table row
-        var id = $(this).attr('id').replace('tr_','');
+        var id = $(this).attr('id').replace('tr_', '');
         //assign the values to values
         var values = getValuesById(id);
 
@@ -69,7 +68,7 @@ $(document).ready(function() {
         $.ajax({
             url: "upload2.jsp?pp_asset_tag=" + values.pp_asset_tag + "&update=false",
             dataType: "text",
-            success: function(msg){
+            success: function (msg) {
                 $('#details_modal_file').append(msg);
             }
         });
@@ -87,22 +86,22 @@ $(document).ready(function() {
     });
 
     //Prevents duplicate upload tables from being presented in the modal in case they open up the update again
-    $("#detailsModal").on("hidden", function() {
+    $("#detailsModal").on("hidden", function () {
         $('#details_modal_file').children().remove();
     });
 
     // when user clicks on the delete (trash can) button
-    $(document).on('click', 'button[name="deleteButton"]', function(e) {
-        var id = $(this).attr('id').replace('delete_','');
+    $(document).on('click', 'button[name="deleteButton"]', function (e) {
+        var id = $(this).attr('id').replace('delete_', '');
         var pp_asset_tag = $('#pp_asset_tag_' + id).val();
         var customer_name = $('#customer_name_' + id).val();
         var essential = $('#essential_' + id).val();
 
         bootbox.confirm("Are you sure you want to delete this drive?",
-            function(result) {
-                if(result === true) {
-                    user.isAdmin(function(isAnAdmin) {
-                        if(isAnAdmin) {
+            function (result) {
+                if (result === true) {
+                    user.isAdmin(function (isAnAdmin) {
+                        if (isAnAdmin) {
                             $.post("deleteDrive",
                                 {
                                     pp_asset_tag: pp_asset_tag,
@@ -133,13 +132,13 @@ $(document).ready(function() {
     });
 
     // when user clicks on the copy (two intersecting squares) button
-    $(document).on('click', 'button[name="copyButton"]', function(e) {
+    $(document).on('click', 'button[name="copyButton"]', function (e) {
         //prevents other operations from being clicked at same time
         e.stopPropagation();
     });
 
     // when user clicks the update button
-    $(document).on('click', "button[name='updateButton']", function(e) {
+    $(document).on('click', "button[name='updateButton']", function (e) {
         var id = $(this).attr('id').replace('update_', '');
         var values = getValuesById(id);
 
@@ -176,7 +175,7 @@ $(document).ready(function() {
         $.ajax({
             url: "upload2.jsp?pp_asset_tag=" + values.pp_asset_tag + "&customer_name=" + values.customer_name + "&update=true",
             dataType: "text",
-            success: function(msg){
+            success: function (msg) {
                 $('#modal_file2').append(msg);
                 //The Asset Tag must be changed here because there is no guarantee ajax will finish loading before it gets to the next line
                 $('#assetTag').val(values.pp_asset_tag);
@@ -191,7 +190,7 @@ $(document).ready(function() {
     });
 
     //Note: if the file is too large it will take a long time to upload
-    $(document).on("click", "#upload", function(e) {
+    $(document).on("click", "#upload", function (e) {
         e.stopPropagation();
         e.preventDefault();
 
@@ -225,7 +224,7 @@ $(document).ready(function() {
             dataType: "json",
             processData: false,
             contentType: false,
-            success: function(data) {
+            success: function (data) {
                 $('#modal_spinner').hide();
                 if (data.result === "success") {//If the data passes all the tests then update the page!
                     $.ajax({
@@ -244,7 +243,7 @@ $(document).ready(function() {
                         msgEnum.props[msgEnum.FAILURE].first_word, msgEnum.props[msgEnum.FAILURE].ttl);
                 }
             },
-            error: function(jqXHR, textStatus, errorThrown) {//if the server gives us an error we're fucked
+            error: function (jqXHR, textStatus, errorThrown) {//if the server gives us an error we're fucked
                 $('#modal_spinner').hide();
                 modal_alert.displayMessage("Error: " + errorThrown, msgEnum.props[msgEnum.FAILURE].class_code,
                     msgEnum.props[msgEnum.FAILURE].first_word, msgEnum.props[msgEnum.FAILURE].ttl);
@@ -253,13 +252,13 @@ $(document).ready(function() {
     });
 
     //Prevents duplicate upload tables from being presented in the modal in case they open up the update again
-    $("#updateModal").on("hidden", function() {
+    $("#updateModal").on("hidden", function () {
         $('#modal_file2').children().remove();
         $(".alert").hide();
     });
 
     // when user clicks on the modalUpdateButton event
-    $(document).on('click', '#modalUpdateButton', function() {
+    $(document).on('click', '#modalUpdateButton', function () {
         var pp_asset_tag = $('#modal_pp_asset_tag').val();
         var manufacturer = $('#modal_manufacturer').val();
         var serial_number = $('#modal_serial_number').val();
@@ -281,7 +280,7 @@ $(document).ready(function() {
         var shipping_tracking_number_sent = $('#modal_shipping_tracking_number_sent').val();
         var essential = $('#modal_essential').val();
 
-        if(pp_asset_tag === null || pp_asset_tag === "") {
+        if (pp_asset_tag === null || pp_asset_tag === "") {
             alert("Drive must have a PP Asset Tag");
             $("#modal_pp_asset_tag").focus();
             return;
@@ -291,32 +290,32 @@ $(document).ready(function() {
 
         $.post("updateDrive",
             {
-                pp_asset_tag : pp_asset_tag,
-                manufacturer : manufacturer,
-                serial_number : serial_number,
-                property : property,
-                customer_name : customer_name,
-                cts : cts,
-                jira : jira,
-                label : label,
-                drive_location : drive_location,
-                drive_state : drive_state,
-                return_media_to_customer : return_media_to_customer,
-                encrypted : encrypted,
-                usb : usb,
-                power : power,
-                notes : notes,
-                received_date : received_date,
-                sent_date : sent_date,
-                shipping_carrier_sent : shipping_carrier_sent,
-                shipping_tracking_number_sent : shipping_tracking_number_sent,
-                updated_by : username,
-                essential : essential
+                pp_asset_tag: pp_asset_tag,
+                manufacturer: manufacturer,
+                serial_number: serial_number,
+                property: property,
+                customer_name: customer_name,
+                cts: cts,
+                jira: jira,
+                label: label,
+                drive_location: drive_location,
+                drive_state: drive_state,
+                return_media_to_customer: return_media_to_customer,
+                encrypted: encrypted,
+                usb: usb,
+                power: power,
+                notes: notes,
+                received_date: received_date,
+                sent_date: sent_date,
+                shipping_carrier_sent: shipping_carrier_sent,
+                shipping_tracking_number_sent: shipping_tracking_number_sent,
+                updated_by: username,
+                essential: essential
             },
-            function(data) {
+            function (data) {
                 $('#modal_spinner').hide();
 
-                if(data.result === 'success') {
+                if (data.result === 'success') {
                     $('[data-dismiss="modal"]').click();
                     location.reload();
                 }
@@ -326,16 +325,16 @@ $(document).ready(function() {
     });
 
     // when user clicks on deletePDFButton event
-    $(document).on('click', "button[name='deletePDFButton']", function(e) {
+    $(document).on('click', "button[name='deletePDFButton']", function (e) {
         e.stopPropagation();
         e.preventDefault();
         var id = this.getAttribute("id");
         id = id.replace("deletePDF_", "");
         var modal_spinner = $('#modal_spinner');
 
-        user.isAdmin(function(isAnAdmin) {
-            if(isAnAdmin) {
-                bootbox.confirm("Are you sure you want to delete this file?", function(result) {
+        user.isAdmin(function (isAnAdmin) {
+            if (isAnAdmin) {
+                bootbox.confirm("Are you sure you want to delete this file?", function (result) {
                     if (result === true) {
                         modal_spinner.show();
                         $.ajax({
@@ -386,18 +385,18 @@ function searchDrive(user) {
 
     $.post("DriveSearchServlet",
         {
-            pp_asset_tag : pp_asset_tag,
-            serial_number : serial_number,
-            customer_name : customer_name,
-            drive_state : drive_state,
-            drive_location : drive_location,
-            tableName : tableName,
-            essential : essential
+            pp_asset_tag: pp_asset_tag,
+            serial_number: serial_number,
+            customer_name: customer_name,
+            drive_state: drive_state,
+            drive_location: drive_location,
+            tableName: tableName,
+            essential: essential
         },
-        function(data) {
+        function (data) {
             $('#drive_list').empty();
 
-            if(data.totalMatches === 0) {
+            if (data.totalMatches === 0) {
                 var msg = "No drives found for the selection, please try different combination or "
                     + "<a href='createDrive.jsp?pp_asset_tag=" + pp_asset_tag + "&"
                     + "serial_number=" + serial_number + "&"
@@ -431,9 +430,9 @@ function searchDrive(user) {
                 value += "<tbody>";
 
                 var i = 1;
-                $.each(data.drives, function(k,v) {
-                    value += "<tr class='detail' id='tr_"+ i + "'>";
-                    if(v.pp_asset_tag === undefined) {
+                $.each(data.drives, function (k, v) {
+                    value += "<tr class='detail' id='tr_" + i + "'>";
+                    if (v.pp_asset_tag === undefined) {
                         value += "<td>" + "Error: " + v.message + "</td>";
                     }
                     else {
@@ -449,9 +448,9 @@ function searchDrive(user) {
                         value += "<td>" + v.drive_state + "</td>";
 
                         var clipboard_text = "" + v.pp_asset_tag + " " + v.customer_name + " " + v.cts + " " + v.jira +
-                                " " + v.manufacturer + " " + v.serial_number;
+                            " " + v.manufacturer + " " + v.serial_number;
 
-                        if((v.return_media_to_customer) == 'Yes') {
+                        if ((v.return_media_to_customer) == 'Yes') {
                             value += "<td style = 'color: green; font-size: 120%;'>" + '<i class="fa fa-check">' + '</i>' + 'Yes' + "</td>";
                         }
                         else {
@@ -460,7 +459,7 @@ function searchDrive(user) {
 
                         value += "<td>" + v.essential + "</td>";
                         value += "<td>" + v.last_updated + "</td>";
-                        value += "<td>" + v.updated_by +"</td>";
+                        value += "<td>" + v.updated_by + "</td>";
 
                         value += "<td id='ops_" + i + "' style='white-space: nowrap'><button name='updateButton' class='btn btn-sm btn-default' id='update_" + i + "'><i class='icon-edit'></i></button>";
 
@@ -474,10 +473,10 @@ function searchDrive(user) {
 
                         value +=
                             "<input type='hidden' id='pp_asset_tag_" + i + "' value='" + v.pp_asset_tag + "'>" +
-                            "<input type='hidden' id='manufacturer_" + i + "' value='" + v.manufacturer +"'>" +
+                            "<input type='hidden' id='manufacturer_" + i + "' value='" + v.manufacturer + "'>" +
                             "<input type='hidden' id='serial_number_" + i + "' value='" + v.serial_number + "'>" +
                             "<input type='hidden' id='property_" + i + "' value='" + v.property + "'>" +
-                            "<input type='hidden' id='customer_name_" + i +"' value='" + v.customer_name + "'>" +
+                            "<input type='hidden' id='customer_name_" + i + "' value='" + v.customer_name + "'>" +
                             "<input type='hidden' id='cts_" + i + "' value='" + v.cts + "'>" +
                             "<input type='hidden' id='jira_" + i + "' value='" + v.jira + "'>" +
                             "<input type='hidden' id='label_" + i + "' value='" + v.label + "'>" +
@@ -491,7 +490,7 @@ function searchDrive(user) {
                             "<input type='hidden' id='received_date_" + i + "' value='" + v.received_date + "'>" +
                             "<input type='hidden' id='sent_date_" + i + "' value='" + v.sent_date + "'>" +
                             "<input type='hidden' id='shipping_carrier_sent_" + i + "' value='" + v.shipping_carrier_sent + "'>" +
-                            "<input type='hidden' id='shipping_tracking_number_sent_" + i +"' value='" + v.shipping_tracking_number_sent + "'>" +
+                            "<input type='hidden' id='shipping_tracking_number_sent_" + i + "' value='" + v.shipping_tracking_number_sent + "'>" +
                             "<input type='hidden' id='created_" + i + "' value='" + v.created + "'>" +
                             "<input type='hidden' id='last_updated_" + i + "' value='" + v.last_updated + "'>" +
                             "<input type='hidden' id='updated_by_" + i + "' value='" + v.updated_by + "'>" +
@@ -545,20 +544,21 @@ function getValuesById(id) {
     var updated_by = $('#updated_by_' + id).val();
     var essential = $('#essential_' + id).val();
 
-    return {pp_asset_tag: pp_asset_tag, manufacturer: manufacturer, serial_number: serial_number, property: property,
-            customer_name: customer_name, cts: cts, jira: jira, label: label, drive_location: drive_location,
-            drive_state: drive_state, return_media_to_customer: return_media_to_customer, encrypted: encrypted,
-            usb: usb, power: power, notes: notes, received_date: received_date, sent_date: sent_date, shipping_carrier_sent:
-            shipping_carrier_sent, shipping_tracking_number_sent: shipping_tracking_number_sent, created: created,
-            last_updated: last_updated, updated_by: updated_by, essential: essential}; //23 values
+    return {
+        pp_asset_tag: pp_asset_tag, manufacturer: manufacturer, serial_number: serial_number, property: property,
+        customer_name: customer_name, cts: cts, jira: jira, label: label, drive_location: drive_location,
+        drive_state: drive_state, return_media_to_customer: return_media_to_customer, encrypted: encrypted,
+        usb: usb, power: power, notes: notes, received_date: received_date, sent_date: sent_date, shipping_carrier_sent:
+        shipping_carrier_sent, shipping_tracking_number_sent: shipping_tracking_number_sent, created: created,
+        last_updated: last_updated, updated_by: updated_by, essential: essential
+    }; //23 values
 }
 
 
-
 function generateTrashCan(user, i) {
-    user.isAdmin(function(isAnAdmin) {
-        if(isAnAdmin) {
-            var trash = "&nbsp;<button name='deleteButton' class='btn btn-sm btn-danger' id='delete_" + i +"'><i class='icon-trash'></i></button>";
+    user.isAdmin(function (isAnAdmin) {
+        if (isAnAdmin) {
+            var trash = "&nbsp;<button name='deleteButton' class='btn btn-sm btn-danger' id='delete_" + i + "'><i class='icon-trash'></i></button>";
             $('#ops_' + i).append(trash);
         }
     });
@@ -577,14 +577,14 @@ function generateJIRATicketUrl(jira) {
 }
 
 function generateShippingTrackingNumberUrl(shipping_tracking_number, shipping_carrier) {
-    if(shipping_tracking_number !== "") {
+    if (shipping_tracking_number !== "") {
         var trackingUrl;
-        if(shipping_carrier === "FedEx")
+        if (shipping_carrier === "FedEx")
             trackingUrl = 'https://www.fedex.com/fedextrack/index.html?tracknumbers=' + shipping_tracking_number;
-        else if(shipping_carrier === "UPS")
+        else if (shipping_carrier === "UPS")
             trackingUrl = 'http://wwwapps.ups.com/WebTracking/processInputRequest?tracknum=' + shipping_tracking_number;
-        else if(shipping_carrier === "USPS")
-            trackingUrl = 'https://tools.usps.com/go/TrackConfirmAction.action?tLabels='+ shipping_tracking_number;
+        else if (shipping_carrier === "USPS")
+            trackingUrl = 'https://tools.usps.com/go/TrackConfirmAction.action?tLabels=' + shipping_tracking_number;
         else
             trackingUrl = "#";
 

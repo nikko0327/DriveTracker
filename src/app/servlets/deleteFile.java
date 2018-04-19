@@ -1,32 +1,40 @@
 package app.servlets;
 
-import db_credentials.mysql_credentials;
 import net.sf.json.JSONObject;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * Servlet implementation class deleteDrive
  */
-public class deleteFile extends HttpServlet implements mysql_credentials {
+public class deleteFile extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private String eMessage;
 
     private String id;
 
+    @Resource(name = "jdbc/DriveTrackerDB")
+    private DataSource dataSource;
+
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public deleteFile() { super(); }
+    public deleteFile() {
+        super();
+    }
 
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-     *      response)
+     * response)
      */
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
@@ -34,10 +42,11 @@ public class deleteFile extends HttpServlet implements mysql_credentials {
 
         JSONObject json = new JSONObject();
 
-        if(removeFile())
+        if (removeFile()) {
             json.put("result", "success");
-        else
+        } else {
             json.put("result", eMessage);
+        }
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -50,29 +59,27 @@ public class deleteFile extends HttpServlet implements mysql_credentials {
         boolean result = false;
 
         Connection connect = null;
+        PreparedStatement ps = null;
+
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            connect = DriverManager.getConnection(db_url, user_name, password);
+            connect = dataSource.getConnection();
 
             String query_deleteDrive = "DELETE FROM upload WHERE id = '" + this.id + "';";
 
-            PreparedStatement preparedStatement = connect.prepareStatement(query_deleteDrive);
-            preparedStatement.executeUpdate();
+            ps = connect.prepareStatement(query_deleteDrive);
+            ps.executeUpdate();
 
-            preparedStatement.close();
+            ps.close();
             System.out.println("Delete file: " + query_deleteDrive);
             result = true;
-        } catch(SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
+            eMessage = e.getMessage();
+            e.printStackTrace();
+        } catch (Exception e) {
             eMessage = e.getMessage();
             e.printStackTrace();
         } finally {
-            try {
-                if(connect != null)
-                    connect.close();
-            } catch(SQLException se) {
-                eMessage = se.getMessage();
-                se.printStackTrace();
-            }
+            db_credentials.DB.closeResources(connect, ps);
         }
 
         return result;

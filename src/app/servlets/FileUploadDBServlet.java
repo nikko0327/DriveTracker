@@ -1,13 +1,9 @@
 package app.servlets;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import db_credentials.mysql_credentials;
+import net.sf.json.JSONObject;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -15,9 +11,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-
-import db_credentials.mysql_credentials;
-import net.sf.json.JSONObject;
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 
 @WebServlet("/FileUpload")
@@ -32,9 +32,12 @@ public class FileUploadDBServlet extends HttpServlet implements mysql_credential
     private String ppAssetTag;
     private String description;
 
+    @Resource(name = "jdbc/DriveTrackerDB")
+    private DataSource dataSource;
+
     /**
      * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse
-     *      response)
+     * response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -58,8 +61,9 @@ public class FileUploadDBServlet extends HttpServlet implements mysql_credential
     private boolean uploadFileAndData() {
         boolean result = false;
         InputStream pdfFileBytes = null;
-        Connection con = null;
-        Statement stmt = null;
+
+        Connection connect = null;
+        PreparedStatement ps = null;
 
         try {
             //if file is NOT a PDF just return false
@@ -78,51 +82,46 @@ public class FileUploadDBServlet extends HttpServlet implements mysql_credential
             pdfFileBytes.read(bytes);  //Storing the binary data in bytes array.
 
             try {
-                Class.forName("com.mysql.jdbc.Driver");
-                con = DriverManager.getConnection(db_url, user_name, password);
+                connect = dataSource.getConnection();
             } catch (Exception e) {
                 System.out.println(e);
                 System.exit(0);
                 return false;
             }
 
+            Statement s = null;
             try {
-                stmt = con.createStatement();
+                s = connect.createStatement();
                 //to create table with blob field (One time only)
-                stmt.executeUpdate("CREATE TABLE upload (id int not null auto_increment, pp_asset_tag varchar (10) not null , file MEDIUMBLOB, description varchar(50) not null, Primary key (id))");
-
+                s.executeUpdate("CREATE TABLE upload (id int not null auto_increment, pp_asset_tag varchar (10) not null , file MEDIUMBLOB, description varchar(50) not null, Primary key (id))");
             } catch (Exception e) {
                 System.out.println("Tables already created, skipping table creation process");
+            } finally {
+                try {
+                    s.close();
+                } catch (SQLException sql) {
+                    sql.printStackTrace();
+                }
             }
 
             int success = 0;
-            PreparedStatement pstmt = con.prepareStatement("INSERT INTO upload VALUES(default,?,?,?)");
-            pstmt.setString(1, ppAssetTag);
-            pstmt.setBytes(2, bytes);    //Storing binary data in blob field.
-            pstmt.setString(3, description);
-            success = pstmt.executeUpdate();
+            ps = connect.prepareStatement("INSERT INTO upload VALUES(default,?,?,?)");
+            ps.setString(1, ppAssetTag);
+            ps.setBytes(2, bytes);    //Storing binary data in blob field.
+            ps.setString(3, description);
+            success = ps.executeUpdate();
 
-            if (success >= 1)
+            if (success >= 1) {
                 System.out.println("File Stored");
+            }
 
-            con.close();
             result = true;
 
         } catch (SQLException | IOException e) {
             eMessage = e.getMessage();
             e.printStackTrace();
         } finally {
-            try {
-                if (con != null)
-                    con.close();
-                if (pdfFileBytes != null)
-                    pdfFileBytes.close();
-            } catch (SQLException se) {
-                eMessage = se.getMessage();
-                se.printStackTrace();
-            } catch (IOException e) {
-                eMessage = e.getMessage();
-            }
+            db_credentials.DB.closeResources(connect, ps);
         }
 
         return result;

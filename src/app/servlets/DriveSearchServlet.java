@@ -1,22 +1,25 @@
 package app.servlets;
 
+import app.DataFoundObject;
+import net.sf.json.JSONObject;
+
+import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import javax.sql.DataSource;
 import java.io.IOException;
-
-import app.DataFoundObject;
-import db_credentials.mysql_credentials;
-import net.sf.json.JSONObject;
 
 
 /**
  * Created by zgraham on 4/13/17.
  */
-public class DriveSearchServlet extends HttpServlet implements mysql_credentials {
+public class DriveSearchServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+
+    @Resource(name = "jdbc/DriveTrackerDB")
+    private DataSource dataSource;
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -44,8 +47,7 @@ public class DriveSearchServlet extends HttpServlet implements mysql_credentials
 
         if (dfo.foundDataSuccessfully()) { //
             response.getWriter().write(dfo.getData());
-        }
-        else {
+        } else {
             response.getWriter().write(new JSONObject().put("message", dfo.getErrorMessage()).toString());
         }
 

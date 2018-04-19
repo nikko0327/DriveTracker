@@ -5,7 +5,10 @@
   Time: 1:52 PM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="java.sql.*,db_credentials.mysql_credentials"%>
+<%@ page import="db_credentials.mysql_credentials,java.sql.Connection" %>
+<%@ page import="java.sql.DriverManager" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.Statement" %>
 <%
     String assetTag = "'" + request.getParameter("pp_asset_tag") + "'";
     boolean update = Boolean.valueOf(request.getParameter("update"));//parses update value(true or false in string) to a boolean
@@ -37,7 +40,7 @@
             </tr>
             <tr>
                 <td>PDF File</td>
-                <td><input type="file" name="file" id="file"/> </td>
+                <td><input type="file" name="file" id="file"/></td>
             </tr>
             <tr>
                 <td colspan="2">
@@ -53,23 +56,28 @@
     <tr>
         <th>ID</th>
         <th style="text-align: center">Description</th>
-        <% if(update) { %>
-            <th id="deleteHeader" style="text-align: center">dlt</th>
+        <% if (update) { %>
+        <th id="deleteHeader" style="text-align: center">dlt</th>
         <% } %>
     </tr>
     <%
-        while(rs.next()){
+        while (rs.next()) {
     %>
     <tr>
         <td>
-            <div id="fileID<%= rs.getString("id")%>"><%=rs.getString("id")%></div>
+            <div id="fileID<%= rs.getString("id")%>"><%=rs.getString("id")%>
+            </div>
         </td>
         <td>
-            <div id="description"><a href="<%="FileReadPdf?assetTag=" + rs.getString("pp_asset_tag") + "&" + "description=" + rs.getString("description")%>" target="_blank"><%=rs.getString("description")%></a></div>
+            <div id="description"><a
+                    href="<%="FileReadPdf?assetTag=" + rs.getString("pp_asset_tag") + "&" + "description=" + rs.getString("description")%>"
+                    target="_blank"><%=rs.getString("description")%>
+            </a></div>
         </td>
         <% if (update) { %>
         <td>
-            <button name='deletePDFButton' class='btn btn-xs btn-danger' id='deletePDF_<%=rs.getString("id")%>'><i class='icon-trash'></i></button>
+            <button name='deletePDFButton' class='btn btn-xs btn-danger' id='deletePDF_<%=rs.getString("id")%>'><i
+                    class='icon-trash'></i></button>
         </td>
         <% } %>
     </tr>

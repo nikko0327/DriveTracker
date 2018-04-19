@@ -5,19 +5,19 @@
     <h1 style="text-align: center"><i class="icon-home"></i> Home</h1>
     <br>
     <form class="form-horizontal" id="search_form" style="text-align: center">
-        <input placeholder ="PP Asset Tag" type="text" name="pp_asset_tag" id="pp_asset_tag" style="height: inherit">
+        <input placeholder="PP Asset Tag" type="text" name="pp_asset_tag" id="pp_asset_tag" style="height: inherit">
         <input placeholder="Serial Number" type="text" name="serial_number" id="serial_number" style="height: inherit">
-        <input placeholder ="Customer Name" type="text" name="customer_name" id="customer_name" style="height: inherit">
+        <input placeholder="Customer Name" type="text" name="customer_name" id="customer_name" style="height: inherit">
         <select id="drive_state">
-            <option value ="" disabled selected style="display:none; color:gray;">Status</option>
+            <option value="" disabled selected style="display:none; color:gray;">Status</option>
         </select>
         <select id="drive_location">
-            <option value ="" disabled selected style="display:none; color:gray;">Location</option>
+            <option value="" disabled selected style="display:none; color:gray;">Location</option>
         </select>
         <select id="essential_select">
-            <option value ="">Essentials</option>
-            <option value ="Yes">Yes</option>
-            <option value ="No">No</option>
+            <option value="">Essentials</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
         </select>
         <br>
         <br>
@@ -33,7 +33,8 @@
     <center><i class="icon-spinner icon-spin icon-3x"></i></center>
 </div>
 <input type="button" value="Print this page" onClick="window.print()">
-<p style="color: green;">Note: To export to pdf, change destination to "Save as PDF" <br>Layout: Landscape <br>Paper Size: Tabloid</p>
+<p style="color: green;">Note: To export to pdf, change destination to "Save as PDF" <br>Layout: Landscape <br>Paper
+    Size: Tabloid</p>
 <div class="sales" id="drive_list" style="overflow: scroll; height: 800px"></div>
 
 <!-- Start of udpate modal -->
@@ -58,7 +59,8 @@
             <div class="control-group">
                 <label class="control-label" for="modal_customer_name">Customer</label>
                 <div class="controls">
-                    <input style="color: black" type="text" id="modal_customer_name" class="update_modal_input" value="">
+                    <input style="color: black" type="text" id="modal_customer_name" class="update_modal_input"
+                           value="">
                 </div>
             </div>
 
@@ -86,7 +88,8 @@
             <div class="control-group">
                 <label class="control-label" for="modal_serial_number">Serial Number</label>
                 <div class="controls">
-                    <input style="color: black" type="text" id="modal_serial_number" value="" class="update_modal_input">
+                    <input style="color: black" type="text" id="modal_serial_number" value=""
+                           class="update_modal_input">
                 </div>
             </div>
 
@@ -136,7 +139,8 @@
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="modal_drive_state">Drive Status</label> <%--Drive State is changed to Drive Status--%>
+                <label class="control-label" for="modal_drive_state">Drive
+                    Status</label> <%--Drive State is changed to Drive Status--%>
                 <div class="controls">
                     <select id="modal_drive_state" class="update_modal_select">
                     </select>
@@ -169,7 +173,8 @@
                 <div class="control-group">
                     <label class="control-label" for="modal_received_date">Received Date</label>
                     <div class="controls">
-                        <input style="color: black" type="text" id="modal_received_date" value="" class="update_modal_input">
+                        <input style="color: black" type="text" id="modal_received_date" value=""
+                               class="update_modal_input">
                     </div>
                 </div>
             </div>
@@ -178,7 +183,8 @@
                 <div class="control-group">
                     <label class="control-label" for="modal_sent_date">Sent Date</label>
                     <div class="controls">
-                        <input style="color: black" type="text" id="modal_sent_date" value="" class="update_modal_input">
+                        <input style="color: black" type="text" id="modal_sent_date" value=""
+                               class="update_modal_input">
                     </div>
                 </div>
 
@@ -191,9 +197,11 @@
                 </div>
 
                 <div class="control-group">
-                    <label class="control-label" for="modal_shipping_tracking_number_sent">Shipping Tracking Number</label>
+                    <label class="control-label" for="modal_shipping_tracking_number_sent">Shipping Tracking
+                        Number</label>
                     <div class="controls">
-                        <input style="color: black" type="text" id="modal_shipping_tracking_number_sent" value=""  class="update_modal_input">
+                        <input style="color: black" type="text" id="modal_shipping_tracking_number_sent" value=""
+                               class="update_modal_input">
                     </div>
                 </div>
             </div>
@@ -319,7 +327,8 @@
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="details_modal_return_media_to_customer">Return Media To Customer</label>
+                <label class="control-label" for="details_modal_return_media_to_customer">Return Media To
+                    Customer</label>
                 <div class="controls">
                     <p id="details_modal_return_media_to_customer" class="detail_modal_p"></p>
                 </div>
@@ -357,7 +366,8 @@
                 </div>
 
                 <div class="control-group">
-                    <label class="control-label" for="details_modal_shipping_tracking_number_sent">Shipping Tracking Number</label>
+                    <label class="control-label" for="details_modal_shipping_tracking_number_sent">Shipping Tracking
+                        Number</label>
                     <div class="controls">
                         <p id="details_modal_shipping_tracking_number_sent" class="detail_modal_p"></p>
                     </div>

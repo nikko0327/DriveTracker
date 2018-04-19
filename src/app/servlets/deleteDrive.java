@@ -1,24 +1,26 @@
 package app.servlets;
 
-import java.io.IOException;
-import java.sql.*;
-import java.util.Date;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import app.EmailNotifier;
 import app.HistoryInfo;
 import net.sf.json.JSONObject;
 
-import db_credentials.mysql_credentials;
+import javax.annotation.Resource;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Servlet implementation class deleteDrive
  */
-public class deleteDrive extends HttpServlet implements mysql_credentials{
+public class deleteDrive extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private String eMessage;
 
@@ -26,6 +28,10 @@ public class deleteDrive extends HttpServlet implements mysql_credentials{
     private String customerName;
     private String updatedBy;
     private String essential;
+
+    @Resource(name = "jdbc/DriveTrackerDB")
+    private DataSource dataSource;
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -36,7 +42,7 @@ public class deleteDrive extends HttpServlet implements mysql_credentials{
 
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-     *      response)
+     * response)
      */
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
@@ -47,10 +53,11 @@ public class deleteDrive extends HttpServlet implements mysql_credentials{
 
         JSONObject json = new JSONObject();
 
-        if(removeDriveAndHistory())
+        if (removeDriveAndHistory()) {
             json.put("result", "success");
-        else
+        } else {
             json.put("result", eMessage);
+        }
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -62,54 +69,47 @@ public class deleteDrive extends HttpServlet implements mysql_credentials{
         boolean result = false;
 
         Connection connect = null;
+        PreparedStatement psDeleteDrive = null;
+        PreparedStatement psDeleteHistory = null;
+        PreparedStatement psDeleteFile = null;
+
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            connect = DriverManager.getConnection(db_url, user_name, password);
+            connect = dataSource.getConnection();
 
             String query_deleteDrive = "delete from drive_info where pp_asset_tag = '" + assetTag + "';";
 
-            PreparedStatement prepDeleteDriveStmt = connect.prepareStatement(query_deleteDrive);
-            int deleteDriveRes = prepDeleteDriveStmt.executeUpdate();
+            psDeleteDrive = connect.prepareStatement(query_deleteDrive);
+            int deleteDriveRes = psDeleteDrive.executeUpdate();
 
             System.out.println("Delete drive: " + query_deleteDrive);
 
             String query_deleteHistory = "delete from drive_history where pp_asset_tag = '" + assetTag + "';";
 
-            PreparedStatement prepDeleteHistoryStmt = connect.prepareStatement(query_deleteHistory);
-            int deleteHistoryRes = prepDeleteHistoryStmt.executeUpdate();
+            psDeleteHistory = connect.prepareStatement(query_deleteHistory);
+            int deleteHistoryRes = psDeleteHistory.executeUpdate();
 
             System.out.println("Delete history: " + query_deleteHistory);
 
             //Deleting file that is related to current PP Asset Tag
-            String query_deleteFile= "delete from upload where pp_asset_tag = '" + assetTag + "';";
+            String query_deleteFile = "delete from upload where pp_asset_tag = '" + assetTag + "';";
 
-            PreparedStatement prepDeleteFileStmt = connect.prepareStatement(query_deleteFile);
-            int deleteFileRes = prepDeleteFileStmt.executeUpdate();
+            psDeleteFile = connect.prepareStatement(query_deleteFile);
+            int deleteFileRes = psDeleteFile.executeUpdate();
 
             System.out.println("Delete drive: " + query_deleteDrive);
 
-
             result = true;
-
-            prepDeleteDriveStmt.close();
-            prepDeleteHistoryStmt.close();
 
             sendEmailNotification();
 
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             eMessage = e.getMessage();
             e.printStackTrace();
-        } catch(ClassNotFoundException e) {
+        } catch (Exception e) {
             eMessage = e.getMessage();
             e.printStackTrace();
         } finally {
-            try {
-                if(connect != null)
-                    connect.close();
-            } catch(SQLException se) {
-                eMessage = se.getMessage();
-                se.printStackTrace();
-            }
+            db_credentials.DB.closeResources(connect, psDeleteDrive, psDeleteFile, psDeleteHistory);
         }
 
         return result;

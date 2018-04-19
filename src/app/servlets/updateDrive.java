@@ -1,19 +1,17 @@
 package app.servlets;
 
-import java.io.IOException;
-import java.sql.*;
-import java.util.Date;
+import app.EmailNotifier;
+import app.HistoryInfo;
+import db_credentials.mysql_credentials;
+import net.sf.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import app.EmailNotifier;
-import app.HistoryInfo;
-import net.sf.json.JSONObject;
-
-import db_credentials.mysql_credentials;
+import java.io.IOException;
+import java.sql.*;
+import java.util.Date;
 
 /**
  * Servlet implementation class updateDrive
@@ -57,7 +55,7 @@ public class updateDrive extends HttpServlet implements mysql_credentials {
 
     /**
      * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse
-     *      response)
+     * response)
      */
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
@@ -89,10 +87,9 @@ public class updateDrive extends HttpServlet implements mysql_credentials {
 
         JSONObject json = new JSONObject();
 
-        if(updateDriveAndAddToHistory()) {
+        if (updateDriveAndAddToHistory()) {
             json.put("result", "success");
-        }
-        else
+        } else
             json.put("result", eMessage);
 
         response.setContentType("application/json");
@@ -119,7 +116,7 @@ public class updateDrive extends HttpServlet implements mysql_credentials {
                     "received_date = ?, " +
                     "sent_date = ?, shipping_carrier_sent = ?, shipping_tracking_number_sent = ?, " +
                     "updated_by = ?, last_updated = ?, return_media_to_customer = ?, essential = ? " +
-                    "where pp_asset_tag = '" + assetTag +"'";
+                    "where pp_asset_tag = '" + assetTag + "'";
 
             PreparedStatement prepUpdateDriveStmt = connect.prepareStatement(query_updateDrive);
             prepUpdateDriveStmt.setString(1, manufacturer);
@@ -212,7 +209,7 @@ public class updateDrive extends HttpServlet implements mysql_credentials {
 
             sendEmailNotification();
 
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             eMessage = e.getMessage();
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -220,9 +217,9 @@ public class updateDrive extends HttpServlet implements mysql_credentials {
             e.printStackTrace();
         } finally {
             try {
-                if(connect != null)
+                if (connect != null)
                     connect.close();
-            } catch(SQLException se) {
+            } catch (SQLException se) {
                 eMessage = se.getMessage();
                 se.printStackTrace();
             }

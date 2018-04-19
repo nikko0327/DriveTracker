@@ -1,7 +1,6 @@
+$(document).ready(function () {
 
-$(document).ready(function() {
-
-    if($.browser.msie) {
+    if ($.browser.msie) {
         $('.container').empty();
 
         var msg = "<div class='masthead'><h3 class='muted'>Drive Tracking Dasboard</h3></div><hr>";
@@ -24,8 +23,8 @@ $(document).ready(function() {
 
     //TODO: isAdmin should not have to rely on getGroup working,
     //      so I should separate the two functions at some point
-    user.getGroup(function(nameOfGroup) {
-        user.isAdmin(function(isAnAdmin) {
+    user.getGroup(function (nameOfGroup) {
+        user.isAdmin(function (isAnAdmin) {
             groupName.text(nameOfGroup + " " + (isAnAdmin ? "Admin" : "User"));
         });
     });
@@ -34,15 +33,15 @@ $(document).ready(function() {
     notifyButton.bootstrapToggle();
 
     //set it to off or on according to user preferences
-    user.hasNotifyOn(function(notifyIsOn) {
-        if(notifyIsOn)
+    user.hasNotifyOn(function (notifyIsOn) {
+        if (notifyIsOn)
             notifyButton.bootstrapToggle("on");
         else
             notifyButton.bootstrapToggle("off");
     });
 
     // toggle the notification button when it is clicked
-    $('.dropdown-menu input, .dropdown-menu label, .dropdown-menu span').click(function(e) {
+    $('.dropdown-menu input, .dropdown-menu label, .dropdown-menu span').click(function (e) {
         notifyButton.bootstrapToggle('toggle');
         user.toggleNotifications();
         e.stopPropagation();

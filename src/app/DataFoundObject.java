@@ -3,7 +3,10 @@ package app;
 import db_credentials.mysql_credentials;
 import net.sf.json.JSONObject;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,17 +49,20 @@ public class DataFoundObject implements mysql_credentials {
 
     public boolean foundDataSuccessfully() {
         boolean result = false;
-        assetTag.trim();
-        serialNumber.trim();
-        customerName.trim();
-        driveState.trim();
-        driveLocation.trim();
-        essential.trim();
+        assetTag = assetTag.trim();
+        serialNumber = serialNumber.trim();
+        customerName = customerName.trim();
+        driveState = driveState.trim();
+        driveLocation = driveLocation.trim();
+        essential = essential.trim();
 
         Connection connect = null;
-        try{
-            Class.forName("com.mysql.jdbc.Driver");
-            connect = DriverManager.getConnection(db_url, user_name, password);
+        PreparedStatement prepSearchDriveStmt = null;
+        ResultSet rs = null;
+
+        try {
+            connect = db_credentials.DB.getConnection();
+            System.out.println("Datasource with static method successful");
 
             ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
 
@@ -73,36 +79,35 @@ public class DataFoundObject implements mysql_credentials {
                         " where drive_state <> 'Import Complete / Return Media to Customer' " +
                         "and drive_state <> 'Project Closed / Media Returned' " +
                         "order by last_updated desc;";
-            }
-            else {
+            } else {
                 query_searchDrive = "select * from " + tableName + " where";
 
                 if (!(assetTag.equalsIgnoreCase(null) || assetTag.equalsIgnoreCase("")))
                     query_searchDrive += " pp_asset_tag like '%" + assetTag + "%'";
 
                 if (!(serialNumber.equalsIgnoreCase(null) || serialNumber.equalsIgnoreCase(""))) {
-                    if(query_searchDrive.equalsIgnoreCase("select * from " + tableName + " where"))
+                    if (query_searchDrive.equalsIgnoreCase("select * from " + tableName + " where"))
                         query_searchDrive += " serial_number like '%" + serialNumber + "%'";
                     else
                         query_searchDrive += " and serial_number like '%" + serialNumber + "%'";
                 }
 
                 if (!(customerName.equalsIgnoreCase(null) || customerName.equalsIgnoreCase(""))) {
-                    if(query_searchDrive.equalsIgnoreCase("select * from " + tableName + " where"))
+                    if (query_searchDrive.equalsIgnoreCase("select * from " + tableName + " where"))
                         query_searchDrive += " customer_name like '%" + customerName + "%'";
                     else
                         query_searchDrive += " and customer_name like '%" + customerName + "%'";
                 }
 
                 if (!(driveState.equalsIgnoreCase(null) || driveState.equalsIgnoreCase(""))) {
-                    if(query_searchDrive.equalsIgnoreCase("select * from " + tableName + " where"))
+                    if (query_searchDrive.equalsIgnoreCase("select * from " + tableName + " where"))
                         query_searchDrive += " drive_state = '" + driveState + "'";
                     else
                         query_searchDrive += " and drive_state = '" + driveState + "'";
                 }
 
                 if (!(driveLocation.equalsIgnoreCase(null) || driveLocation.equalsIgnoreCase(""))) {
-                    if(query_searchDrive.equalsIgnoreCase("select * from " + tableName + " where"))
+                    if (query_searchDrive.equalsIgnoreCase("select * from " + tableName + " where"))
                         query_searchDrive += " drive_location = '" + driveLocation + "'";
                     else
                         query_searchDrive += " and drive_location = '" + driveLocation + "'";
@@ -120,12 +125,12 @@ public class DataFoundObject implements mysql_credentials {
 
             System.out.println("Search drive: " + query_searchDrive);
 
-            PreparedStatement prepSearchDriveStmt = connect.prepareStatement(query_searchDrive);
-            ResultSet rs = prepSearchDriveStmt.executeQuery();
+            prepSearchDriveStmt = connect.prepareStatement(query_searchDrive);
+            rs = prepSearchDriveStmt.executeQuery();
 
             result = true;
 
-            while(rs.next()){
+            while (rs.next()) {
                 Map<String, String> map = new HashMap<String, String>();
 
                 map.put("pp_asset_tag", rs.getString("pp_asset_tag"));
@@ -165,23 +170,11 @@ public class DataFoundObject implements mysql_credentials {
 
             searchResult = json.toString();
 
-            rs.close();
-            prepSearchDriveStmt.close();
-
-        } catch(SQLException e) {
-            eMessage = e.getMessage();
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException e) {
             eMessage = e.getMessage();
             e.printStackTrace();
         } finally {
-            try {
-                if(connect != null)
-                    connect.close();
-            } catch(SQLException se) {
-                eMessage = se.getMessage();
-                se.printStackTrace();
-            }
+            db_credentials.DB.closeResources(connect, rs, prepSearchDriveStmt);
         }
         return result;
     }

@@ -25,17 +25,17 @@ function Alert(jQuerySelector) {
     }
 
     function privateFadeInSeconds(seconds) {
-        that.timeout = window.setTimeout(function() {
+        that.timeout = window.setTimeout(function () {
             if (that.jQuerySelector !== undefined) {
                 that.jQuerySelector.fadeTo(500, 0).slideUp(500, function () {
                     that.resetAlertBox(); // reset the alert box when the time is up
                 });
             }
-        }, seconds*1000);
+        }, seconds * 1000);
     }
 
     function privateStartListening() {
-        $(".close-alert").click(function() {
+        $(".close-alert").click(function () {
             clearTimeout(that.timeout); // first stop the timeout from continuing as all it does its hide/empty
             privateResetAlertBox(); // then reset the alert box
         });
@@ -43,24 +43,24 @@ function Alert(jQuerySelector) {
 
     // PRIVILEGED METHOD(S) - (privileged functions are used to access private methods from public methods) //
     // hide, empty, and un-stylize the alert box
-    this.resetAlertBox = function() {
+    this.resetAlertBox = function () {
         privateResetAlertBox();
     };
 
     // fades the alert box away and takes in how many seconds it takes before it starts to fade
-    this.fadeInSeconds = function(seconds) {
+    this.fadeInSeconds = function (seconds) {
         privateFadeInSeconds(seconds);
     };
 
     // set up event listener
-    this.startListening = function() {
+    this.startListening = function () {
         privateStartListening();
     }
 }
 
 // PUBLIC METHODS //
 // display a message in the alert box (and the alert box itself) to the user
-Alert.prototype.displayMessage = function(msg, msgClass, msgFirstWord, fadeTime) {
+Alert.prototype.displayMessage = function (msg, msgClass, msgFirstWord, fadeTime) {
     this.resetAlertBox();
     this.jQuerySelector.show();
     this.jQuerySelector.addClass(msgClass);
@@ -71,7 +71,7 @@ Alert.prototype.displayMessage = function(msg, msgClass, msgFirstWord, fadeTime)
 };
 
 // clear the message and the alert box
-Alert.prototype.clearCurrentMessage = function() {
+Alert.prototype.clearCurrentMessage = function () {
     (this.jQuerySelector).attr("class", "alert");
     (this.jQuerySelector).empty();
     (this.jQuerySelector).hide();

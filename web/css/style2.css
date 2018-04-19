@@ -1,4 +1,3 @@
-
 /*Main CSS*/
 
 /* CSS for aligning labels and inputs together correctly in modals */
@@ -17,18 +16,21 @@
 }
 
 /*Login Signup Page*/
-a:focus,a:hover,a{
-    outline:none;
+a:focus, a:hover, a {
+    outline: none;
     text-decoration: none;
 }
-li,ul{
+
+li, ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
+
 .header-top i {
     font-size: 18px;
 }
+
 .bg-image {
     /*background: url(../images/background-login.jpg) no-repeat 0 0 / cover;*/
     position: relative;
@@ -189,9 +191,7 @@ li,ul{
     padding: 70px 0;
 }
 
-
 /*Login Signup Page*/
-
 
 /*Home Page*/
 
@@ -228,6 +228,7 @@ li,ul{
 .v-align {
     vertical-align: top;
 }
+
 .logo img {
     max-width: 180px;
     padding: 16px 0 17px;
@@ -263,8 +264,7 @@ li,ul{
 
 .add-project::before {
     /*background: rgba(0, 0, 0, 0) url("../images/plus.png") no-repeat scroll 0 0;*/
-    content: "";
-;
+    content: "";;
     height: 12px;
     left: 17px;
     position: absolute;
@@ -283,9 +283,11 @@ li,ul{
 .icon-info {
     position: relative;
 }
+
 .navi i {
     font-size: 20px;
 }
+
 .label.label-primary {
     border-radius: 50%;
     font-size: 9px;
@@ -315,6 +317,7 @@ li,ul{
     left: -85px;
     padding: 17px;
 }
+
 .view {
     background: #5584ff none repeat scroll 0 0;
     border-radius: 100px;
@@ -334,12 +337,14 @@ li,ul{
 .img-responsive {
     width: 100%;
 }
-#navigation{
+
+#navigation {
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
+
 .search input {
     border: none;
     font-size: 15px;
@@ -419,7 +424,8 @@ header {
     max-width: 30px !important;
     text-align: center;
 }
-.hidden-xs{
+
+.hidden-xs {
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
@@ -437,6 +443,7 @@ header {
     margin: 0;
     padding: 21px 0;
 }
+
 .sales {
     background: #ffffff none repeat scroll 0 0;
     border: 1px solid #d4d9e3;
@@ -444,14 +451,17 @@ header {
     padding: 15px;
     width: 100%;
 }
+
 .shield-buttons {
     display: none;
 }
+
 .close, .close:focus, .close:hover {
     color: #fff;;
     opacity: 1;
     text-shadow: none;
 }
+
 .modal {
     position: fixed;
     top: 0;
@@ -464,6 +474,7 @@ header {
     -webkit-overflow-scrolling: touch;
     outline: 0;
 }
+
 .modal-body input {
     border: 1px solid #d4d9e3;
     font-size: 14px;
@@ -475,6 +486,7 @@ header {
     width: 63%;
     color: #8492af;
 }
+
 .modal-body textarea {
     border: 1px solid #d4d9e3;
     font-size: 14px;
@@ -485,9 +497,11 @@ header {
     width: 63%;
     color: #8492af;
 }
+
 .modal-header.login-header h4 {
     color: #ffffff;
 }
+
 .modal-footer .add-project {
     background: #5584ff none repeat scroll 0 0;
     border: medium none;
@@ -498,14 +512,19 @@ header {
     padding: 10px 30px;
     position: relative;
 }
-.modal-footer .add-project::before{display: none;}
+
+.modal-footer .add-project::before {
+    display: none;
+}
+
 .modal-footer {
     border: 0 none;
     padding: 10px 15px 26px;
     text-align: right;
 }
+
 .cancel {
-    background: #0E1A35     ;
+    background: #0E1A35;
     border: medium none;
     border-radius: 100px;
     color: #ffffff;
@@ -515,68 +534,78 @@ header {
     position: relative;
 
 }
-.modal{
+
+.modal {
     top: 20%;
 }
+
 .modal-header .close {
     margin-top: 2px;
 }
-.search input:focus{
+
+.search input:focus {
     border-bottom: 1px solid #BDC4D4;
-    line-height:22px;
+    line-height: 22px;
     transition: 0.1s all;
 }
+
 .modal-header.login-header {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
+
 /*Main CSS*/
-
-
-
-
-
 
 @media only screen and (max-device-width: 767px) {
     .login-logo img {
         margin: 0 auto;
     }
+
     .login-details .nav-tabs > li {
         text-align: center;
         width: 50%;
     }
+
     .login-signup .login-inner h1 {
         font-size: 26px;
         margin-bottom: 0;
         margin-top: 10px;
     }
+
     .login-inner .login-form input {
         font-size: 15px;
         max-width: 100%;
         padding: 15px 45px;
     }
+
     .login-inner .form-details {
         padding: 25px;
     }
+
     .login-inner .login-form label {
         margin-bottom: 20px;
         width: 100%;
     }
+
     .login-inner .form-btn {
         margin: 0;
         max-width: 180px;
     }
+
     .tab-content .tab-pane {
         padding: 20px 0;
     }
+
     #navigation .navi a {
         font-size: 14px;
         padding: 20px;
         text-align: center;
     }
+
     #navigation .navi i {
         margin-right: 0px;
     }
+
     #navigation .navi a:hover,
     #navigation .navi .active a {
         background: #122143 none repeat scroll 0 0;
@@ -584,31 +613,38 @@ header {
         display: block;
         padding-left: 20px;
     }
+
     header .header-top img {
         max-width: 38px !important;
     }
+
     .v-align header {
         padding: 12px 15px;
     }
+
     header .header-top li {
         padding-left: 13px;
         padding-right: 6px;
     }
+
     .navbar-default .navbar-toggle {
         border-color: rgba(0, 0, 0, 0);
     }
+
     .navbar-header .navbar-toggle {
         float: left;
         margin: 0;
         padding: 0;
         top: 12px;
     }
+
     button,
     html [type="button"],
     [type="reset"],
     [type="submit"] {
         outline: medium none;
     }
+
     .user-dashboard .sales h2 {
         color: #8492af;
         float: left;
@@ -617,17 +653,21 @@ header {
         margin: 0;
         padding: 13px 0 0;
     }
+
     .user-dashboard .btn.btn-secondary.btn-lg.dropdown-toggle > span {
         font-size: 11px;
     }
+
     .user-dashboard .sales button {
         font-size: 11px;
         padding-right: 23px;
     }
+
     .user-dashboard .sales h2 {
         font-size: 12px;
     }
-    .gutter{
+
+    .gutter {
         padding: 0;
     }
 }
@@ -637,35 +677,42 @@ header {
         padding-left: 20px !important;
         padding-right: 0;
     }
+
     header .logo img {
         max-width: 125px !important;
     }
 
 }
 
-@media only screen and (min-device-width: 767px) and (max-device-width: 998px){
+@media only screen and (min-device-width: 767px) and (max-device-width: 998px) {
     .user-dashboard .header-top {
         padding-top: 5px;
     }
+
     .user-dashboard .header-rightside {
         display: inline-block;
         float: left;
         width: 100%;
     }
+
     .user-dashboard .header-rightside .header-top img {
         max-width: 41px !important;
     }
+
     .user-dashboard .sales button {
         font-size: 10px;
     }
+
     .user-dashboard .btn.btn-secondary.btn-lg.dropdown-toggle > span {
         font-size: 12px;
     }
+
     .user-dashboard .sales h2 {
         font-size: 15px;
     }
 }
-@media only screen and (min-device-width:998px) and (max-device-width: 1350px){
+
+@media only screen and (min-device-width: 998px) and (max-device-width: 1350px) {
     #navigation .logo img {
         max-width: 130px;
         padding: 16px 0 17px;

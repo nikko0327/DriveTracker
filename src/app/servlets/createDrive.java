@@ -1,28 +1,27 @@
 package app.servlets;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.*;
+import app.EmailNotifier;
+import app.HistoryInfo;
+import net.sf.json.JSONObject;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.*;
 
-import app.EmailNotifier;
-import app.HistoryInfo;
-import net.sf.json.JSONObject;
-
-import db_credentials.mysql_credentials;
 @WebServlet("/uploadServlet")
 @MultipartConfig(maxFileSize = 16177215)    // upload file's size up to 16MB
 /**
  * Servlet implementation class createDrive
  */
-public class createDrive extends HttpServlet implements mysql_credentials {
+public class createDrive extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private String eMessage;
 
@@ -59,6 +58,9 @@ public class createDrive extends HttpServlet implements mysql_credentials {
 
     InputStream inputStream;
 
+    @Resource(name = "jdbc/DriveTrackerDB")
+    private DataSource dataSource;
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -68,7 +70,7 @@ public class createDrive extends HttpServlet implements mysql_credentials {
 
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-     *      response)
+     * response)
      */
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
@@ -84,8 +86,7 @@ public class createDrive extends HttpServlet implements mysql_credentials {
         driveLocation = request.getParameter("drive_location");
         driveState = request.getParameter("drive_state");
 
-        if(driveState.startsWith("Shipped")
-                || driveState.startsWith("Returned"))
+        if (driveState.startsWith("Shipped") || driveState.startsWith("Returned"))
             receivedOrSent = "Sent";
         else
             receivedOrSent = "Received";
@@ -115,8 +116,7 @@ public class createDrive extends HttpServlet implements mysql_credentials {
             latestDrive = getCreatedDrive();
 
             response.getWriter().write(latestDrive);
-        }
-        else {
+        } else {
             JSONObject json = new JSONObject();
             json.put("message", eMessage);
             response.getWriter().write(json.toString());
@@ -128,18 +128,21 @@ public class createDrive extends HttpServlet implements mysql_credentials {
     private boolean createDriveAndHistory() {
 
         boolean result = false;
+
         Connection connect = null;
+        PreparedStatement prepCreateSprintStmt = null;
+        PreparedStatement prepCreateHistoryStmt = null;
+
         try {
             java.util.Date currentDatetime = new java.util.Date();
             java.sql.Timestamp sqlTime = new Timestamp(currentDatetime.getTime());
             lastUpdated = sqlTime.toString();
 
-            Class.forName("com.mysql.jdbc.Driver");
-            connect = DriverManager.getConnection(db_url, user_name, password);
+            connect = dataSource.getConnection();
 
             String query_createSprint;
 
-            if(isUpdate.equals("true")) {
+            if (isUpdate.equals("true")) {
                 query_createSprint = "update drive_info set manufacturer_model = ?, serial_number = ?, property = ?, "
                         + "customer_name = ?, cts = ?, jira = ?, label = ?, drive_location = ?, drive_state = ?, "
                         + "encrypted = ?, box = ?, usb = ?, power = ?, rack = ?, shelf = ?, notes = ?, "
@@ -147,9 +150,7 @@ public class createDrive extends HttpServlet implements mysql_credentials {
                         + "sent_date = ?, shipping_carrier_sent = ?, shipping_tracking_number_sent = ?, "
                         + "received_date = ?, return_media_to_customer = ?, essential = ? "
                         + "where pp_asset_tag = ?";
-            }
-
-            else {
+            } else {
                 query_createSprint = "insert into drive_info ("
                         + "pp_asset_tag, manufacturer_model, serial_number, property, "
                         + "customer_name, cts, jira, label, drive_location, drive_state, "
@@ -164,7 +165,7 @@ public class createDrive extends HttpServlet implements mysql_credentials {
                         + "?,?,?,?,?,?);";
             }
 
-            PreparedStatement prepCreateSprintStmt = connect.prepareStatement(query_createSprint);
+            prepCreateSprintStmt = connect.prepareStatement(query_createSprint);
 
             prepCreateSprintStmt.setString(1, assetTag);
             prepCreateSprintStmt.setString(2, manufacturer);
@@ -187,12 +188,11 @@ public class createDrive extends HttpServlet implements mysql_credentials {
             prepCreateSprintStmt.setTimestamp(19, sqlTime);
             prepCreateSprintStmt.setString(20, updatedBy);
 
-            if(receivedOrSent.equals("Received")) {
+            if (receivedOrSent.equals("Received")) {
                 prepCreateSprintStmt.setString(21, "");
                 prepCreateSprintStmt.setString(22, "");
                 prepCreateSprintStmt.setString(23, "");
-            }
-            else if(receivedOrSent.equals("Sent")) {
+            } else if (receivedOrSent.equals("Sent")) {
                 prepCreateSprintStmt.setString(21, sentDate);
                 prepCreateSprintStmt.setString(22, shippingCarrier);
                 prepCreateSprintStmt.setString(23, shippingTrackingNumber);
@@ -219,7 +219,7 @@ public class createDrive extends HttpServlet implements mysql_credentials {
                     + "?,?,?,?,?, ?);";
 
 
-            PreparedStatement prepCreateHistoryStmt = connect.prepareStatement(query_createHistory);
+            prepCreateHistoryStmt = connect.prepareStatement(query_createHistory);
             prepCreateHistoryStmt.setString(1, assetTag);
             prepCreateHistoryStmt.setString(2, manufacturer);
             prepCreateHistoryStmt.setString(3, serialNumber);
@@ -241,12 +241,11 @@ public class createDrive extends HttpServlet implements mysql_credentials {
             prepCreateHistoryStmt.setTimestamp(19, sqlTime);
             prepCreateHistoryStmt.setString(20, updatedBy);
 
-            if(receivedOrSent.equals("Received")) {
+            if (receivedOrSent.equals("Received")) {
                 prepCreateHistoryStmt.setString(21, "");
                 prepCreateHistoryStmt.setString(22, "");
                 prepCreateHistoryStmt.setString(23, "");
-            }
-            else if(receivedOrSent.equals("Sent")) {
+            } else if (receivedOrSent.equals("Sent")) {
                 prepCreateHistoryStmt.setString(21, sentDate);
                 prepCreateHistoryStmt.setString(22, shippingCarrier);
                 prepCreateHistoryStmt.setString(23, shippingTrackingNumber);
@@ -255,31 +254,23 @@ public class createDrive extends HttpServlet implements mysql_credentials {
             prepCreateHistoryStmt.setString(24, receivedDate);
             prepCreateHistoryStmt.setString(25, return_media_to_customer);
             prepCreateHistoryStmt.setString(26, essential);
+
             int createHistoryStmtRes = prepCreateHistoryStmt.executeUpdate();
 
             System.out.println("Create history: " + query_createHistory);
 
             result = true;
 
-            prepCreateSprintStmt.close();
-            prepCreateHistoryStmt.close();
-
             sendEmailNotification();
 
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             eMessage = e.getMessage();
             e.printStackTrace();
-        } catch(ClassNotFoundException e) {
+        } catch (Exception e) {
             eMessage = e.getMessage();
             e.printStackTrace();
         } finally {
-            try {
-                if(connect != null)
-                    connect.close();
-            } catch(SQLException se) {
-                eMessage = se.getMessage();
-                se.printStackTrace();
-            }
+            db_credentials.DB.closeResources(connect, prepCreateHistoryStmt, prepCreateSprintStmt);
         }
 
         return result;
@@ -288,16 +279,18 @@ public class createDrive extends HttpServlet implements mysql_credentials {
     private String getCreatedDrive() {
 
         JSONObject json = new JSONObject();
+
         Connection connect = null;
+        PreparedStatement prepStmt = null;
+        ResultSet rs = null;
+
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            connect = DriverManager.getConnection(db_url, user_name, password);
+            connect = dataSource.getConnection();
 
             String query_getDriveById = "select * from drive_info where pp_asset_tag ='" + assetTag + "';";
 
-            PreparedStatement prepStmt = connect
-                    .prepareStatement(query_getDriveById);
-            ResultSet rs = prepStmt.executeQuery();
+            prepStmt = connect.prepareStatement(query_getDriveById);
+            rs = prepStmt.executeQuery();
 
             while (rs.next()) {
                 json.put("pp_asset_tag", assetTag);
@@ -323,22 +316,16 @@ public class createDrive extends HttpServlet implements mysql_credentials {
                 json.put("last_updated", rs.getString("last_updated"));
                 json.put("updated_by", rs.getString("updated_by"));
                 json.put("essential", rs.getString("essential"));
-//                json.put("inputStream", rs.getBlob("inputStream"));
+                // json.put("inputStream", rs.getBlob("inputStream"));
             }
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             eMessage = e.getMessage();
             e.printStackTrace();
-        } catch(ClassNotFoundException e) {
+        } catch (Exception e) {
             eMessage = e.getMessage();
             e.printStackTrace();
         } finally {
-            try {
-                if(connect != null)
-                    connect.close();
-            } catch(SQLException se) {
-                eMessage = se.getMessage();
-                se.printStackTrace();
-            }
+            db_credentials.DB.closeResources(connect, prepStmt, rs);
         }
 
         return json.toString();

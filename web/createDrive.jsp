@@ -1,6 +1,6 @@
 <%@include file="navbar.jsp" %>
 <style>
-    .control-label{
+    .control-label {
         font-weight: bold;
     }
 </style>
@@ -13,7 +13,8 @@
 <hr>
 <div class="sales">
     <div id="createDrive">
-        <form style="margin-left: 31%" id="myForm" action="uploadServlet" class="form-horizontal" method="post" enctype="multipart/form-data">
+        <form style="margin-left: 31%" id="myForm" action="uploadServlet" class="form-horizontal" method="post"
+              enctype="multipart/form-data">
 
             <div class="control-group">
                 <label class="control-label" for="essential">Essentials</label>
@@ -28,14 +29,16 @@
             <div class="control-group">
                 <label class="control-label" for="pp_asset_tag">PP Asset Tag</label>
                 <div class="controls">
-                    <span id="PSorPSE">PS</span> <input type="text" id="pp_asset_tag" pattern="\d{6}"  title="Only 6 digits" style="height: inherit;" placeholder="PP Asset Tag (6-digit Number)" required>
+                    <span id="PSorPSE">PS</span> <input type="text" id="pp_asset_tag" pattern="\d{6}"
+                                                        title="Only 6 digits" style="height: inherit;"
+                                                        placeholder="PP Asset Tag (6-digit Number)" required>
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label" for="customer_name">Customer Name</label>
                 <div class="controls">
-                    <input type="text" id="customer_name" style="height: inherit;"  placeholder="Customer Name">
+                    <input type="text" id="customer_name" style="height: inherit;" placeholder="Customer Name">
                 </div>
             </div>
 
@@ -114,7 +117,8 @@
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="drive_state">Drive Status</label> <%--Drive State is changed to Drive Status--%>
+                <label class="control-label" for="drive_state">Drive
+                    Status</label> <%--Drive State is changed to Drive Status--%>
                 <div class="controls">
                     <select id="drive_state">
                     </select>
@@ -169,11 +173,15 @@
             <div class="control-group">
                 <div class="controls">
                     <button type="submit" class="btn btn-primary btn-lg" id="create" value="save">Create</button>
-                    <button type="submit" class="btn btn-danger btn-lg" onclick="myFunction()" value="Reset form">Reset</button>
+                    <button type="submit" class="btn btn-danger btn-lg" onclick="myFunction()" value="Reset form">
+                        Reset
+                    </button>
                 </div>
             </div>
 
-            <div id="spinner" hidden><center><i class="icon-spinner icon-spin icon-3x"></i></center></div>
+            <div id="spinner" hidden>
+                <center><i class="icon-spinner icon-spin icon-3x"></i></center>
+            </div>
 
             <p id="error-message" class="text-error" hidden><b>Missing Value/s</b></p>
         </form>
@@ -199,7 +207,7 @@
 
     var inputBox = document.getElementById('customer_name');
 
-    inputBox.onkeyup = function(){
+    inputBox.onkeyup = function () {
         document.getElementById('printchatbox').innerHTML = inputBox.value;
     }
 </script>

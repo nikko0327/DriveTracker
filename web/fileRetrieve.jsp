@@ -25,22 +25,26 @@
         response.sendRedirect("/DriveTracker");
 %>
 <body>
-<%@ page import="java.io.*,java.sql.*"%>
+<%@ page import="java.sql.Connection,java.sql.DriverManager" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.Statement" %>
 <%
-    String pp_asset_tag=request.getParameter("pp_asset_tag");
+    String pp_asset_tag = request.getParameter("pp_asset_tag");
     Class.forName("com.mysql.jdbc.Driver").newInstance();
-    Connection con = DriverManager.getConnection("jdbc:mysql://localhost/DriveTracking","root","@Rm@d1ll0!");
-    Statement st=con.createStatement();
-    ResultSet rs=st.executeQuery("Select attachment_id, attachment_path, pp_asset_tag from attachment_info");
+    Connection con = DriverManager.getConnection("jdbc:mysql://localhost/DriveTracking", "root", "@Rm@d1ll0!");
+    Statement st = con.createStatement();
+    ResultSet rs = st.executeQuery("Select attachment_id, attachment_path, pp_asset_tag from attachment_info");
 %>
 <table cellpadding="15" border="1">
     <%
-        while(rs.next()){
+        while (rs.next()) {
     %>
     <tr>
         <td>
-            <div>Attachment ID: <%=rs.getString("attachment_id")%></div>
-            <div><a href="<%="/" + rs.getString("attachment_path")%>"><%=rs.getString("attachment_path")%></a></div>
+            <div>Attachment ID: <%=rs.getString("attachment_id")%>
+            </div>
+            <div><a href="<%="/" + rs.getString("attachment_path")%>"><%=rs.getString("attachment_path")%>
+            </a></div>
         </td>
 
     </tr>

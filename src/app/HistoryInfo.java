@@ -251,7 +251,11 @@ public class HistoryInfo {
         this.updatedBy = updatedBy;
     }
 
-    public String getEssential() { return essential;}
+    public String getEssential() {
+        return essential;
+    }
 
-    public void setEssential(String essential) {this.essential = essential;}
+    public void setEssential(String essential) {
+        this.essential = essential;
+    }
 }

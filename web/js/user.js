@@ -16,10 +16,10 @@ function User() {
     this.username = function () {
         var nameEQ = "username=";
         var ca = document.cookie.split(';');
-        for(var i=0;i < ca.length;i++) {
+        for (var i = 0; i < ca.length; i++) {
             var c = ca[i];
-            while (c.charAt(0)==' ') c = c.substring(1,c.length);
-            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
         }
         return null;
     };
@@ -32,13 +32,13 @@ function User() {
      *        separate thread, so we should wait for it before
      *        continuing, so we use the callback method
      */
-    this.postToUserInfoServlet = function(action, myCallback) {
+    this.postToUserInfoServlet = function (action, myCallback) {
         $.ajax({
             type: 'POST',
             url: 'UserInfoServlet',
             data: {action: action, username: this.username},
             dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 myCallback(data);
             }
         });
@@ -51,10 +51,10 @@ function User() {
  *        into isAdmin function, callback is called to
  *        send info to original function
  */
-User.prototype.isAdmin = function(myCallback) {
-    this.postToUserInfoServlet("isAdmin", function(data) {
+User.prototype.isAdmin = function (myCallback) {
+    this.postToUserInfoServlet("isAdmin", function (data) {
         //return true if result is "Yes", else return false
-        myCallback(data.result==="Yes");
+        myCallback(data.result === "Yes");
     });
 };
 
@@ -64,8 +64,8 @@ User.prototype.isAdmin = function(myCallback) {
  *        into hasNotifyOn function, callback is called to
  *        send info to original function
  */
-User.prototype.hasNotifyOn = function(myCallback) {
-    this.postToUserInfoServlet("notifications", function(data) {
+User.prototype.hasNotifyOn = function (myCallback) {
+    this.postToUserInfoServlet("notifications", function (data) {
         // return true if result is "Yes"
         myCallback(data.result === "Yes");
     });
@@ -75,9 +75,9 @@ User.prototype.hasNotifyOn = function(myCallback) {
  * about: toggles the user's notifications
  * param: none
  */
-User.prototype.toggleNotifications = function() {
+User.prototype.toggleNotifications = function () {
 
-    this.postToUserInfoServlet("toggleNotify", function(data) {
+    this.postToUserInfoServlet("toggleNotify", function (data) {
         if (data.result === "Error")
             alert("Error: " + data.result);
     });
@@ -89,9 +89,9 @@ User.prototype.toggleNotifications = function() {
  *        into getGroup function, callback is called to
  *        send info to original function
  */
-User.prototype.getGroup = function(myCallback) {
+User.prototype.getGroup = function (myCallback) {
 
-    this.postToUserInfoServlet("getGroup", function(data) {
+    this.postToUserInfoServlet("getGroup", function (data) {
         if (data.result === undefined || data.result === null) {
             myCallback("Unknown");
             alert("Error: Undefined or null value for group name!");
@@ -105,6 +105,6 @@ User.prototype.getGroup = function(myCallback) {
     });
 };
 
-User.prototype.getUsername = function() {
+User.prototype.getUsername = function () {
     return this.username();
 };

@@ -1,37 +1,36 @@
-$(document).ready(function() {
+$(document).ready(function () {
     // just defining commonly used variable here
     var search_form = $('#search_form');
     var pp_asset_tag = $('#pp_asset_tag');
 
     pp_asset_tag.focus(); // highlight the pp_asset_tag search field
-    $("[id$=date]").datepicker({ dateFormat: "yy-mm-dd"}); // date picker initialization
+    $("[id$=date]").datepicker({dateFormat: "yy-mm-dd"}); // date picker initialization
 
     // when user submits the search form then execute searchDrive method (found below)
-    search_form.on('submit', function(e) {
+    search_form.on('submit', function (e) {
         e.preventDefault(); // prevent page from reloading when submitting
         searchDrive();
     });
 
     // need this because pp_asset_tag can be sent over GET form
     // to historyDrive.jsp from searchDrive by clicking on the asset_tag
-    function getQueryVariable(variable)
-    {
+    function getQueryVariable(variable) {
         var query = window.location.search.substring(1);
         var vars = query.split("&");
         var i;
-        for (i=0; i<vars.length; i++) {
+        for (i = 0; i < vars.length; i++) {
             var pair = vars[i].split("=");
-            if(pair[0] === variable) { // if the variable in the url is variable, return its value
+            if (pair[0] === variable) { // if the variable in the url is variable, return its value
                 return pair[1];
             }
         }
-        return(false);
+        return (false);
     }
 
     // if the pp_asset_tag GET field is not empty then
     // set the value of the search asset_tag search field
     // and submit the search query
-    if(getQueryVariable("pp_asset_tag") !== ("" || false)) {
+    if (getQueryVariable("pp_asset_tag") !== ("" || false)) {
         pp_asset_tag.val(getQueryVariable("pp_asset_tag"));
 
         search_form.submit();
@@ -53,18 +52,18 @@ function searchDrive() {
 
     $.post("DriveSearchServlet",
         {
-            pp_asset_tag : pp_asset_tag,
-            serial_number : serial_number,
-            customer_name : customer_name,
-            drive_state : drive_state,
-            drive_location : drive_location,
-            tableName : tableName,
-            essential : essential
+            pp_asset_tag: pp_asset_tag,
+            serial_number: serial_number,
+            customer_name: customer_name,
+            drive_state: drive_state,
+            drive_location: drive_location,
+            tableName: tableName,
+            essential: essential
         },
-        function(data) {
+        function (data) {
             $('#drive_list').empty();
 
-            if(data.totalMatches == 0) {
+            if (data.totalMatches == 0) {
                 var msg = "No drives found for the selection, please try different combination or "
                     + "<a href='createDrive.jsp?pp_asset_tag=" + pp_asset_tag + "&"
                     + "serial_number=" + serial_number + "&"
@@ -74,7 +73,7 @@ function searchDrive() {
                 $('#drive_list').append(msg);
             }
             else {
-                var value = "<p>Total Matches: " + data.totalMatches +"</p>";
+                var value = "<p>Total Matches: " + data.totalMatches + "</p>";
                 value += "<table id='drive_table' class='table table-condensed table-hover tablesorter'>";
                 value += "<thead>";
                 value += "<tr style='background-color:#D8D8D8'>";
@@ -95,9 +94,9 @@ function searchDrive() {
                 value += "<tbody>";
 
                 var i = 1;
-                $.each(data.drives, function(k,v) {
+                $.each(data.drives, function (k, v) {
                     value += "<tr class='detail' id='tr_" + i + "'>";
-                    if(v.pp_asset_tag == undefined) {
+                    if (v.pp_asset_tag == undefined) {
                         value += "<td>" + "Error: " + v.message + "</td>";
                     }
                     else {
@@ -111,7 +110,7 @@ function searchDrive() {
                         value += "<td>" + v.last_updated + "</td>";
                         value += "<td>" + v.updated_by + "</td>";
                         value += "<td>" + v.notes + "</td>";
-                        if((v.return_media_to_customer) == 'Yes') {
+                        if ((v.return_media_to_customer) == 'Yes') {
                             // value += "<td style = 'color: green'>" + "<strong>" + v.return_media_to_customer + "</strong>" + "</td>";
                             value += "<td style = 'color: green; font-size: 120%;'>" + '<i class="fa fa-check">' + '</i>' + 'Yes' + "</td>";
                         } else {
@@ -122,10 +121,10 @@ function searchDrive() {
 
                         value +=
                             "<input type='hidden' id='pp_asset_tag_" + i + "' value='" + v.pp_asset_tag + "'>" +
-                            "<input type='hidden' id='manufacturer_" + i + "' value='" + v.manufacturer +"'>" +
+                            "<input type='hidden' id='manufacturer_" + i + "' value='" + v.manufacturer + "'>" +
                             "<input type='hidden' id='serial_number_" + i + "' value='" + v.serial_number + "'>" +
                             "<input type='hidden' id='property_" + i + "' value='" + v.property + "'>" +
-                            "<input type='hidden' id='customer_name_" + i +"' value='" + v.customer_name + "'>" +
+                            "<input type='hidden' id='customer_name_" + i + "' value='" + v.customer_name + "'>" +
                             "<input type='hidden' id='cts_" + i + "' value='" + v.cts + "'>" +
                             "<input type='hidden' id='jira_" + i + "' value='" + v.jira + "'>" +
                             "<input type='hidden' id='label_" + i + "' value='" + v.label + "'>" +
@@ -138,7 +137,7 @@ function searchDrive() {
                             "<input type='hidden' id='received_date_" + i + "' value='" + v.received_date + "'>" +
                             "<input type='hidden' id='sent_date_" + i + "' value='" + v.sent_date + "'>" +
                             "<input type='hidden' id='shipping_carrier_sent_" + i + "' value='" + v.shipping_carrier_sent + "'>" +
-                            "<input type='hidden' id='shipping_tracking_number_sent_" + i +"' value='" + v.shipping_tracking_number_sent + "'>" +
+                            "<input type='hidden' id='shipping_tracking_number_sent_" + i + "' value='" + v.shipping_tracking_number_sent + "'>" +
                             "<input type='hidden' id='created_" + i + "' value='" + v.created + "'>" +
                             "<input type='hidden' id='last_updated_" + i + "' value='" + v.last_updated + "'>" +
                             "<input type='hidden' id='updated_by_" + i + "' value='" + v.updated_by + "'>" +

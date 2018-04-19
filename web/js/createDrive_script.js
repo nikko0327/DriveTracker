@@ -1,7 +1,6 @@
+$(document).ready(function () {
 
-$(document).ready(function() {
-
-    var user  = new User();
+    var user = new User();
     var username = user.getUsername();
     var msgEnum = new Enum().MESSAGE;
     var createDrive_alert = new Alert($('#alert-area'));
@@ -10,19 +9,19 @@ $(document).ready(function() {
 
     //add startsWith function to the String prototype
     if (typeof String.prototype.startsWith != 'function') {
-        String.prototype.startsWith = function (str){
+        String.prototype.startsWith = function (str) {
             return this.slice(0, str.length) == str;
         };
     }
 
     $('#pp_asset_tag').focus();
-    $('#sent_date').datepicker({ dateFormat: "yy-mm-dd"});
-    $('#received_date').datepicker({ dateFormat: "yy-mm-dd"}).datepicker('setDate', new Date());
+    $('#sent_date').datepicker({dateFormat: "yy-mm-dd"});
+    $('#received_date').datepicker({dateFormat: "yy-mm-dd"}).datepicker('setDate', new Date());
 
 
     createDrive_alert.displayMessage("Using Archiving/Enterprise Prefix Tag (PS)", msgEnum.props[msgEnum.INFO].class_code,
         msgEnum.props[msgEnum.INFO].first_word, msgEnum.props[msgEnum.INFO].ttl);
-    $('#essential').on('change', function() {
+    $('#essential').on('change', function () {
         var PSorPSE = $('#PSorPSE');
         if ($(this).val() === "Yes") {
             createDrive_alert.clearCurrentMessage();
@@ -38,16 +37,16 @@ $(document).ready(function() {
         }
     });
 
-    $(document).on('change', '#property', function() {
+    $(document).on('change', '#property', function () {
         var property = $('#property').val();
 
-        if(property === "Proofpoint")
+        if (property === "Proofpoint")
             $("#return_media_to_customer").val("No");
         else
             $("#return_media_to_customer").val("Yes");
     });
 
-    $("form").on('submit', function() {
+    $("form").on('submit', function () {
         var essential = $('#essential').val();
 
         if (essential === "Yes")
@@ -73,7 +72,7 @@ $(document).ready(function() {
         var return_media_to_customer = $('#return_media_to_customer').val();
         var notes = $('#notes').val();
 
-        if(pp_asset_tag == null || pp_asset_tag == "") {
+        if (pp_asset_tag == null || pp_asset_tag == "") {
             $('#pp_asset_tag').focus();
             return;
         }
@@ -82,33 +81,33 @@ $(document).ready(function() {
 
         $.post("createDrive",
             {
-                pp_asset_tag : pp_asset_tag,
-                manufacturer : manufacturer,
-                serial_number : serial_number,
-                property : property,
-                customer_name : customer_name,
-                cts : cts,
-                jira : jira,
-                label : label,
-                drive_location : drive_location,
-                drive_state : drive_state,
-                usb : usb,
-                power : power,
-                received_date : received_date,
-                shipping_carrier : shipping_carrier,
-                shipping_tracking_number : shipping_tracking_number,
-                sent_date : sent_date,
-                return_media_to_customer : return_media_to_customer,
-                notes : notes,
-                updated_by : username,
-                is_update : "false",
+                pp_asset_tag: pp_asset_tag,
+                manufacturer: manufacturer,
+                serial_number: serial_number,
+                property: property,
+                customer_name: customer_name,
+                cts: cts,
+                jira: jira,
+                label: label,
+                drive_location: drive_location,
+                drive_state: drive_state,
+                usb: usb,
+                power: power,
+                received_date: received_date,
+                shipping_carrier: shipping_carrier,
+                shipping_tracking_number: shipping_tracking_number,
+                sent_date: sent_date,
+                return_media_to_customer: return_media_to_customer,
+                notes: notes,
+                updated_by: username,
+                is_update: "false",
                 essential: essential
             },
-            function(data){
+            function (data) {
                 $('#createDrive').hide();
 
 
-                if(data.pp_asset_tag === undefined) {
+                if (data.pp_asset_tag === undefined) {
                     createDrive_alert.displayMessage("Error: " + data.message, msgEnum.props[msgEnum.FAILURE].class_code,
                         msgEnum.props[msgEnum.FAILURE].first_word, msgEnum.props[msgEnum.FAILURE].ttl);
                 }

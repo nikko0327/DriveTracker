@@ -1,34 +1,34 @@
 <%@include file="navbar.jsp" %>
 
-		<br>
-		
-		<div id="page_spinner" hidden>
-		  		<center><i class="icon-spinner icon-spin icon-3x"></i></center>
-		</div>
-		
-		<form class="form-horizontal">
-		    <input placeholder = "Customer Name" type="text" name="NAME" id= "name">
-		    <button type="submit" class="btn btn-primary" id="search">Search</button>
-        </form>
+<br>
 
-		<div id="customer_list">
-			&nbsp;
-		</div>
+<div id="page_spinner" hidden>
+    <center><i class="icon-spinner icon-spin icon-3x"></i></center>
+</div>
 
-		<input id="username" value='<%= session.getAttribute("username") %>' hidden>
-		<input id="email" value='<%= session.getAttribute("mail") %>' hidden>
+<form class="form-horizontal">
+    <input placeholder="Customer Name" type="text" name="NAME" id="name">
+    <button type="submit" class="btn btn-primary" id="search">Search</button>
+</form>
 
-		<hr>
-		<div class="footer">
-			<p>&copy; proofpoint 2016</p>
-		</div>
-	</div>
-	<!-- /container -->
+<div id="customer_list">
+    &nbsp;
+</div>
 
-	<script src="js/libs/jquery.js"></script>
-	<script src="js/libs/bootstrap.js"></script>
-	<script src="js/libs/bootbox.js"></script>
+<input id="username" value='<%= session.getAttribute("username") %>' hidden>
+<input id="email" value='<%= session.getAttribute("mail") %>' hidden>
 
-	<script src="js/libs/customerInfo_script.js"></script>
+<hr>
+<div class="footer">
+    <p>&copy; proofpoint 2016</p>
+</div>
+</div>
+<!-- /container -->
+
+<script src="js/libs/jquery.js"></script>
+<script src="js/libs/bootstrap.js"></script>
+<script src="js/libs/bootbox.js"></script>
+
+<script src="js/libs/customerInfo_script.js"></script>
 </body>
 </html>
