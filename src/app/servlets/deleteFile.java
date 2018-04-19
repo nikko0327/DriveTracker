@@ -63,6 +63,7 @@ public class deleteFile extends HttpServlet {
 
         try {
             connect = dataSource.getConnection();
+            System.out.println("Connection successful trying to delete file?");
 
             String query_deleteDrive = "DELETE FROM upload WHERE id = '" + this.id + "';";
 

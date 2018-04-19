@@ -3,6 +3,8 @@ package app;
 import db_credentials.mysql_credentials;
 import net.sf.json.JSONObject;
 
+import javax.annotation.Resource;
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,6 +29,9 @@ public class DataFoundObject implements mysql_credentials {
 
     private String eMessage = "";
     private String searchResult = "";
+
+    @Resource(name = "jdbc/DriveTrackerDB")
+    private DataSource dataSource;
 
     public DataFoundObject(String assetTag, String serialNumber, String customerName,
                            String driveState, String driveLocation, String tableName, String essential) {
@@ -62,7 +67,6 @@ public class DataFoundObject implements mysql_credentials {
 
         try {
             connect = db_credentials.DB.getConnection();
-            System.out.println("Datasource with static method successful");
 
             ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
 
@@ -172,6 +176,8 @@ public class DataFoundObject implements mysql_credentials {
 
         } catch (SQLException e) {
             eMessage = e.getMessage();
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             db_credentials.DB.closeResources(connect, rs, prepSearchDriveStmt);

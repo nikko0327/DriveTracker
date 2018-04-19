@@ -130,8 +130,8 @@ public class createDrive extends HttpServlet {
         boolean result = false;
 
         Connection connect = null;
-        PreparedStatement prepCreateSprintStmt = null;
-        PreparedStatement prepCreateHistoryStmt = null;
+        PreparedStatement psCreateSprint = null;
+        PreparedStatement psCreateHistory = null;
 
         try {
             java.util.Date currentDatetime = new java.util.Date();
@@ -165,44 +165,44 @@ public class createDrive extends HttpServlet {
                         + "?,?,?,?,?,?);";
             }
 
-            prepCreateSprintStmt = connect.prepareStatement(query_createSprint);
+            psCreateSprint = connect.prepareStatement(query_createSprint);
 
-            prepCreateSprintStmt.setString(1, assetTag);
-            prepCreateSprintStmt.setString(2, manufacturer);
-            prepCreateSprintStmt.setString(3, serialNumber);
-            prepCreateSprintStmt.setString(4, property);
-            prepCreateSprintStmt.setString(5, customerName);
-            prepCreateSprintStmt.setString(6, cts);
-            prepCreateSprintStmt.setString(7, jira);
-            prepCreateSprintStmt.setString(8, label);
-            prepCreateSprintStmt.setString(9, driveLocation);
-            prepCreateSprintStmt.setString(10, driveState);
-            prepCreateSprintStmt.setString(11, encrypted);
-            prepCreateSprintStmt.setString(12, box);
-            prepCreateSprintStmt.setString(13, usb);
-            prepCreateSprintStmt.setString(14, power);
-            prepCreateSprintStmt.setString(15, rack);
-            prepCreateSprintStmt.setString(16, shelf);
-            prepCreateSprintStmt.setString(17, notes);
-            prepCreateSprintStmt.setTimestamp(18, sqlTime);
-            prepCreateSprintStmt.setTimestamp(19, sqlTime);
-            prepCreateSprintStmt.setString(20, updatedBy);
+            psCreateSprint.setString(1, assetTag);
+            psCreateSprint.setString(2, manufacturer);
+            psCreateSprint.setString(3, serialNumber);
+            psCreateSprint.setString(4, property);
+            psCreateSprint.setString(5, customerName);
+            psCreateSprint.setString(6, cts);
+            psCreateSprint.setString(7, jira);
+            psCreateSprint.setString(8, label);
+            psCreateSprint.setString(9, driveLocation);
+            psCreateSprint.setString(10, driveState);
+            psCreateSprint.setString(11, encrypted);
+            psCreateSprint.setString(12, box);
+            psCreateSprint.setString(13, usb);
+            psCreateSprint.setString(14, power);
+            psCreateSprint.setString(15, rack);
+            psCreateSprint.setString(16, shelf);
+            psCreateSprint.setString(17, notes);
+            psCreateSprint.setTimestamp(18, sqlTime);
+            psCreateSprint.setTimestamp(19, sqlTime);
+            psCreateSprint.setString(20, updatedBy);
 
             if (receivedOrSent.equals("Received")) {
-                prepCreateSprintStmt.setString(21, "");
-                prepCreateSprintStmt.setString(22, "");
-                prepCreateSprintStmt.setString(23, "");
+                psCreateSprint.setString(21, "");
+                psCreateSprint.setString(22, "");
+                psCreateSprint.setString(23, "");
             } else if (receivedOrSent.equals("Sent")) {
-                prepCreateSprintStmt.setString(21, sentDate);
-                prepCreateSprintStmt.setString(22, shippingCarrier);
-                prepCreateSprintStmt.setString(23, shippingTrackingNumber);
+                psCreateSprint.setString(21, sentDate);
+                psCreateSprint.setString(22, shippingCarrier);
+                psCreateSprint.setString(23, shippingTrackingNumber);
             }
 
-            prepCreateSprintStmt.setString(24, receivedDate);
-            prepCreateSprintStmt.setString(25, return_media_to_customer);
-            prepCreateSprintStmt.setString(26, essential);
+            psCreateSprint.setString(24, receivedDate);
+            psCreateSprint.setString(25, return_media_to_customer);
+            psCreateSprint.setString(26, essential);
 
-            int createSprintStmtRes = prepCreateSprintStmt.executeUpdate();
+            int createSprintStmtRes = psCreateSprint.executeUpdate();
 
             System.out.println("Create drive: " + query_createSprint);
 
@@ -219,43 +219,43 @@ public class createDrive extends HttpServlet {
                     + "?,?,?,?,?, ?);";
 
 
-            prepCreateHistoryStmt = connect.prepareStatement(query_createHistory);
-            prepCreateHistoryStmt.setString(1, assetTag);
-            prepCreateHistoryStmt.setString(2, manufacturer);
-            prepCreateHistoryStmt.setString(3, serialNumber);
-            prepCreateHistoryStmt.setString(4, property);
-            prepCreateHistoryStmt.setString(5, customerName);
-            prepCreateHistoryStmt.setString(6, cts);
-            prepCreateHistoryStmt.setString(7, jira);
-            prepCreateHistoryStmt.setString(8, label);
-            prepCreateHistoryStmt.setString(9, driveLocation);
-            prepCreateHistoryStmt.setString(10, driveState);
-            prepCreateHistoryStmt.setString(11, encrypted);
-            prepCreateHistoryStmt.setString(12, box);
-            prepCreateHistoryStmt.setString(13, usb);
-            prepCreateHistoryStmt.setString(14, power);
-            prepCreateHistoryStmt.setString(15, rack);
-            prepCreateHistoryStmt.setString(16, shelf);
-            prepCreateHistoryStmt.setString(17, notes);
-            prepCreateHistoryStmt.setTimestamp(18, sqlTime);
-            prepCreateHistoryStmt.setTimestamp(19, sqlTime);
-            prepCreateHistoryStmt.setString(20, updatedBy);
+            psCreateHistory = connect.prepareStatement(query_createHistory);
+            psCreateHistory.setString(1, assetTag);
+            psCreateHistory.setString(2, manufacturer);
+            psCreateHistory.setString(3, serialNumber);
+            psCreateHistory.setString(4, property);
+            psCreateHistory.setString(5, customerName);
+            psCreateHistory.setString(6, cts);
+            psCreateHistory.setString(7, jira);
+            psCreateHistory.setString(8, label);
+            psCreateHistory.setString(9, driveLocation);
+            psCreateHistory.setString(10, driveState);
+            psCreateHistory.setString(11, encrypted);
+            psCreateHistory.setString(12, box);
+            psCreateHistory.setString(13, usb);
+            psCreateHistory.setString(14, power);
+            psCreateHistory.setString(15, rack);
+            psCreateHistory.setString(16, shelf);
+            psCreateHistory.setString(17, notes);
+            psCreateHistory.setTimestamp(18, sqlTime);
+            psCreateHistory.setTimestamp(19, sqlTime);
+            psCreateHistory.setString(20, updatedBy);
 
             if (receivedOrSent.equals("Received")) {
-                prepCreateHistoryStmt.setString(21, "");
-                prepCreateHistoryStmt.setString(22, "");
-                prepCreateHistoryStmt.setString(23, "");
+                psCreateHistory.setString(21, "");
+                psCreateHistory.setString(22, "");
+                psCreateHistory.setString(23, "");
             } else if (receivedOrSent.equals("Sent")) {
-                prepCreateHistoryStmt.setString(21, sentDate);
-                prepCreateHistoryStmt.setString(22, shippingCarrier);
-                prepCreateHistoryStmt.setString(23, shippingTrackingNumber);
+                psCreateHistory.setString(21, sentDate);
+                psCreateHistory.setString(22, shippingCarrier);
+                psCreateHistory.setString(23, shippingTrackingNumber);
             }
 
-            prepCreateHistoryStmt.setString(24, receivedDate);
-            prepCreateHistoryStmt.setString(25, return_media_to_customer);
-            prepCreateHistoryStmt.setString(26, essential);
+            psCreateHistory.setString(24, receivedDate);
+            psCreateHistory.setString(25, return_media_to_customer);
+            psCreateHistory.setString(26, essential);
 
-            int createHistoryStmtRes = prepCreateHistoryStmt.executeUpdate();
+            psCreateHistory.executeUpdate();
 
             System.out.println("Create history: " + query_createHistory);
 
@@ -270,7 +270,7 @@ public class createDrive extends HttpServlet {
             eMessage = e.getMessage();
             e.printStackTrace();
         } finally {
-            db_credentials.DB.closeResources(connect, prepCreateHistoryStmt, prepCreateSprintStmt);
+            db_credentials.DB.closeResources(connect, psCreateHistory, psCreateSprint);
         }
 
         return result;
