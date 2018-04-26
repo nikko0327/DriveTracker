@@ -46,6 +46,7 @@ public class deleteDrive extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("--- deleteDrive ---");
         assetTag = request.getParameter("pp_asset_tag");
         customerName = request.getParameter("customer_name");
         updatedBy = request.getParameter("updated_by");

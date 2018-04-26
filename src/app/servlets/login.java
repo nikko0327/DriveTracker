@@ -138,6 +138,7 @@ public class login extends HttpServlet {
     }
 
     private void loadAuthorizedUsers() {
+
         Connection connect = null;
         PreparedStatement psSelectUsers = null;
         ResultSet rs = null;

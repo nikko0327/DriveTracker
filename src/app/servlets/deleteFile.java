@@ -38,6 +38,8 @@ public class deleteFile extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("--- deleteFile ---");
+
         id = request.getParameter("id");
 
         JSONObject json = new JSONObject();

@@ -102,7 +102,6 @@ public class EmailNotifier {
 
         try {
             connect = db_credentials.DB.getConnection();
-            System.out.println("Email datasource ok");
 
             String query_selectUsers = "SELECT username FROM user_info WHERE notification='Yes'";
             if (this.essential.equalsIgnoreCase("Yes")) {

@@ -22,6 +22,8 @@ public class UserInfoServlet extends HttpServlet implements mysql_credentials {
      */
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) {
+        //System.out.println("--- userInfo ---");
+
         try {
             String action = request.getParameter("action");
             String username = request.getParameter("username");

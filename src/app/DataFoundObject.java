@@ -2,8 +2,6 @@ package app;
 
 import net.sf.json.JSONObject;
 
-import javax.annotation.Resource;
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,9 +26,6 @@ public class DataFoundObject {
 
     private String eMessage = "";
     private String searchResult = "";
-
-    @Resource(name = "jdbc/DriveTrackerDB")
-    private DataSource dataSource;
 
     public DataFoundObject(String assetTag, String serialNumber, String customerName,
                            String driveState, String driveLocation, String tableName, String essential) {

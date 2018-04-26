@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,14 +35,19 @@ public class customerInfo extends HttpServlet {
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String name = request.getParameter("name");
-        String result = customer_info(name);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        System.out.println("--- customerInfo ---");
+        try {
+            String name = request.getParameter("name");
+            String result = customer_info(name);
 
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(result);
-        response.flushBuffer();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(result);
+            response.flushBuffer();
+        } catch (Exception e) {
+            throw new ServletException(e);
+        }
     }
 
     public String customer_info(String name) {

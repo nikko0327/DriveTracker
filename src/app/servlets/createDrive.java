@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 
@@ -53,8 +52,8 @@ public class createDrive extends HttpServlet {
     private String lastUpdated;
     private String updatedBy;
     private String essential;
-
     private String isUpdate;
+    private JSONObject newCreatedDrive;
 
     InputStream inputStream;
 
@@ -73,56 +72,58 @@ public class createDrive extends HttpServlet {
      * response)
      */
     protected void doPost(HttpServletRequest request,
-                          HttpServletResponse response) throws ServletException, IOException {
+                          HttpServletResponse response) throws ServletException {
 
-        assetTag = request.getParameter("pp_asset_tag");
-        manufacturer = request.getParameter("manufacturer");
-        serialNumber = request.getParameter("serial_number");
-        property = request.getParameter("property");
-        customerName = request.getParameter("customer_name");
-        cts = request.getParameter("cts");
-        jira = request.getParameter("jira");
-        label = request.getParameter("label");
-        driveLocation = request.getParameter("drive_location");
-        driveState = request.getParameter("drive_state");
+        System.out.println("--- createDrive ---");
+        try {
+            assetTag = request.getParameter("pp_asset_tag");
+            manufacturer = request.getParameter("manufacturer");
+            serialNumber = request.getParameter("serial_number");
+            property = request.getParameter("property");
+            customerName = request.getParameter("customer_name");
+            cts = request.getParameter("cts");
+            jira = request.getParameter("jira");
+            label = request.getParameter("label");
+            driveLocation = request.getParameter("drive_location");
+            driveState = request.getParameter("drive_state");
 
-        if (driveState.startsWith("Shipped") || driveState.startsWith("Returned"))
-            receivedOrSent = "Sent";
-        else
-            receivedOrSent = "Received";
+            if (driveState.startsWith("Shipped") || driveState.startsWith("Returned")) {
+                receivedOrSent = "Sent";
+            } else {
+                receivedOrSent = "Received";
+            }
 
-        encrypted = ""; //request.getParameter("encrypted");
-        box = ""; //request.getParameter("box");
-        usb = request.getParameter("usb");
-        power = request.getParameter("power");
-        rack = ""; //request.getParameter("rack");
-        shelf = ""; //request.getParameter("shelf");
-        receivedDate = request.getParameter("received_date");
-        shippingCarrier = request.getParameter("shipping_carrier");
-        shippingTrackingNumber = request.getParameter("shipping_tracking_number");
-        sentDate = request.getParameter("sent_date");
-        return_media_to_customer = request.getParameter("return_media_to_customer");
-        notes = request.getParameter("notes");
-        updatedBy = request.getParameter("updated_by");
-        isUpdate = request.getParameter("is_update");
-        essential = request.getParameter("essential");
+            encrypted = ""; //request.getParameter("encrypted");
+            box = ""; //request.getParameter("box");
+            usb = request.getParameter("usb");
+            power = request.getParameter("power");
+            rack = ""; //request.getParameter("rack");
+            shelf = ""; //request.getParameter("shelf");
+            receivedDate = request.getParameter("received_date");
+            shippingCarrier = request.getParameter("shipping_carrier");
+            shippingTrackingNumber = request.getParameter("shipping_tracking_number");
+            sentDate = request.getParameter("sent_date");
+            return_media_to_customer = request.getParameter("return_media_to_customer");
+            notes = request.getParameter("notes");
+            updatedBy = request.getParameter("updated_by");
+            isUpdate = request.getParameter("is_update");
+            essential = request.getParameter("essential");
 
-        String latestDrive;
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
 
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
+            if (createDriveAndHistory()) {
+                response.getWriter().write(newCreatedDrive.toString());
+            } else {
+                JSONObject json = new JSONObject();
+                json.put("message", eMessage);
+                response.getWriter().write(json.toString());
+            }
 
-        if (createDriveAndHistory()) {
-            latestDrive = getCreatedDrive();
-
-            response.getWriter().write(latestDrive);
-        } else {
-            JSONObject json = new JSONObject();
-            json.put("message", eMessage);
-            response.getWriter().write(json.toString());
+            response.flushBuffer();
+        } catch (Exception e) {
+            throw new ServletException(e);
         }
-
-        response.flushBuffer();
     }
 
     private boolean createDriveAndHistory() {
@@ -202,62 +203,34 @@ public class createDrive extends HttpServlet {
             psCreateSprint.setString(25, return_media_to_customer);
             psCreateSprint.setString(26, essential);
 
-            int createSprintStmtRes = psCreateSprint.executeUpdate();
+            psCreateSprint.executeUpdate();
 
             System.out.println("Create drive: " + query_createSprint);
 
-            String query_createHistory = "insert into drive_history ("
-                    + "pp_asset_tag, manufacturer_model, serial_number, property, "
-                    + "customer_name, cts, jira, label, drive_location, drive_state, "
-                    + "encrypted, box, usb, power, rack, shelf, notes, "
-                    + "created, last_updated, updated_by, "
-                    + "sent_date, shipping_carrier_sent, shipping_tracking_number_sent, received_date, "
-                    + "return_media_to_customer, essential) "
-                    + "values ("
-                    + "?,?,?,?,?,?,?,?,?,?,"
-                    + "?,?,?,?,?,?,?,?,?,?,"
-                    + "?,?,?,?,?, ?);";
-
-
-            psCreateHistory = connect.prepareStatement(query_createHistory);
-            psCreateHistory.setString(1, assetTag);
-            psCreateHistory.setString(2, manufacturer);
-            psCreateHistory.setString(3, serialNumber);
-            psCreateHistory.setString(4, property);
-            psCreateHistory.setString(5, customerName);
-            psCreateHistory.setString(6, cts);
-            psCreateHistory.setString(7, jira);
-            psCreateHistory.setString(8, label);
-            psCreateHistory.setString(9, driveLocation);
-            psCreateHistory.setString(10, driveState);
-            psCreateHistory.setString(11, encrypted);
-            psCreateHistory.setString(12, box);
-            psCreateHistory.setString(13, usb);
-            psCreateHistory.setString(14, power);
-            psCreateHistory.setString(15, rack);
-            psCreateHistory.setString(16, shelf);
-            psCreateHistory.setString(17, notes);
-            psCreateHistory.setTimestamp(18, sqlTime);
-            psCreateHistory.setTimestamp(19, sqlTime);
-            psCreateHistory.setString(20, updatedBy);
-
-            if (receivedOrSent.equals("Received")) {
-                psCreateHistory.setString(21, "");
-                psCreateHistory.setString(22, "");
-                psCreateHistory.setString(23, "");
-            } else if (receivedOrSent.equals("Sent")) {
-                psCreateHistory.setString(21, sentDate);
-                psCreateHistory.setString(22, shippingCarrier);
-                psCreateHistory.setString(23, shippingTrackingNumber);
-            }
-
-            psCreateHistory.setString(24, receivedDate);
-            psCreateHistory.setString(25, return_media_to_customer);
-            psCreateHistory.setString(26, essential);
-
-            psCreateHistory.executeUpdate();
-
-            System.out.println("Create history: " + query_createHistory);
+            newCreatedDrive = new JSONObject();
+            newCreatedDrive.put("pp_asset_tag", assetTag);
+            newCreatedDrive.put("manufacturer", manufacturer);
+            newCreatedDrive.put("serial_number", serialNumber);
+            newCreatedDrive.put("property", property);
+            newCreatedDrive.put("customer_name", customerName);
+            newCreatedDrive.put("cts", cts);
+            newCreatedDrive.put("jira", jira);
+            newCreatedDrive.put("label", label);
+            newCreatedDrive.put("drive_location", driveLocation);
+            newCreatedDrive.put("drive_state", driveState);
+            newCreatedDrive.put("box", box);
+            newCreatedDrive.put("usb", usb);
+            newCreatedDrive.put("power", power);
+            newCreatedDrive.put("notes", notes);
+            newCreatedDrive.put("received_date", receivedDate);
+            newCreatedDrive.put("sent_date", sentDate);
+            newCreatedDrive.put("return_media_to_customer", return_media_to_customer);
+            newCreatedDrive.put("shipping_carrier", shippingCarrier);
+            newCreatedDrive.put("shipping_tracking_number", shippingTrackingNumber);
+            newCreatedDrive.put("created", sqlTime.toString());
+            newCreatedDrive.put("last_updated", sqlTime.toString());
+            newCreatedDrive.put("updated_by", updatedBy);
+            newCreatedDrive.put("essential", essential);
 
             result = true;
 
@@ -276,6 +249,7 @@ public class createDrive extends HttpServlet {
         return result;
     }
 
+    @SuppressWarnings("Duplicates")
     private String getCreatedDrive() {
 
         JSONObject json = new JSONObject();

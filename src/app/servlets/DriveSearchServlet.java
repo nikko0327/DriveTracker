@@ -27,6 +27,7 @@ public class DriveSearchServlet extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("--- searchDrives ---");
         String assetTag = request.getParameter("pp_asset_tag");
         String serialNumber = request.getParameter("serial_number");
         String customerName = request.getParameter("customer_name");

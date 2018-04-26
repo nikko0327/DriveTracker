@@ -65,11 +65,14 @@ public class updateDrive extends HttpServlet implements mysql_credentials {
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
 
+        System.out.println("--- updateDrive ---");
+
         assetTag = request.getParameter("pp_asset_tag");
         manufacturer = request.getParameter("manufacturer");
         serialNumber = request.getParameter("serial_number");
         property = request.getParameter("property");
         customerName = request.getParameter("customer_name");
+        System.out.println("--- updateDrive's post: " + customerName + " ---");
         cts = request.getParameter("cts");
         jira = request.getParameter("jira");
         label = request.getParameter("label");
@@ -154,71 +157,7 @@ public class updateDrive extends HttpServlet implements mysql_credentials {
             psUpdateDrive.executeUpdate();
 
             System.out.println("Update drive: " + query_updateDrive);
-
-            String query_selectDriveById = "select * from drive_info where pp_asset_tag = '" + assetTag + "'";
-            psSelectDrive = connect.prepareStatement(query_selectDriveById);
-            selectDriveRes = psSelectDrive.executeQuery();
-
-            while (selectDriveRes.next()) {
-                Timestamp created = selectDriveRes.getTimestamp("created");
-
-                String query_createHistory = "insert into drive_history ("
-                        + "pp_asset_tag, manufacturer_model, serial_number, property, "
-                        + "customer_name, cts, jira, label, drive_location, drive_state, "
-                        + "encrypted, box, usb, power, rack, shelf, notes, "
-                        + "received_date, "
-                        + "sent_date, shipping_carrier_sent, shipping_tracking_number_sent, "
-                        + "created, last_updated, updated_by, return_media_to_customer, essential) "
-                        + "values ("
-                        + "?,?,?,?,?,?,?,?,?,?,"
-                        + "?,?,?,?,?,?,?,?,?,?,"
-                        + "?,?,?,?,?,?);";
-
-                PreparedStatement prepCreateHistoryStmt = null;
-                try {
-
-                    prepCreateHistoryStmt = connect.prepareStatement(query_createHistory);
-
-                    prepCreateHistoryStmt.setString(1, assetTag);
-                    prepCreateHistoryStmt.setString(2, manufacturer);
-                    prepCreateHistoryStmt.setString(3, serialNumber);
-                    prepCreateHistoryStmt.setString(4, property);
-                    prepCreateHistoryStmt.setString(5, customerName);
-                    prepCreateHistoryStmt.setString(6, cts);
-                    prepCreateHistoryStmt.setString(7, jira);
-                    prepCreateHistoryStmt.setString(8, label);
-                    prepCreateHistoryStmt.setString(9, driveLocation);
-                    prepCreateHistoryStmt.setString(10, driveState);
-                    prepCreateHistoryStmt.setString(11, encrypted);
-                    prepCreateHistoryStmt.setString(12, box);
-                    prepCreateHistoryStmt.setString(13, usb);
-                    prepCreateHistoryStmt.setString(14, power);
-                    prepCreateHistoryStmt.setString(15, rack);
-                    prepCreateHistoryStmt.setString(16, shelf);
-                    prepCreateHistoryStmt.setString(17, notes);
-                    prepCreateHistoryStmt.setString(18, receivedDate);
-                    prepCreateHistoryStmt.setString(19, sentDate);
-                    prepCreateHistoryStmt.setString(20, shippingCarrierSent);
-                    prepCreateHistoryStmt.setString(21, shippingTrackingNumberSent);
-                    prepCreateHistoryStmt.setTimestamp(22, created);
-                    prepCreateHistoryStmt.setTimestamp(23, sqlTime);
-                    prepCreateHistoryStmt.setString(24, updatedBy);
-                    prepCreateHistoryStmt.setString(25, return_media_to_customer);
-                    prepCreateHistoryStmt.setString(26, essential);
-
-                    prepCreateHistoryStmt.executeUpdate();
-
-                    System.out.println("Create history: " + query_createHistory);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    prepCreateHistoryStmt.close();
-                }
-            }
-
             result = true;
-
             sendEmailNotification();
 
         } catch (SQLException e) {

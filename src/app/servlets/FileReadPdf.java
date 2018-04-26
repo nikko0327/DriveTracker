@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  * Servlet implementation class GetDetails
@@ -35,31 +34,26 @@ public class FileReadPdf extends HttpServlet {
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-
-        String assetTag = request.getParameter("assetTag") != null ? request.getParameter("assetTag") : "NA";
-        String description = request.getParameter("description") != null ? request.getParameter("description") : "NA";
-        System.out.println(description);
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        System.out.println("--- read pdf ---");
         ServletOutputStream sos = null;
         Connection connect = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        response.setContentType("application/pdf");
-        response.setHeader("Content-disposition", "inline; description=" + assetTag + ".pdf");
-
         try {
+            String assetTag = request.getParameter("assetTag") != null ? request.getParameter("assetTag") : "NA";
+            String description = request.getParameter("description") != null ? request.getParameter("description") : "NA";
+            System.out.println(description);
+
+            response.setContentType("application/pdf");
+            response.setHeader("Content-disposition", "inline; description=" + assetTag + ".pdf");
+
             sos = response.getOutputStream();
 
-            try {
-                connect = dataSource.getConnection();
-            } catch (SQLException sql) {
-                sql.printStackTrace();
-                System.exit(1);
-            }
+            connect = dataSource.getConnection();
 
-            ps = connect.prepareStatement("Select file from upload where pp_asset_tag=? and description=?");
+            ps = connect.prepareStatement("select file from upload where pp_asset_tag=? and description=?");
             ps.setString(1, assetTag.trim());
             ps.setString(2, description.trim());
             rs = ps.executeQuery();
@@ -67,15 +61,17 @@ public class FileReadPdf extends HttpServlet {
             if (rs.next()) {
                 sos.write(rs.getBytes("file"));
             }
+
+            sos.flush();
+
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new ServletException(e);
         } finally {
             db_credentials.DB.closeResources(connect, ps, rs);
             try {
-                sos.flush();
                 sos.close();
             } catch (Exception e) {
-                System.out.println("ServletOutputStream not closed.");
+                throw new ServletException(e);
             }
         }
     }

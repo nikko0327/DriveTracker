@@ -5,29 +5,30 @@
   Time: 1:52 PM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="db_credentials.mysql_credentials,java.sql.Connection" %>
-<%@ page import="java.sql.DriverManager" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.PreparedStatement" %>
 <%@ page import="java.sql.ResultSet" %>
-<%@ page import="java.sql.Statement" %>
 <%
-    String assetTag = "'" + request.getParameter("pp_asset_tag") + "'";
-    boolean update = Boolean.valueOf(request.getParameter("update"));//parses update value(true or false in string) to a boolean
+    Connection con = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
 
+    try {
+        String assetTag = request.getParameter("pp_asset_tag");
+        boolean update = Boolean.valueOf(request.getParameter("update"));//parses update value(true or false in string) to a boolean
 
-    System.out.println("asset: " + assetTag);
-    System.out.println("update: " + update);
-    //if it is not called for an update, then dont display the form (since the user isnt updating)
-    String hide = "";
-    if (!update)
-        hide = "hidden";
+        System.out.println("asset: " + assetTag);
+        System.out.println("update: " + update);
+        //if it is not called for an update, then dont display the form (since the user isnt updating)
+        String hide = "";
+        if (!update) {
+            hide = "hidden";
+        }
 
-    //TODO: fix this, this is how sql injections happen (escape the values and use PreparedStatement)
-    String query = "SELECT * FROM upload WHERE pp_asset_tag = " + assetTag;
-
-    Class.forName("com.mysql.jdbc.Driver").newInstance();
-    Connection con = DriverManager.getConnection(mysql_credentials.db_url, mysql_credentials.user_name, mysql_credentials.password);
-    Statement st = con.createStatement();
-    ResultSet rs = st.executeQuery(query);
+        con = db_credentials.DB.getConnection();
+        ps = con.prepareStatement("SELECT * FROM upload WHERE pp_asset_tag = ?");
+        ps.setString(1, assetTag);
+        rs = ps.executeQuery();
 %>
 <div id="uploadFile" style="margin-top: 1%;">
     <form method="POST" action="FileUploadDBServlet" enctype="multipart/form-data" <%=hide%>>
@@ -62,6 +63,7 @@
     </tr>
     <%
         while (rs.next()) {
+            // System.out.println("[upload2.jsp] RS has next.");
     %>
     <tr>
         <td>
@@ -82,6 +84,11 @@
         <% } %>
     </tr>
     <%
+            }
+        } catch (Exception e) {
+            throw new ServletException(e);
+        } finally {
+            db_credentials.DB.closeResources(con, ps, rs);
         }
     %>
 </table>
