@@ -154,7 +154,7 @@ function searchDrive() {
 
                 $('#drive_list').append(value);
             }
-            
+
             // using tablesorter 3rd party API, this will make table sortable and look better
             $('#drive_table').tablesorter();
 

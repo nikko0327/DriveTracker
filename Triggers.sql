@@ -1,4 +1,4 @@
-# DO NOT USE IN PRODUCTION YET, A FEW ROWS IN THE SCHEMA WERE MOVED AROUND TO KEEP CONSISTENCY AND HAS YET TO BE TESTED.
+# TRIGGERS TESTED. To prevent clicking update and making a new history, it must be done on the JavaScript or Java level.
 
 
 DELIMITER //
