@@ -1,4 +1,4 @@
-# TRIGGERS TESTED. To prevent clicking update and making a new history, it must be done on the JavaScript or Java level.
+# TRIGGERS TESTED. To prevent clicking update repeatedly with no changes and making a new history every time, it must be done on the JavaScript or Java level.
 
 
 DELIMITER //
