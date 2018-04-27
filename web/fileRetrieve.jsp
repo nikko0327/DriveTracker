@@ -25,15 +25,14 @@
         response.sendRedirect("/DriveTracker");
 %>
 <body>
-<%@ page import="java.sql.Connection,java.sql.DriverManager" %>
+<%@ page import="java.sql.Connection,java.sql.PreparedStatement" %>
 <%@ page import="java.sql.ResultSet" %>
-<%@ page import="java.sql.Statement" %>
 <%
     String pp_asset_tag = request.getParameter("pp_asset_tag");
-    Class.forName("com.mysql.jdbc.Driver").newInstance();
-    Connection con = DriverManager.getConnection("jdbc:mysql://localhost/DriveTracking", "root", "@Rm@d1ll0!");
-    Statement st = con.createStatement();
-    ResultSet rs = st.executeQuery("Select attachment_id, attachment_path, pp_asset_tag from attachment_info");
+
+    Connection con = db_credentials.DB.getConnection();
+    PreparedStatement ps = con.prepareStatement("Select attachment_id, attachment_path, pp_asset_tag from attachment_info");
+    ResultSet rs = ps.executeQuery();
 %>
 <table cellpadding="15" border="1">
     <%

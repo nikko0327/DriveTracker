@@ -7,7 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 
 /**
@@ -26,27 +25,32 @@ public class DriveSearchServlet extends HttpServlet {
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         System.out.println("--- searchDrives ---");
-        String assetTag = request.getParameter("pp_asset_tag");
-        String serialNumber = request.getParameter("serial_number");
-        String customerName = request.getParameter("customer_name");
-        String driveState = request.getParameter("drive_state");
-        String driveLocation = request.getParameter("drive_location");
-        String tableName = request.getParameter("tableName");
-        String essential = request.getParameter("essential");
+        try {
+            String assetTag = request.getParameter("pp_asset_tag");
+            String serialNumber = request.getParameter("serial_number");
+            String customerName = request.getParameter("customer_name");
+            String driveState = request.getParameter("drive_state");
+            String driveLocation = request.getParameter("drive_location");
+            String tableName = request.getParameter("tableName");
+            String notes = request.getParameter("notes");
+            String essential = request.getParameter("essential");
 
-        DataFoundObject dfo = new DataFoundObject(assetTag, serialNumber, customerName, driveState, driveLocation, tableName, essential);
+            DataFoundObject dfo = new DataFoundObject(assetTag, serialNumber, customerName, driveState, driveLocation, tableName, essential);
 
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
 
-        if (dfo.foundDataSuccessfully()) { //
-            response.getWriter().write(dfo.getData());
-        } else {
-            response.getWriter().write(new JSONObject().put("message", dfo.getErrorMessage()).toString());
+            if (dfo.foundDataSuccessfully()) { //
+                response.getWriter().write(dfo.getData());
+            } else {
+                response.getWriter().write(new JSONObject().put("message", dfo.getErrorMessage()).toString());
+            }
+
+            response.flushBuffer();
+        } catch (Exception e) {
+            throw new ServletException(e);
         }
-
-        response.flushBuffer();
     }
 }

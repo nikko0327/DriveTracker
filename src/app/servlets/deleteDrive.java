@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -45,25 +44,29 @@ public class deleteDrive extends HttpServlet {
      * response)
      */
     protected void doPost(HttpServletRequest request,
-                          HttpServletResponse response) throws ServletException, IOException {
+                          HttpServletResponse response) throws ServletException {
         System.out.println("--- deleteDrive ---");
-        assetTag = request.getParameter("pp_asset_tag");
-        customerName = request.getParameter("customer_name");
-        updatedBy = request.getParameter("updated_by");
-        essential = request.getParameter("essential");
+        try {
+            assetTag = request.getParameter("pp_asset_tag");
+            customerName = request.getParameter("customer_name");
+            updatedBy = request.getParameter("updated_by");
+            essential = request.getParameter("essential");
 
-        JSONObject json = new JSONObject();
+            JSONObject json = new JSONObject();
 
-        if (removeDriveAndHistory()) {
-            json.put("result", "success");
-        } else {
-            json.put("result", eMessage);
+            if (removeDriveAndHistory()) {
+                json.put("result", "success");
+            } else {
+                json.put("result", eMessage);
+            }
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(json.toString());
+            response.flushBuffer();
+        } catch (Exception e) {
+            throw new ServletException(e);
         }
-
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(json.toString());
-        response.flushBuffer();
     }
 
     public boolean removeDriveAndHistory() {
@@ -77,25 +80,27 @@ public class deleteDrive extends HttpServlet {
         try {
             connect = dataSource.getConnection();
 
-            String query_deleteDrive = "delete from drive_info where pp_asset_tag = '" + assetTag + "';";
+            String query_deleteDrive = "delete from drive_info where pp_asset_tag = ?;";
 
             psDeleteDrive = connect.prepareStatement(query_deleteDrive);
-            int deleteDriveRes = psDeleteDrive.executeUpdate();
+            psDeleteDrive.setString(1, assetTag);
+            psDeleteDrive.executeUpdate();
 
             System.out.println("Delete drive: " + query_deleteDrive);
 
-            String query_deleteHistory = "delete from drive_history where pp_asset_tag = '" + assetTag + "';";
-
+            String query_deleteHistory = "delete from drive_history where pp_asset_tag = ?;";
             psDeleteHistory = connect.prepareStatement(query_deleteHistory);
-            int deleteHistoryRes = psDeleteHistory.executeUpdate();
+            psDeleteHistory.setString(1, assetTag);
+            psDeleteHistory.executeUpdate();
 
             System.out.println("Delete history: " + query_deleteHistory);
 
             //Deleting file that is related to current PP Asset Tag
-            String query_deleteFile = "delete from upload where pp_asset_tag = '" + assetTag + "';";
+            String query_deleteFile = "delete from upload where pp_asset_tag = ?;";
 
             psDeleteFile = connect.prepareStatement(query_deleteFile);
-            int deleteFileRes = psDeleteFile.executeUpdate();
+            psDeleteFile.setString(1, assetTag);
+            psDeleteFile.executeUpdate();
 
             System.out.println("Delete drive: " + query_deleteDrive);
 

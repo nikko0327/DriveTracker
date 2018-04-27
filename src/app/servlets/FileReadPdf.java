@@ -67,12 +67,12 @@ public class FileReadPdf extends HttpServlet {
         } catch (Exception e) {
             throw new ServletException(e);
         } finally {
-            db_credentials.DB.closeResources(connect, ps, rs);
-            try {
-                sos.close();
-            } catch (Exception e) {
-                throw new ServletException(e);
-            }
+            db_credentials.DB.closeResources(connect, ps, rs, sos);
+//            try {
+//                sos.close();
+//            } catch (Exception e) {
+//                throw new ServletException(e);
+//            }
         }
     }
 

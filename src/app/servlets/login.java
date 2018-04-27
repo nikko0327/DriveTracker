@@ -5,7 +5,6 @@ import net.sf.json.JSONObject;
 import javax.annotation.Resource;
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
-import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
@@ -122,7 +121,7 @@ public class login extends HttpServlet {
             // Close the context when we're done
             result = true;
 
-        } catch (NamingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             result = false;
             eMessage = e.getMessage();

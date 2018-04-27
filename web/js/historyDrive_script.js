@@ -77,17 +77,17 @@ function searchDrive() {
                 value += "<table id='drive_table' class='table table-condensed table-hover tablesorter'>";
                 value += "<thead>";
                 value += "<tr style='background-color:#D8D8D8'>";
-                value += "<th>PP Asset Tag</th>";
-                value += "<th>Manufacturer</th>";
-                value += "<th>Serial</th>";
+                value += "<th>Asset Tag</th>";
                 value += "<th>Customer</th>";
+                value += "<th>MFR/Model</th>";
+                value += "<th>Serial</th>";
                 value += "<th>Location</th>";
                 value += "<th>Status</th>"; //State is changed to Status
+                value += "<th>Return Media To Customer</th>";
                 value += "<th>Created</th>";
                 value += "<th>Updated</th>";
                 value += "<th>Updater</th>";
-                value += "<th>Note</th>";
-                value += "<th>Return Media To Customer</th>";
+                value += "<th>Notes</th>";
                 value += "<th>Essentials</th>";
                 value += "</tr>";
                 value += "</thead>";
@@ -98,18 +98,14 @@ function searchDrive() {
                     value += "<tr class='detail' id='tr_" + i + "'>";
                     if (v.pp_asset_tag == undefined) {
                         value += "<td>" + "Error: " + v.message + "</td>";
-                    }
-                    else {
+                    } else {
                         value += "<td><a href='historyDrive.jsp?pp_asset_tag=" + v.pp_asset_tag + "'>" + v.pp_asset_tag + "</td>";
+                        value += "<td>" + v.customer_name + "</td>";
                         value += "<td>" + v.manufacturer + "</td>";
                         value += "<td>" + v.serial_number + "</td>";
-                        value += "<td>" + v.customer_name + "</td>";
                         value += "<td>" + v.drive_location + "</td>";
                         value += "<td>" + v.drive_state + "</td>";
-                        value += "<td>" + v.created + "</td>";
-                        value += "<td>" + v.last_updated + "</td>";
-                        value += "<td>" + v.updated_by + "</td>";
-                        value += "<td>" + v.notes + "</td>";
+
                         if ((v.return_media_to_customer) == 'Yes') {
                             // value += "<td style = 'color: green'>" + "<strong>" + v.return_media_to_customer + "</strong>" + "</td>";
                             value += "<td style = 'color: green; font-size: 120%;'>" + '<i class="fa fa-check">' + '</i>' + 'Yes' + "</td>";
@@ -117,14 +113,19 @@ function searchDrive() {
                             // value += "<td style='color: red'>" +  "<strong>" + v.return_media_to_customer + "</strong>" + "</td>";
                             value += "<td style = 'color: red; font-size: 120%;'>" + '<i class="fa fa-times">' + '</i>' + 'No' + "</td>";
                         }
+
+                        value += "<td>" + v.created + "</td>";
+                        value += "<td>" + v.last_updated + "</td>";
+                        value += "<td>" + v.updated_by + "</td>";
+                        value += "<td>" + v.notes + "</td>";
                         value += "<td>" + v.essential + "</td>";
 
                         value +=
                             "<input type='hidden' id='pp_asset_tag_" + i + "' value='" + v.pp_asset_tag + "'>" +
+                            "<input type='hidden' id='customer_name_" + i + "' value='" + v.customer_name + "'>" +
                             "<input type='hidden' id='manufacturer_" + i + "' value='" + v.manufacturer + "'>" +
                             "<input type='hidden' id='serial_number_" + i + "' value='" + v.serial_number + "'>" +
                             "<input type='hidden' id='property_" + i + "' value='" + v.property + "'>" +
-                            "<input type='hidden' id='customer_name_" + i + "' value='" + v.customer_name + "'>" +
                             "<input type='hidden' id='cts_" + i + "' value='" + v.cts + "'>" +
                             "<input type='hidden' id='jira_" + i + "' value='" + v.jira + "'>" +
                             "<input type='hidden' id='label_" + i + "' value='" + v.label + "'>" +
@@ -145,7 +146,6 @@ function searchDrive() {
                             "</td>";
                     }
                     value += "</tr>";
-
                     i++;
                 });
 
@@ -154,8 +154,7 @@ function searchDrive() {
 
                 $('#drive_list').append(value);
             }
-
-
+            
             // using tablesorter 3rd party API, this will make table sortable and look better
             $('#drive_table').tablesorter();
 

@@ -12,7 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -112,7 +115,6 @@ public class updateDrive extends HttpServlet implements mysql_credentials {
         Connection connect = null;
         PreparedStatement psUpdateDrive = null;
         PreparedStatement psSelectDrive = null;
-        ResultSet selectDriveRes = null;
 
         try {
             connect = dataSource.getConnection();

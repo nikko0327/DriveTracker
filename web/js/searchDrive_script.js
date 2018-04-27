@@ -378,6 +378,7 @@ function searchDrive(user) {
     var customer_name = $('#customer_name').val();
     var drive_state = $('#drive_state').val();
     var drive_location = $('#drive_location').val();
+    var notes = $('#notes').val();
     var essential = $('#essential_select').val();
     var tableName = "drive_info";
 
@@ -391,6 +392,7 @@ function searchDrive(user) {
             drive_state: drive_state,
             drive_location: drive_location,
             tableName: tableName,
+            notes: notes,
             essential: essential
         },
         function (data) {
@@ -421,9 +423,11 @@ function searchDrive(user) {
                 value += "<th>Property</th>";
                 value += "<th>Status</th>";
                 value += "<th>Return Media To Customer</th>";
-                value += "<th>Essentials</th>";
+                //value += "<th>Essentials</th>";
                 value += "<th>Updated</th>";
                 value += "<th>Updated By</th>";
+                value += "<th>Notes</th>";
+                value += "<th>Essentials</th>";
                 value += "<th>Operations</th>";
                 value += "</tr>";
                 value += "</thead>";
@@ -457,9 +461,10 @@ function searchDrive(user) {
                             value += "<td style = 'color: red; font-size: 120%;'>" + '<i class="fa fa-times">' + '</i>' + 'No' + "</td>";
                         }
 
-                        value += "<td>" + v.essential + "</td>";
                         value += "<td>" + v.last_updated + "</td>";
                         value += "<td>" + v.updated_by + "</td>";
+                        value += "<td>" + v.notes + "</td>";
+                        value += "<td>" + v.essential + "</td>";
 
                         value += "<td id='ops_" + i + "' style='white-space: nowrap'><button name='updateButton' class='btn btn-sm btn-default' id='update_" + i + "'><i class='icon-edit'></i></button>";
 

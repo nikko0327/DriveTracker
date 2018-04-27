@@ -11,7 +11,6 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -68,19 +67,19 @@ public class customerInfo extends HttpServlet {
 
             JSONObject json = new JSONObject();
 
-            query_customerInfo = "select * from customer_info " + "where name='" + name + "';";
+            query_customerInfo = "select * from customer_info where name = ?";
 
             System.out.println(query_customerInfo);
 
             ps = connect.prepareStatement(query_customerInfo);
+            ps.setString(1, name);
 
             rs = ps.executeQuery();
+
             while (rs.next()) {
                 Map<String, String> map = new HashMap<String, String>();
-
                 map.put("name", rs.getString("name"));
                 map.put("guid", rs.getString("guid"));
-
                 list.add(map);
             }
 
@@ -92,10 +91,6 @@ public class customerInfo extends HttpServlet {
             customers = json.toString();
 
             System.out.println(customers);
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

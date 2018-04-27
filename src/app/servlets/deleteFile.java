@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -37,23 +36,27 @@ public class deleteFile extends HttpServlet {
      * response)
      */
     protected void doPost(HttpServletRequest request,
-                          HttpServletResponse response) throws ServletException, IOException {
+                          HttpServletResponse response) throws ServletException {
         System.out.println("--- deleteFile ---");
 
-        id = request.getParameter("id");
+        try {
+            id = request.getParameter("id");
 
-        JSONObject json = new JSONObject();
+            JSONObject json = new JSONObject();
 
-        if (removeFile()) {
-            json.put("result", "success");
-        } else {
-            json.put("result", eMessage);
+            if (removeFile()) {
+                json.put("result", "success");
+            } else {
+                json.put("result", eMessage);
+            }
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(json.toString());
+            response.flushBuffer();
+        } catch (Exception e) {
+            throw new ServletException(e);
         }
-
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(json.toString());
-        response.flushBuffer();
     }
 
     @SuppressWarnings("Duplicates")
@@ -67,12 +70,12 @@ public class deleteFile extends HttpServlet {
             connect = dataSource.getConnection();
             System.out.println("Connection successful trying to delete file?");
 
-            String query_deleteDrive = "DELETE FROM upload WHERE id = '" + this.id + "';";
+            String query_deleteDrive = "DELETE FROM upload WHERE id = ?;";
 
             ps = connect.prepareStatement(query_deleteDrive);
+            ps.setString(1, id);
             ps.executeUpdate();
 
-            ps.close();
             System.out.println("Delete file: " + query_deleteDrive);
             result = true;
         } catch (SQLException e) {
