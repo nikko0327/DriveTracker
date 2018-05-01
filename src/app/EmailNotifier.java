@@ -43,6 +43,7 @@ public class EmailNotifier {
     }
 
     public boolean send() {
+        System.out.println("-- Trying to send email... --");
         boolean result = false;
 
         Session mailSession = Session.getInstance(props);
@@ -82,6 +83,8 @@ public class EmailNotifier {
                 );
             }
 
+            //System.out.println("Email message: " + message.toString());
+
             Transport.send(message);
 
             result = true;
@@ -89,7 +92,11 @@ public class EmailNotifier {
             e.printStackTrace();
             eMessage = "Unable to Send Message";
         }
-
+        if(result == false) {
+            System.out.println("-- Email sending failed. --");
+        } else {
+            System.out.println("-- Email supposedly sent --");
+        }
         return result;
     }
 
@@ -102,9 +109,11 @@ public class EmailNotifier {
             connect = db_credentials.DB.getConnection();
 
             String query_selectUsers = "SELECT username FROM user_info WHERE notification='Yes'";
-            if (this.essential.equalsIgnoreCase("Yes")) {
+            if (this.essential.equalsIgnoreCase("yes")) {
+                // if in essentials, mail to nlee@proofpoint
                 query_selectUsers += " AND group_name IN ('" + this.groupNameEssentials + "', '" + this.groupNameMaster + "');";
-            } else if (this.essential.equalsIgnoreCase("No")) {
+            } else if (this.essential.equalsIgnoreCase("no")) {
+                // if
                 query_selectUsers += " AND group_name IN ('" + this.groupNameEnterprise + "', '" + this.groupNameMaster + "');";
             } else {
                 query_selectUsers += " AND group_name='" + this.groupNameMaster + "';";
