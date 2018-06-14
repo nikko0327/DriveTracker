@@ -60,6 +60,11 @@ public class User {
             ps.setString(1, this.username);
             rs = ps.executeQuery();
 
+            if (!rs.isBeforeFirst()) {
+                this.errorMessage = "No group name found!";
+                return "Error";
+            }
+
             // Move pointer to first row of the result set
             rs.first();
 

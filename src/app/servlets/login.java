@@ -66,7 +66,7 @@ public class login extends HttpServlet {
             json.put("mail", username + "@proofpoint.com");
 
             Cookie loginCookie = new Cookie("username", username);
-            // setting cookie to expiry in 60 mins
+            // setting cookie to expire in 60 mins
             loginCookie.setMaxAge(60 * 60); // commented this out so that cookies should last entire session rather than 60 minutes
             response.addCookie(loginCookie);
         } else

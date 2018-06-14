@@ -18,6 +18,14 @@ public class logout extends HttpServlet {
         Cookie loginCookie = null;
         Cookie[] cookies = request.getCookies();
 
+//        if (cookies != null) {
+//            for(Cookie c: cookies) {
+//                c.setMaxAge(0);
+//                c.setPath("/");
+//                response.addCookie(c);
+//            }
+//        }
+
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("username")) {

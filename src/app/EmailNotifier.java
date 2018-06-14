@@ -5,6 +5,7 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.Address;
 import javax.mail.internet.MimeMessage;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,8 +47,8 @@ public class EmailNotifier {
         System.out.println("-- Trying to send email... --");
         boolean result = false;
 
-        Session mailSession = Session.getInstance(props);
         try {
+            Session mailSession = Session.getInstance(props);
             MimeMessage message = new MimeMessage(mailSession);
 
             message.setFrom(new InternetAddress(from));
@@ -68,7 +69,14 @@ public class EmailNotifier {
             if (info.getType().equals("DELETED")) {
                 message.setText("Drive removed from system with following details\n"
                         + "By " + info.getUpdatedBy() + "\n"
-                        + "At " + info.getLastUpdated()
+                        + "At " + info.getLastUpdated() + "\n"
+                        + "By " + info.getUpdatedBy() + "\n"
+                        + "At " + info.getLastUpdated() + "\n\n"
+                        + "PP Asset Tag: " + info.getAssetTag() + "\n"
+                        + "Customer: " + info.getCustomerName() + "\n"
+                        + "Drive Location: " + info.getDriveLocation() + "\n"
+                        + "Drive State: " + info.getDriveState() + "\n"
+                        + "Notes: " + info.getNotes() + "\n\n"
                 );
             } else {
                 message.setText("Drive " + info.getType().toLowerCase() + " in system with following details\n"
@@ -84,14 +92,19 @@ public class EmailNotifier {
             }
 
             //System.out.println("Email message: " + message.toString());
+            for(Address a: message.getAllRecipients()) {
+                System.out.println(a.toString());
+            }
 
             Transport.send(message);
 
             result = true;
-        } catch (MessagingException e) {
+        } catch (Exception e) {
+            System.out.println("-- Email sending failed. --");
             e.printStackTrace();
             eMessage = "Unable to Send Message";
         }
+
         if(result == false) {
             System.out.println("-- Email sending failed. --");
         } else {

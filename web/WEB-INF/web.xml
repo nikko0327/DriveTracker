@@ -7,6 +7,7 @@
         <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
 
+    <!-- Servlets -->
     <servlet>
         <description></description>
         <display-name>login</display-name>
@@ -111,6 +112,27 @@
         <servlet-name>DriveSearchServlet</servlet-name>
         <url-pattern>/DriveSearchServlet</url-pattern>
     </servlet-mapping>
+
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>
+            app.filters.AuthenticationFilter
+        </filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <!--<url-pattern>/*</url-pattern>-->
+        <url-pattern>/createDrive.jsp</url-pattern>
+        <url-pattern>/customerInfo.jsp</url-pattern>
+        <url-pattern>/fileRetrieve.jsp</url-pattern>
+        <url-pattern>/historyDrive.jsp</url-pattern>
+        <url-pattern>/navbar.jsp</url-pattern>
+        <url-pattern>/footer.jsp</url-pattern>
+        <url-pattern>/main.jsp</url-pattern>
+        <url-pattern>/message.jsp</url-pattern>
+        <url-pattern>/searchDrive.jsp</url-pattern>
+        <url-pattern>/upload2.jsp</url-pattern>
+    </filter-mapping>
 
     <resource-ref>
         <description>
