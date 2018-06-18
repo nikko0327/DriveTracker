@@ -4,7 +4,7 @@ $(document).ready(function () {
     var msgEnum = new Enum().MESSAGE;
     var action_alert_box = new Alert($('#alert-area'));
     var modal_alert = new Alert($('#modal-alert-area'));
-    //new Clipboard('.clipbtn');
+    new Clipboard('.clipbtn');
 
 
     $('#pp_asset_tag').focus();
