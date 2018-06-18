@@ -114,7 +114,7 @@ $(document).ready(function () {
                     }
                     return columnGroups;
                 }
-            }
+            };
 
             // Useful variables for accessing table data
             chartData = tableData.chartData();

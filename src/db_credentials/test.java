@@ -11,10 +11,8 @@ public class test {
 
     /**
      * @param args
-     * @throws IOException
-     * @throws ParseException
      */
-    public static void main(String[] args) throws IOException, ParseException {
+    public static void main(String[] args) {
         // TODO Auto-generated method stub
 
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");

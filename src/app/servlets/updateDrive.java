@@ -66,7 +66,7 @@ public class updateDrive extends HttpServlet implements mysql_credentials {
      * response)
      */
     protected void doPost(HttpServletRequest request,
-                          HttpServletResponse response) throws ServletException, IOException {
+                          HttpServletResponse response) throws IOException {
 
         System.out.println("--- updateDrive ---");
 

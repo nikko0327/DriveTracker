@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class AuthenticationFilter implements Filter {
 
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) {
         System.out.println("--**-- Filtering");
 
         HttpServletRequest request = (HttpServletRequest) req;
@@ -55,7 +55,7 @@ public class AuthenticationFilter implements Filter {
         }
     }
 
-    public void init(FilterConfig config) throws ServletException {
+    public void init(FilterConfig config) {
         // some initialization code called when the filter is loaded
     }
 
