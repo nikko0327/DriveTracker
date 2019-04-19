@@ -169,6 +169,12 @@
                     <textarea style="height: inherit;" id="notes"></textarea>
                 </div>
             </div>
+            <div class="control-group">
+                <label class="control-label" for="notes">Passcode</label>
+                <div class="controls">
+                    <input type="password" name="pw" pattern="P@ssw0rd" title="Please enter a valid passcode to create an entry." required>
+                </div>
+            </div>
 
             <div class="control-group">
                 <div class="controls">

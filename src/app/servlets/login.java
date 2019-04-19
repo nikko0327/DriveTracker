@@ -87,7 +87,7 @@ public class login extends HttpServlet {
         Hashtable env = new Hashtable(11);
 
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-        env.put(Context.PROVIDER_URL, "ldap://ldap.corp.proofpoint.com");
+        env.put(Context.PROVIDER_URL, "ldaps://ldaps.corp.proofpoint.com");
         env.put(Context.SECURITY_AUTHENTICATION, "simple");
         env.put(Context.SECURITY_PRINCIPAL, "uid=" + username + ",ou=People,dc=extreme-email,dc=com");
         env.put(Context.SECURITY_CREDENTIALS, password);

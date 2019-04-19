@@ -189,6 +189,59 @@ $(document).ready(function () {
         e.stopPropagation();
     });
 
+
+    // when user clicks the update button NonAdmin
+    $(document).on('click', "button[name='updateButtonNonAdmin']", function (e) {
+        var id = $(this).attr('id').replace('update_', '');
+        var values = getValuesById(id);
+
+        $('#change_customer').html("<a href='createDrive.jsp?pp_asset_tag=" + values.pp_asset_tag + "&" +
+            "manufacturer=" + values.manufacturer + "&" +
+            "serial_number=" + values.serial_number + "&" +
+            "update=true" + "'>Click here to use this Drive for other customer</a>");
+        $('#modal_pp_asset_tag_NonAdmin').val(values.pp_asset_tag);
+        $('#modal_manufacturer_NonAdmin').val(values.manufacturer);
+        $('#modal_serial_number_NonAdmin').val(values.serial_number);
+
+        $('#modal_property_NonAdmin').val(values.property);
+        $('#modal_property_NonAdmin').change();//same as .trigger("change")
+
+        $('#modal_customer_name_NonAdmin').val(values.customer_name);
+        $('#modal_cts_NonAdmin').val(values.cts);
+        $('#modal_jira_NonAdmin').val(values.jira);
+        $('#modal_label_NonAdmin').val(values.label);
+        $('#modal_drive_location_NonAdmin').val(values.drive_location);
+        $('#modal_drive_state_NonAdmin').val(values.drive_state);
+        $('#modal_return_media_to_customer_NonAdmin').val(values.return_media_to_customer);
+        $('#modal_essential_NonAdmin').val(values.essential);
+        $('#modal_encrypted_NonAdmin').val(values.encrypted);
+        $('#modal_usb_NonAdmin').val(values.usb);
+        $('#modal_power_NonAdmin').val(values.power);
+        $('#modal_notes_NonAdmin').val(values.notes);
+        $('#modal_received_date_NonAdmin').val(values.received_date);
+        $('#modal_sent_date_NonAdmin').val(values.sent_date);
+        $('#modal_shipping_carrier_sent_NonAdmin').val(values.shipping_carrier_sent);
+        $('#modal_shipping_tracking_number_sent_NonAdmin').val(values.shipping_tracking_number_sent);
+
+        //Use ajax to load in data from the MySQL server using upload2.jsp
+        //Default so its GET method
+        $.ajax({
+            url: "upload2.jsp?pp_asset_tag=" + values.pp_asset_tag + "&customer_name=" + values.customer_name + "&update=true",
+            dataType: "text",
+            success: function (msg) {
+                $('#modal_file2').append(msg);
+                //The Asset Tag must be changed here because there is no guarantee ajax will finish loading before it gets to the next line
+                $('#assetTag').val(values.pp_asset_tag);
+
+            }
+        });
+
+        $('#modal_spinner').hide();
+        $('#updateModalNonAdmin').modal();
+
+        e.stopPropagation();
+    });
+
     //Note: if the file is too large it will take a long time to upload
     $(document).on("click", "#upload", function (e) {
         e.stopPropagation();
@@ -283,6 +336,76 @@ $(document).ready(function () {
         if (pp_asset_tag === null || pp_asset_tag === "") {
             alert("Drive must have a PP Asset Tag");
             $("#modal_pp_asset_tag").focus();
+            return;
+        }
+
+        $('#modal_spinner').show();
+
+        $.post("updateDrive",
+            {
+                pp_asset_tag: pp_asset_tag,
+                manufacturer: manufacturer,
+                serial_number: serial_number,
+                property: property,
+                customer_name: customer_name,
+                cts: cts,
+                jira: jira,
+                label: label,
+                drive_location: drive_location,
+                drive_state: drive_state,
+                return_media_to_customer: return_media_to_customer,
+                encrypted: encrypted,
+                usb: usb,
+                power: power,
+                notes: notes,
+                received_date: received_date,
+                sent_date: sent_date,
+                shipping_carrier_sent: shipping_carrier_sent,
+                shipping_tracking_number_sent: shipping_tracking_number_sent,
+                updated_by: username,
+                essential: essential
+            },
+            function (data) {
+                $('#modal_spinner').hide();
+
+                if (data.result === 'success') {
+                    $('[data-dismiss="modal"]').click();
+                    $('#search').click();
+                    //location.reload();
+                }
+                else
+                    alert("Error: " + data.result);
+            }, 'json');
+    });
+
+
+
+    // when user clicks on the modalUpdateButtonNonAdmin event
+    $(document).on('click', '#modalUpdateButtonNonAdmin', function () {
+        var pp_asset_tag = $('#modal_pp_asset_tag_NonAdmin').val();
+        var manufacturer = $('#modal_manufacturer_NonAdmin').val();
+        var serial_number = $('#modal_serial_number_NonAdmin').val();
+        var property = $('#modal_property_NonAdmin').val();
+        var customer_name = $('#modal_customer_name_NonAdmin').val();
+        var cts = $('#modal_cts_NonAdmin').val();
+        var jira = $('#modal_jira_NonAdmin').val();
+        var label = $('#modal_label_NonAdmin').val();
+        var drive_location = $('#modal_drive_location_NonAdmin').val();
+        var drive_state = $('#modal_drive_state_NonAdmin').val();
+        var return_media_to_customer = $('#modal_return_media_to_customer_NonAdmin').val();
+        var encrypted = $('#modal_encrypted').val();
+        var usb = $('#modal_usb_NonAdmin').val();
+        var power = $('#modal_power_NonAdmin').val();
+        var notes = $('#modal_notes_NonAdmin').val();
+        var received_date = $('#modal_received_date_NonAdmin').val();
+        var sent_date = $('#modal_sent_date_NonAdmin').val();
+        var shipping_carrier_sent = $('#modal_shipping_carrier_sent_NonAdmin').val();
+        var shipping_tracking_number_sent = $('#modal_shipping_tracking_number_sent_NonAdmin').val();
+        var essential = $('#modal_essential_NonAdmin').val();
+
+        if (pp_asset_tag === null || pp_asset_tag === "") {
+            alert("Drive must have a PP Asset Tag");
+            $("#modal_pp_asset_tag_NonAdmin").focus();
             return;
         }
 
@@ -462,7 +585,13 @@ function searchDrive(user) {
                         value += "<td>" + v.last_updated + "</td>";
                         value += "<td>" + v.updated_by + "</td>";
 
-                        value += "<td id='ops_" + i + "' style='white-space: nowrap'><button name='updateButton' class='btn btn-sm btn-default' id='update_" + i + "'><i class='icon-edit'></i></button>";
+                        if (user.getUsername() == "hkaito" || user.getUsername() == "nlee" || user.getUsername() == "kladha" || user.getUsername() == "awheelon" || user.getUsername() == "jparikh"){
+                            console.log("Admin");
+                            value += "<td id='ops_" + i + "' style='white-space: nowrap'><button name='updateButton' class='btn btn-sm btn-default' id='update_" + i + "'><i class='icon-edit'></i></button>";
+                        }else{
+                            value += "<td id='ops_" + i + "' style='white-space: nowrap'><button name='updateButtonNonAdmin' class='btn btn-sm btn-default' id='update_" + i + "'><i class='icon-edit'></i></button>";
+                            console.log("Non-amin");
+                        }
 
                         value += "&nbsp;<button name='copyButton' class='btn btn-sm btn-default clipbtn' " +
                             "data-clipboard-text='" + clipboard_text + "' " +

@@ -43,6 +43,8 @@
     <link href="css/style2.css" rel="stylesheet">
 
     <link href="css/bootstrap-toggle.css" rel="stylesheet">
+
+    <script src="../js/script.js"></script>
 </head>
 
 <body class="home">

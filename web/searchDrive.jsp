@@ -232,6 +232,208 @@
 </div>
 <!-- end of udpate modal -->
 
+
+
+<!-- Start of udpate non-admin modal -->
+<div id="updateModalNonAdmin" class="modal hide fade in" style="display: none;">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">?</a>
+        <h3>Update Drive</h3>
+        <div id="change_customer_NonAdmin"></div>
+    </div>
+    <div class="modal-body">
+        <div id="modal-alert-area_NonAdmin" class="alert" hidden>
+
+        </div>
+        <form class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" for="modal_pp_asset_tag">PP Asset Tag</label>
+                <div class="controls">
+                    <input type="text" id="modal_pp_asset_tag_NonAdmin" class="update_modal_input" value="" readonly>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="modal_customer_name">Customer</label>
+                <div class="controls">
+                    <input style="color: black" type="text" id="modal_customer_name_NonAdmin" class="update_modal_input"
+                           value="" disabled>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="modal_cts">CTS</label>
+                <div class="controls">
+                    <input style="color: black" type="text" id="modal_cts_NonAdmin" value="" class="update_modal_input" disabled>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="modal_jira">JIRA</label>
+                <div class="controls">
+                    <input style="color: black" type="text" id="modal_jira_NonAdmin" value="" class="update_modal_input" disabled>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="modal_manufacturer">Manufacturer/Model</label>
+                <div class="controls">
+                    <input style="color: black" type="text" id="modal_manufacturer_NonAdmin" value="" class="update_modal_input" disabled>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="modal_serial_number">Serial Number</label>
+                <div class="controls">
+                    <input style="color: black" type="text" id="modal_serial_number_NonAdmin" value=""
+                           class="update_modal_input" disabled>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="modal_label">Label</label>
+                <div class="controls">
+                    <input style="color: black" type="text" id="modal_label_NonAdmin" value="" class="update_modal_input" disabled>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="modal_usb">USB</label>
+                <div class="controls">
+                    <select id="modal_usb_NonAdmin" class="update_modal_select" disabled>
+                        <option value=""></option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="modal_power">Power</label>
+                <div class="controls">
+                    <select id="modal_power_NonAdmin" class="update_modal_select" disabled>
+                        <option value=""></option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="modal_property">Property</label>
+                <div class="controls">
+                    <select id="modal_property_NonAdmin" class="update_modal_select" disabled>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="modal_drive_location">Drive Location</label>
+                <div class="controls">
+                    <select id="modal_drive_location_NonAdmin" class="update_modal_select">
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="modal_drive_state">Drive
+                    Status</label> <%--Drive State is changed to Drive Status--%>
+                <div class="controls">
+                    <select id="modal_drive_state_NonAdmin" class="update_modal_select">
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="modal_return_media_to_customer">Return Media To Customer</label>
+                <div class="controls">
+                    <select id="modal_return_media_to_customer_NonAdmin" class="update_modal_select" disabled>
+                        <option value=""></option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="modal_essential">Essentials</label>
+                <div class="controls">
+                    <select id="modal_essential_NonAdmin" class="update_modal_select" disabled>
+                        <option value=""></option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="shipping_information_received_NonAdmin">
+                <div class="control-group">
+                    <label class="control-label" for="modal_received_date">Received Date</label>
+                    <div class="controls">
+                        <input style="color: black" type="text" id="modal_received_date_NonAdmin" value=""
+                               class="update_modal_input">
+                    </div>
+                </div>
+            </div>
+
+            <div id="shipping_information_sent_NonAdmin">
+                <div class="control-group">
+                    <label class="control-label" for="modal_sent_date">Sent Date</label>
+                    <div class="controls">
+                        <input style="color: black" type="text" id="modal_sent_date_NonAdmin" value=""
+                               class="update_modal_input">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="modal_shipping_carrier_sent">Shipping Carrier</label>
+                    <div class="controls">
+                        <select id="modal_shipping_carrier_sent_NonAdmin" class="update_modal_select">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="modal_shipping_tracking_number_sent">Shipping Tracking
+                        Number</label>
+                    <div class="controls">
+                        <input style="color: black" type="text" id="modal_shipping_tracking_number_sent_NonAdmin" value=""
+                               class="update_modal_input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="modal_notes">Notes</label>
+                <div class="controls">
+                    <textarea style="color: black" id="modal_notes_NonAdmin"></textarea>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="modal_file2">File Upload</label>
+                <div class="controls">
+                    <div id="modal_file2_NonAdmin"></div>
+                </div>
+            </div>
+            <div id="modal_spinner_NonAdmin" hidden>
+                <center><i class="icon-spinner icon-spin icon-3x"></i></center>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal-footer">
+        <a href="#" class="btn btn-success" id="modalUpdateButtonNonAdmin">Update</a>
+        <a href="#" class="btn" id="modalUpdateCloseButtonNonAdmin" data-dismiss="modal">Close</a>
+    </div>
+</div>
+<!-- end of udpate Non-admin modal -->
+
+
+
+
+
+
 <!-- Start of details modal -->
 <div id="detailsModal" class="modal hide fade in" style="display: none;">
     <div class="modal-header">
